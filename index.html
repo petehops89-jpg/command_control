@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistamations — Command Control</title>
+<style>
+  :root {
+    --bg: #06060d;
+    --card-bg: rgba(15, 15, 28, 0.82);
+    --card-border: rgba(255, 255, 255, 0.06);
+    --card-hover-border: rgba(255, 255, 255, 0.12);
+    --text: #d4d4e8;
+    --text-dim: rgba(212, 212, 232, 0.5);
+    --accent: #00e5ff;
+    --accent2: #7c4dff;
+    --accent3: #ff4081;
+    --accent4: #00e676;
+    --glow-cyan: 0 0 40px rgba(0, 229, 255, 0.08);
+    --glow-purple: 0 0 40px rgba(124, 77, 255, 0.08);
+    --radius: 16px;
+    --gap: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      url('images/command-control.png') center/cover no-repeat,
+      radial-gradient(ellipse at 30% 0%, rgba(0, 229, 255, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 100%, rgba(124, 77, 255, 0.06) 0%, transparent 50%),
+      var(--bg);
+    filter: brightness(0.7) saturate(1.2);
+  }
+
+  .bg-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(6, 6, 13, 0.6) 100%);
+    pointer-events: none;
+  }
+
+  .app {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 20px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+  }
+  .header .brand {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--accent2);
+    opacity: 0.7;
+  }
+  .header .status-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 10px;
+    opacity: 0.5;
+  }
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent4);
+    box-shadow: 0 0 8px var(--accent4);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ─── BENTO GRID ─── */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+    gap: var(--gap);
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.25s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--card-hover-border);
+    box-shadow: var(--glow-cyan);
+  }
+  .card:hover::after {
+    opacity: 1;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0, 229, 255, 0.04), transparent 70%);
+  }
+
+  .card .icon {
+    font-size: 28px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .card .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 2px;
+  }
+  .card .title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 0.3px;
+    line-height: 1.3;
+  }
+  .card .sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* ─── CARD VARIANTS ─── */
+  .card.hero {
+    grid-column: span 7;
+    grid-row: span 3;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(15, 15, 28, 0.9), rgba(25, 20, 45, 0.85));
+    border-color: rgba(124, 77, 255, 0.2);
+  }
+  .card.hero .title {
+    font-size: 36px;
+    font-weight: 200;
+    letter-spacing: 2px;
+    line-height: 1.1;
+  }
+  .card.hero .title em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .card.hero .sub {
+    font-size: 13px;
+    margin-top: 12px;
+    max-width: 360px;
+  }
+
+  .card.span2 { grid-column: span 4; grid-row: span 2; }
+  .card.span1s { grid-column: span 3; grid-row: span 1; }
+  .card.span1m { grid-column: span 2; grid-row: span 1; }
+  .card.span1l { grid-column: span 3; grid-row: span 2; }
+  .card.span2w { grid-column: span 6; grid-row: span 2; }
+  .card.span3w { grid-column: span 5; grid-row: span 2; }
+
+  /* ─── ACCENT BORDERS ─── */
+  .card.accent-cyan { border-left: 2px solid var(--accent); }
+  .card.accent-purple { border-left: 2px solid var(--accent2); }
+  .card.accent-pink { border-left: 2px solid var(--accent3); }
+  .card.accent-green { border-left: 2px solid var(--accent4); }
+
+  .card.accent-cyan:hover { box-shadow: 0 0 24px rgba(0, 229, 255, 0.1); }
+  .card.accent-purple:hover { box-shadow: 0 0 24px rgba(124, 77, 255, 0.1); }
+  .card.accent-pink:hover { box-shadow: 0 0 24px rgba(255, 64, 129, 0.1); }
+  .card.accent-green:hover { box-shadow: 0 0 24px rgba(0, 230, 118, 0.1); }
+
+  /* ─── STATUS DOTS IN CARDS ─── */
+  .card .live-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .live-dot.online { background: var(--accent4); box-shadow: 0 0 6px var(--accent4); }
+  .live-dot.offline { background: #555; }
+
+  /* ─── TAG ─── */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 8px;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .bento { grid-template-columns: repeat(6, 1fr); }
+    .card.hero { grid-column: span 6; grid-row: span 2; }
+    .card.hero .title { font-size: 26px; }
+    .card.span2 { grid-column: span 3; grid-row: span 2; }
+    .card.span1s { grid-column: span 3; }
+    .card.span1m { grid-column: span 2; }
+    .card.span1l { grid-column: span 3; grid-row: span 2; }
+    .card.span2w { grid-column: span 6; }
+    .card.span3w { grid-column: span 3; grid-row: span 2; }
+  }
+
+  @media (max-width: 560px) {
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .card.hero { grid-column: span 2; grid-row: span 1; }
+    .card.span2, .card.span1s, .card.span1m, .card.span1l, .card.span2w, .card.span3w { grid-column: span 2; grid-row: span 1; }
+    .card.hero .title { font-size: 22px; }
+    .app { padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-overlay"></div>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="brand">Vistamations Command Control</div>
+    <div class="status-row">
+      <span class="status-dot"></span> System Online
+    </div>
+  </div>
+
+  <!-- BENTO GRID -->
+  <div class="bento">
+
+    <!-- HERO -->
+    <div class="card hero">
+      <div class="title">Vistamations<br><em>Command Control</em></div>
+      <div class="sub">Real-time runtime simulator. Docker &middot; Redis &middot; Prometheus &middot; MCP. Base environment orchestration via Trinity agent.</div>
+      <div style="margin-top:16px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="tag">docker</span><span class="tag">mcp</span><span class="tag">localhost</span>
+      </div>
+    </div>
+
+    <!-- CLOCK -->
+    <a href="clock.html" class="card span3w accent-cyan">
+      <div>
+        <span class="tag" style="color:var(--accent)">Live</span>
+        <div class="icon">&#x1F570;</div>
+        <div class="title">Clock</div>
+        <div class="sub">Wagga Wagga, NSW — weather, world clock, 24hr toggle</div>
+      </div>
+      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; clock.html</div>
+    </a>
+
+    <!-- AUDIO PLAYER -->
+    <a href="media-player/index.html#audio" class="card span1l accent-purple">
+      <div>
+        <div class="icon">&#x1F3B5;</div>
+        <div class="title">Audio Player</div>
+        <div class="sub">Web Audio API equalizer, 10-band, 8 presets, visualizer, playlist</div>
+      </div>
+      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; media-player/#audio</div>
+    </a>
+
+    <!-- VIDEO PLAYER -->
+    <a href="media-player/index.html#video" class="card span2 accent-pink">
+      <div>
+        <div class="icon">&#x1F3AC;</div>
+        <div class="title">Video Player</div>
+        <div class="sub">HLS/IPTV streaming, 5 default channels, M3U playlist, CSS filter controls, ffmpeg.wasm transcoder</div>
+      </div>
+      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; media-player/#video</div>
+    </a>
+
+    <!-- VISTA MOONLIGHT -->
+    <a href="vista-moonlight" class="card span2 accent-green">
+      <div>
+        <span class="tag" style="color:var(--accent4)">Legacy</span>
+        <div class="icon">&#x1F319;</div>
+        <div class="title">Vista Moonlight</div>
+        <div class="sub">Video.js-based media player, playlist, URL loading, local files</div>
+      </div>
+      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; vista-moonlight</div>
+    </a>
+
+    <!-- TORRENT -->
+    <a href="media-player/index.html#torrent" class="card span1s accent-cyan">
+      <div>
+        <div class="icon">&#x2B07;</div>
+        <div class="title">Torrent</div>
+        <div class="sub">WebTorrent streaming, magnet links, .torrent files, live progress</div>
+      </div>
+      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; media-player/#torrent</div>
+    </a>
+
+    <!-- DOWNLOADS -->
+    <a href="media-player/index.html#download" class="card span1m accent-purple">
+      <div>
+        <div class="icon">&#x1F4E5;</div>
+        <div class="title">Downloads</div>
+        <div class="sub">Fetch streaming, progress, save</div>
+      </div>
+      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; media-player/#download</div>
+    </a>
+
+    <!-- SETTINGS -->
+    <a href="media-player/index.html#settings" class="card span1m accent-pink">
+      <div>
+        <div class="icon">&#x2699;</div>
+        <div class="title">Settings</div>
+        <div class="sub">Volume, speed, buffer, crossfade, persistence</div>
+      </div>
+      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; media-player/#settings</div>
+    </a>
+
+    <!-- INFRASTRUCTURE -->
+    <div class="card span2w" style="cursor:default">
+      <div class="label">Infrastructure</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <a href="docker-compose.yml" style="color:var(--accent);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">docker-compose.yml</a>
+        <a href="Dockerfile" style="color:var(--accent);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">Dockerfile</a>
+        <a href="nginx.conf" style="color:var(--accent2);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">nginx.conf</a>
+        <a href="redis.conf" style="color:var(--accent3);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">redis.conf</a>
+        <a href="prometheus.yml" style="color:var(--accent4);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">prometheus.yml</a>
+        <a href="server.js" style="color:var(--accent);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">server.js</a>
+      </div>
+      <div style="margin-top:10px;font-size:10px;opacity:0.4">
+        <span class="live-dot online"></span> docker <span style="margin:0 8px">|</span>
+        <span class="live-dot online"></span> redis:6379 <span style="margin:0 8px">|</span>
+        <span class="live-dot online"></span> prometheus:9090 <span style="margin:0 8px">|</span>
+        <span class="live-dot online"></span> nginx:80/5501
+      </div>
+    </div>
+
+    <!-- AGENTS -->
+    <a href="agents" class="card span1s accent-purple">
+      <div>
+        <div class="icon">&#x1F916;</div>
+        <div class="title">Agents</div>
+        <div class="sub">Trinity &#8226; org AG001 base-env &#8226; AG007</div>
+      </div>
+      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; agents</div>
+    </a>
+
+    <!-- BASE-ENV -->
+    <a href="base-env" class="card span1m accent-cyan">
+      <div>
+        <div class="icon">&#x1F4E6;</div>
+        <div class="title">Base Env</div>
+        <div class="sub">Trinity config — docker | mcp | localhost</div>
+      </div>
+      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; base-env</div>
+    </a>
+
+    <!-- NOTES -->
+    <a href=".vscode/pete/notes-folder/notes" class="card span1m accent-green">
+      <div>
+        <div class="icon">&#x1F4DD;</div>
+        <div class="title">Notes</div>
+        <div class="sub">Project notes & references</div>
+      </div>
+      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; notes</div>
+    </a>
+
+  </div><!-- /bento -->
+
+</div><!-- /app -->
+
+</body>
+</html>

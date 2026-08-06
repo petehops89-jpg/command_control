@@ -1,0 +1,12 @@
+node_modules/
+.git/
+.kilo/
+*.log
+docker-compose.yml
+Dockerfile
+nginx.conf
+redis.conf
+prometheus.yml
+.dockerignore
+README.md
+*.md

@@ -1,0 +1,15 @@
+title: trinity
+
+[a] base infrastructure
+
+  1. docker
+  2. mcp
+  3. localhost
+
+  trinity = docker | mcp | localhost
+
+[b] agent role
+
+  agent: Trinity
+  scope: base-env
+  function: base infrastructure orchestration and environment management

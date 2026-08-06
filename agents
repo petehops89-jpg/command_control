@@ -1,0 +1,5 @@
+vistamations agents
+
+# ID          agent        cluster
+org AG001     Trinity      base-env
+org AG007     -            base-env

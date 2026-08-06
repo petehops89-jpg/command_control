@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistamations Media Player</title>
+<link rel="stylesheet" href="css/player.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div class="brand">Vistamations Media</div>
+  <a href="/clock.html" class="back-link">&#x2190; Clock</a>
+</div>
+
+<!-- TABS -->
+<div class="app-tabs">
+  <button data-tab="audio" class="active">&#x1F3B5; Audio</button>
+  <button data-tab="video">&#x1F3AC; Video</button>
+  <button data-tab="torrent">&#x2B07; Torrent</button>
+  <button data-tab="download">&#x1F4E5; Download</button>
+  <button data-tab="settings">&#x2699; Settings</button>
+</div>
+
+<!-- BODY -->
+<div class="app-body">
+
+  <!-- ═══════ AUDIO TAB ═══════ -->
+  <div class="tab-content active" id="tab-audio">
+    <!-- Visualizer -->
+    <div class="visualizer" id="vizContainer">
+      <canvas id="vizCanvas"></canvas>
+    </div>
+
+    <!-- Now Playing -->
+    <div class="panel">
+      <div class="now-playing">
+        <div style="font-size:32px">&#x1F3B5;</div>
+        <div class="track-info">
+          <div class="track-title" id="trackTitle">No track loaded</div>
+          <div class="track-artist" id="trackArtist">Drop audio files or load from playlist</div>
+        </div>
+      </div>
+      <div class="progress-bar" id="progBar" style="margin-top:12px">
+        <div class="fill" id="progFill" style="width:0%"></div>
+      </div>
+      <div class="time-labels">
+        <span id="timeCur">0:00</span>
+        <span id="timeDur">0:00</span>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="panel">
+      <div class="controls">
+        <button class="ctrl-btn" id="btnPrev" title="Previous">&#x23EE;</button>
+        <button class="ctrl-btn play-btn" id="btnPlay" title="Play">&#x25B6;</button>
+        <button class="ctrl-btn" id="btnStop" title="Stop">&#x23F9;</button>
+        <button class="ctrl-btn" id="btnNext" title="Next">&#x23ED;</button>
+        <span style="font-size:11px;opacity:0.4;margin:0 8px">Vol</span>
+        <input type="range" id="volSlider" min="0" max="100" value="75" style="width:100px;accent-color:var(--accent2)">
+        <span id="volValue" style="font-size:11px;min-width:32px">75%</span>
+      </div>
+    </div>
+
+    <!-- File Load -->
+    <div class="panel">
+      <div class="btn-row">
+        <label class="btn" style="cursor:pointer">
+          &#x1F4C2; Add Files
+          <input type="file" id="audioFileInput" accept="audio/*" multiple style="display:none">
+        </label>
+        <span style="font-size:11px;opacity:0.4;align-self:center">or drag & drop audio files anywhere</span>
+      </div>
+    </div>
+
+    <!-- Playlist -->
+    <div class="panel">
+      <h2>Playlist</h2>
+      <div class="playlist" id="playlist"></div>
+    </div>
+
+    <!-- Equalizer -->
+    <div class="panel">
+      <h2>Equalizer</h2>
+      <div class="btn-row" style="margin-bottom:12px">
+        <select id="eqPreset" class="input" style="width:auto">
+          <option value="flat">Flat</option>
+          <option value="bass">Bass Boost</option>
+          <option value="pop">Pop</option>
+          <option value="rock">Rock</option>
+          <option value="jazz">Jazz</option>
+          <option value="classical">Classical</option>
+          <option value="vocal">Vocal</option>
+          <option value="electronic">Electronic</option>
+        </select>
+      </div>
+      <div class="eq-sliders">
+        <div class="eq-band"><span class="label">32</span><input type="range" min="-12" max="12" step="0.5" value="0"><span class="value">0dB</span></div>
+        <div class="eq-band"><span class="label">64</span><input type="range" min="-12" max="12" step="0.5" value="0"><span class="value">0dB</span></div>
+        <div class="eq-band"><span class="label">125</span><input type="range" min="-12" max="12" step="0.5" value="0"><span class="value">0dB</span></div>
+        <div class="eq-band"><span class="label">250</span><input type="range" min="-12" max="12" step="0.5" value="0"><span class="value">0dB</span></div>
+        <div class="eq-band"><span class="label">500</span><input type="range" min="-12" max="12" step="0.5" value="0"><span class="value">0dB</span></div>
+        <div class="eq-band"><span class="label">1K</span><input type="range" min="-12" max="12" step="0.5" value="0"><span class="value">0dB</span></div>
+        <div class="eq-band"><span class="label">2K</span><input type="range" min="-12" max="12" step="0.5" value="0"><span class="value">0dB</span></div>
+        <div class="eq-band"><span class="label">4K</span><input type="range" min="-12" max="12" step="0.5" value="0"><span class="value">0dB</span></div>
+        <div class="eq-band"><span class="label">8K</span><input type="range" min="-12" max="12" step="0.5" value="0"><span class="value">0dB</span></div>
+        <div class="eq-band"><span class="label">16K</span><input type="range" min="-12" max="12" step="0.5" value="0"><span class="value">0dB</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ VIDEO TAB ═══════ -->
+  <div class="tab-content" id="tab-video">
+    <!-- Video Player -->
+    <div class="video-container" id="videoContainer">
+      <video id="videoPlayer" controls crossorigin="anonymous"></video>
+    </div>
+
+    <!-- Stream Info -->
+    <div class="panel" style="text-align:center">
+      <span id="streamStatus" style="font-size:12px;opacity:0.5">Ready — load a stream or file</span>
+    </div>
+
+    <!-- Stream URL -->
+    <div class="panel">
+      <h2>Stream / IPTV</h2>
+      <div class="input-group">
+        <input type="text" class="input" id="streamUrl" placeholder="Stream URL (.m3u8, .mp4, .webm)...">
+        <button class="btn accent" id="streamLoadBtn">Load</button>
+      </div>
+      <div class="input-group" style="margin-top:8px">
+        <input type="text" class="input" id="m3uUrl" placeholder="M3U Playlist URL (or leave empty for default)...">
+        <button class="btn" id="m3uLoadBtn">Load M3U</button>
+      </div>
+    </div>
+
+    <!-- Channel List -->
+    <div class="panel">
+      <h2>Channels</h2>
+      <div class="stream-list" id="streamList"></div>
+    </div>
+
+    <!-- Local File -->
+    <div class="panel">
+      <div class="btn-row">
+        <label class="btn" style="cursor:pointer">
+          &#x1F4C2; Open Video File
+          <input type="file" id="videoFileInput" accept="video/*" style="display:none">
+        </label>
+      </div>
+    </div>
+
+    <!-- Video Filters -->
+    <div class="panel">
+      <h2>Video Filters</h2>
+      <div class="filter-sliders">
+        <div class="filter-slider">
+          <span class="label">Brightness <span id="vid_brightness_val">100%</span></span>
+          <input type="range" id="vid_brightness" min="0" max="300" value="100">
+        </div>
+        <div class="filter-slider">
+          <span class="label">Contrast <span id="vid_contrast_val">100%</span></span>
+          <input type="range" id="vid_contrast" min="0" max="300" value="100">
+        </div>
+        <div class="filter-slider">
+          <span class="label">Saturation <span id="vid_saturation_val">100%</span></span>
+          <input type="range" id="vid_saturation" min="0" max="300" value="100">
+        </div>
+        <div class="filter-slider">
+          <span class="label">Hue <span id="vid_hue_val">0°</span></span>
+          <input type="range" id="vid_hue" min="-180" max="180" value="0">
+        </div>
+        <div class="filter-slider">
+          <span class="label">Blur <span id="vid_blur_val">0px</span></span>
+          <input type="range" id="vid_blur" min="0" max="20" value="0">
+        </div>
+      </div>
+      <button class="btn" id="vidFiltersReset" style="margin-top:8px">Reset Filters</button>
+    </div>
+
+    <!-- FFmpeg Convert -->
+    <div class="panel">
+      <h2>FFmpeg Converter</h2>
+      <div class="input-group">
+        <label class="btn" style="cursor:pointer">
+          Select File
+          <input type="file" id="convertFile" accept="video/*" style="display:none">
+        </label>
+        <select class="input" id="convertFormat" style="width:auto">
+          <option value="mp4">MP4</option>
+          <option value="webm">WebM</option>
+          <option value="avi">AVI</option>
+          <option value="mov">MOV</option>
+          <option value="mkv">MKV</option>
+          <option value="ogg">OGG</option>
+        </select>
+        <button class="btn primary" id="convertBtn">Convert</button>
+      </div>
+      <div style="font-size:10px;opacity:0.4;margin-top:8px">FFmpeg runs in-browser via WebAssembly (~31MB load)</div>
+    </div>
+  </div>
+
+  <!-- ═══════ TORRENT TAB ═══════ -->
+  <div class="tab-content" id="tab-torrent">
+    <div class="panel">
+      <h2>WebTorrent Stream</h2>
+      <div class="input-group">
+        <input type="text" class="input" id="magnetInput" placeholder="magnet:?xt=urn:btih:... or torrent hash...">
+        <button class="btn accent" id="magnetBtn">Add</button>
+      </div>
+      <div class="btn-row" style="margin-top:8px">
+        <label class="btn" style="cursor:pointer">
+          &#x1F4C2; Open .torrent File
+          <input type="file" id="torrentFileInput" accept=".torrent" style="display:none">
+        </label>
+      </div>
+    </div>
+
+    <div class="panel" id="torrentVideoContainer" style="display:none">
+      <h2>Stream Preview</h2>
+      <div class="video-container"><video id="torrentVideo" controls style="width:100%;max-height:400px"></video></div>
+    </div>
+
+    <div class="panel">
+      <h2>Active Torrents</h2>
+      <div class="torrent-list" id="torrentList"></div>
+    </div>
+  </div>
+
+  <!-- ═══════ DOWNLOAD TAB ═══════ -->
+  <div class="tab-content" id="tab-download">
+    <div class="panel">
+      <h2>Download Manager</h2>
+      <div class="input-group" style="margin-bottom:8px">
+        <input type="text" class="input" id="dlUrl" placeholder="File URL to download...">
+      </div>
+      <div class="input-group">
+        <input type="text" class="input" id="dlName" placeholder="Filename (optional)">
+        <button class="btn accent" id="dlStartBtn">Download</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Downloads</h2>
+      <div id="downloadList"></div>
+    </div>
+  </div>
+
+  <!-- ═══════ SETTINGS TAB ═══════ -->
+  <div class="tab-content" id="tab-settings">
+    <div class="settings-grid">
+      <div class="panel setting-group">
+        <h3>Playback</h3>
+        <div class="setting-row">
+          <span class="label">Default Volume</span>
+          <span id="volValue2">75%</span>
+        </div>
+        <div class="setting-row">
+          <span class="label">Playback Speed</span>
+          <select class="input" id="speedSelect" style="width:auto">
+            <option value="0.25">0.25x</option>
+            <option value="0.5">0.5x</option>
+            <option value="0.75">0.75x</option>
+            <option value="1" selected>1x</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2x</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <span class="label">Autoplay</span>
+          <input type="checkbox" id="autoplayCb">
+        </div>
+      </div>
+
+      <div class="panel setting-group">
+        <h3>Buffer & Streaming</h3>
+        <div class="setting-row">
+          <span class="label">Preload Buffer</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="range" id="bufferSlider" min="5" max="60" value="30" style="width:100px;accent-color:var(--accent2)">
+            <span id="bufferValue" style="font-size:11px;min-width:30px">30s</span>
+          </div>
+        </div>
+        <div class="setting-row">
+          <span class="label">Crossfade</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="range" id="crossfadeSlider" min="0" max="10" value="0" style="width:100px;accent-color:var(--accent2)">
+            <span id="crossfadeValue" style="font-size:11px;min-width:30px">0s</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel setting-group">
+        <h3>System</h3>
+        <div class="setting-row">
+          <span class="label">Theme</span>
+          <span style="color:var(--accent)">Dark (Vistamations)</span>
+        </div>
+        <div class="setting-row">
+          <span class="label">FFmpeg Status</span>
+          <span id="ffmpegStatus" style="color:var(--warn)">Not loaded</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <button class="btn" id="resetSettingsBtn" style="margin-top:8px">Reset All Settings</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <span><span class="status-dot"></span><span id="statusText">Online</span></span>
+  <span id="versionLabel">v1.0 — Vistamations Media Unit</span>
+</div>
+
+<!-- SCRIPTS (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+<script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/dist/umd/ffmpeg.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/umd/index.js"></script>
+
+<!-- APP SCRIPTS -->
+<script src="js/main.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/video.js"></script>
+<script src="js/torrent.js"></script>
+<script src="js/download.js"></script>
+<script src="js/settings.js"></script>
+
+</body>
+</html>

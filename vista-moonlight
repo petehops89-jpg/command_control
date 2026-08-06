@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vista Moonlight</title>
+  <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; }
+    header { background: #16213e; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    header h1 { color: #e94560; font-size: 1.5rem; }
+    nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    nav a { color: #e0e0e0; text-decoration: none; padding: 0.4rem 0.8rem; border-radius: 4px; transition: background 0.2s; font-size: 0.9rem; cursor: pointer; }
+    nav a:hover, nav a.active { background: #e94560; color: #fff; }
+    main { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+    .player-container { margin-bottom: 2rem; }
+    .video-js { width: 100%; max-width: 760px; margin: 0 auto; }
+    .section { margin-bottom: 2rem; }
+    .section h2 { margin-bottom: 0.75rem; color: #e94560; font-size: 1.1rem; }
+    .file-input-wrap { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+    .file-input-wrap input[type="file"] { color: #e0e0e0; }
+    .url-form { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .url-form input { flex: 1; min-width: 200px; padding: 0.5rem; border: 1px solid #333; border-radius: 4px; background: #0f3460; color: #e0e0e0; }
+    .url-form button, .file-input-wrap button { padding: 0.5rem 1rem; border: none; border-radius: 4px; background: #e94560; color: #fff; cursor: pointer; font-size: 0.9rem; }
+    .url-form button:hover, .file-input-wrap button:hover { background: #c73652; }
+    .playlist { list-style: none; }
+    .playlist li { padding: 0.5rem; border-bottom: 1px solid #232342; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .playlist li:hover, .playlist li.active { background: #16213e; }
+    .playlist li.active .name { color: #e94560; font-weight: bold; }
+    .playlist li .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 1rem; }
+    .playlist li .type { font-size: 0.75rem; color: #888; text-transform: uppercase; }
+    .repo-link { display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #0f3460; border-radius: 4px; color: #e94560; text-decoration: none; font-size: 0.9rem; }
+    .repo-link:hover { background: #16213e; }
+    .status { font-size: 0.8rem; color: #888; margin-top: 0.5rem; word-break: break-all; }
+    .hidden { display: none; }
+    .tabs { display: flex; gap: 0; margin-bottom: 1rem; border-bottom: 2px solid #333; flex-wrap: wrap; }
+    .tabs button { padding: 0.5rem 1rem; border: none; background: transparent; color: #888; cursor: pointer; font-size: 0.9rem; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+    .tabs button.active { color: #e94560; border-bottom-color: #e94560; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Vista Moonlight</h1>
+    <nav>
+      <a href="#local" class="active" data-tab="local">Local Files</a>
+      <a href="#url" data-tab="url">URL / Stream</a>
+      <a href="#gateway" data-tab="gateway">Gateway</a>
+      <a href="#iptv" data-tab="iptv">IPTV</a>
+      <a href="#playlist" data-tab="playlist">Playlist</a>
+    </nav>
+  </header>
+  <main>
+    <div class="player-container">
+      <video id="player" class="video-js vjs-default-skin" controls preload="auto" width="760" height="428">
+        <p class="vjs-no-js">Enable JavaScript and upgrade to a browser that supports HTML5 video.</p>
+      </video>
+      <p class="status" id="status">No media loaded</p>
+    </div>
+
+    <div class="tabs">
+      <button class="active" data-tab="local">Local Files</button>
+      <button data-tab="url">URL / Stream</button>
+      <button data-tab="gateway">Gateway</button>
+      <button data-tab="iptv">IPTV</button>
+      <button data-tab="playlist">Playlist</button>
+    </div>
+
+    <div class="tab-content active" id="tab-local">
+      <div class="section">
+        <h2>Load Local Media</h2>
+        <div class="file-input-wrap">
+          <input type="file" id="fileInput" accept="video/*,audio/*,.m3u,.m3u8,.mpd,.mp4,.mkv,.avi,.webm,.mp3,.flac,.ogg,.wav,.aac,.m4a" multiple>
+          <button id="loadFileBtn">Load Files</button>
+        </div>
+        <p class="status">Supported: MP4, MKV, AVI, WebM, MP3, FLAC, OGG, WAV, AAC, M4A, M3U, M3U8, MPD</p>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-url">
+      <div class="section">
+        <h2>Stream from URL</h2>
+        <div class="url-form">
+          <input type="text" id="urlInput" placeholder="Paste media URL or stream link (m3u8, mpd, mp4, etc.)">
+          <button id="loadUrlBtn">Load URL</button>
+        </div>
+        <p class="status">Supports HLS (.m3u8), DASH (.mpd), direct video/audio URLs</p>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-gateway">
+      <div class="section">
+        <h2>Gateway Endpoint Stream</h2>
+        <div class="url-form">
+          <input type="text" id="gatewayInput" placeholder="Enter Gateway / IPFS media endpoint URL">
+          <button id="loadGatewayBtn">Load Gateway</button>
+        </div>
+        <p class="status">Stream directly through Web3 or custom media gateways</p>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-iptv">
+      <div class="section">
+        <h2>IPTV Stream / Channel List</h2>
+        <div class="url-form">
+          <input type="text" id="iptvInput" placeholder="Paste IPTV playlist URL (.m3u, .m3u8)">
+          <button id="loadIptvBtn">Load IPTV Stream</button>
+        </div>
+        <p class="status">Stream live IPTV channels or load external playlist feeds</p>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-playlist">
+      <div class="section">
+        <h2>Playlist</h2>
+        <ul class="playlist" id="playlist"></ul>
+        <p class="status" id="playlistStatus">No items in playlist</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Open Source Media Player</h2>
+      <p>Full-featured media player with music, video, controls, local network, gateway, API, and IPTV support:</p>
+      <a href="https://github.com/bugsfreeweb/WebIPTV" class="repo-link" target="_blank" rel="noopener">bugsfreeweb/WebIPTV on GitHub</a>
+      <p style="margin-top:0.5rem;font-size:0.8rem;color:#888;">WebIPTV — HLS, DASH, M3U playlists, local files, URL endpoints, channel management, favorites, history</p>
+    </div>
+  </main>
+
+  <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dashjs@4.7.4/dist/dash.all.min.js"></script>
+  <script>
+    const player = videojs('player', {
+      controls: true,
+      autoplay: false,
+      preload: 'auto',
+      fluid: true,
+      playbackRates: [0.5, 1, 1.25, 1.5, 2]
+    });
+
+    const statusEl = document.getElementById('status');
+    const playlistEl = document.getElementById('playlist');
+    const playlistStatusEl = document.getElementById('playlistStatus');
+
+    let playlist = [];
+    let currentPlaylistIndex = -1;
+    let objectUrls = [];
+    let hlsInstance = null;
+    let dashInstance = null;
+
+    function setStatus(msg) {
+      statusEl.textContent = msg;
+    }
+
+    function destroyStreamingInstances() {
+      if (hlsInstance) {
+        hlsInstance.destroy();
+        hlsInstance = null;
+      }
+      if (dashInstance) {
+        dashInstance.destroy();
+        dashInstance = null;
+      }
+    }
+
+    function cleanupObjectUrls() {
+      objectUrls.forEach(url => URL.revokeObjectURL(url));
+      objectUrls = [];
+    }
+
+    function getMimeType(fileNameOrUrl) {
+      const cleanStr = fileNameOrUrl.split('?')[0].split('#')[0];
+      const ext = cleanStr.split('.').pop().toLowerCase();
+      const mimeMap = {
+        mp4: 'video/mp4',
+        webm: 'video/webm',
+        ogg: 'video/ogg',
+        ogv: 'video/ogg',
+        mkv: 'video/x-matroska',
+        avi: 'video/x-msvideo',
+        mp3: 'audio/mpeg',
+        flac: 'audio/flac',
+        wav: 'audio/wav',
+        m4a: 'audio/mp4',
+        aac: 'audio/aac',
+        opus: 'audio/opus',
+        m3u8: 'application/x-mpegURL',
+        mpd: 'application/dash+xml'
+      };
+      return mimeMap[ext] || '';
+    }
+
+    function isHlsUrl(url) {
+      return url.includes('.m3u8') || url.includes('m3u8');
+    }
+
+    function isDashUrl(url) {
+      return url.includes('.mpd') || url.includes('mpd');
+    }
+
+    function loadMedia(src, type) {
+      destroyStreamingInstances();
+      player.src({ src, type });
+      player.play().catch(() => {});
+      setStatus('Playing: ' + src);
+    }
+
+    function loadHlsUrl(url) {
+      destroyStreamingInstances();
+      const videoEl = player.el().querySelector('video');
+
+      if (Hls.isSupported()) {
+        hlsInstance = new Hls();
+        hlsInstance.loadSource(url);
+        hlsInstance.attachMedia(videoEl);
+        hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+          player.play().catch(() => {});
+          setStatus('HLS streaming: ' + url);
+        });
+        hlsInstance.on(Hls.Events.ERROR, (_, data) => {
+          if (data.fatal) {
+            setStatus('HLS error, falling back to direct player playback');
+            destroyStreamingInstances();
+            player.src({ src: url, type: 'application/x-mpegURL' });
+            player.play().catch(() => {});
+          }
+        });
+      } else if (videoEl && videoEl.canPlayType('application/vnd.apple.mpegurl')) {
+        player.src({ src: url, type: 'application/vnd.apple.mpegURL' });
+        player.play().catch(() => {});
+        setStatus('HLS (native): ' + url);
+      } else {
+        setStatus('HLS not supported in this browser');
+      }
+    }
+
+    function loadDashUrl(url) {
+      destroyStreamingInstances();
+      const videoEl = player.el().querySelector('video');
+
+      if (dashjs.supportsMediaSource()) {
+        dashInstance = dashjs.MediaPlayer().create();
+        dashInstance.initialize(videoEl, url, true);
+        setStatus('DASH streaming: ' + url);
+      } else {
+        setStatus('DASH not supported in this browser');
+      }
+    }
+
+    function handleUrlStream(url) {
+      if (!url) return;
+      const detectedMime = getMimeType(url);
+
+      if (isHlsUrl(url)) {
+        loadHlsUrl(url);
+      } else if (isDashUrl(url)) {
+        loadDashUrl(url);
+      } else if (detectedMime) {
+        loadMedia(url, detectedMime);
+      } else {
+        player.src({ src: url, type: 'application/x-mpegURL' });
+        player.play().catch(() => {});
+        setStatus('Loaded URL: ' + url);
+      }
+    }
+
+    function updatePlaylistHighlight() {
+      const items = playlistEl.querySelectorAll('li');
+      items.forEach((li, idx) => {
+        if (idx === currentPlaylistIndex) {
+          li.classList.add('active');
+        } else {
+          li.classList.remove('active');
+        }
+      });
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('nav a').forEach(a => {
+        a.classList.toggle('active', a.dataset.tab === tabId);
+      });
+      document.querySelectorAll('.tabs button').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === tabId);
+      });
+      document.querySelectorAll('.tab-content').forEach(c => {
+        c.classList.toggle('active', c.id === 'tab-' + tabId);
+      });
+    }
+
+    document.getElementById('loadFileBtn').addEventListener('click', () => {
+      const fileInput = document.getElementById('fileInput');
+      const files = fileInput.files;
+      if (!files.length) return;
+
+      cleanupObjectUrls();
+      playlist = [];
+      currentPlaylistIndex = -1;
+      playlistEl.innerHTML = '';
+
+      Array.from(files).forEach((file, index) => {
+        const url = URL.createObjectURL(file);
+        objectUrls.push(url);
+
+        const mimeType = getMimeType(file.name);
+        const ext = file.name.split('.').pop().toLowerCase();
+        const isAudio = ['mp3', 'flac', 'ogg', 'wav', 'aac', 'm4a', 'opus'].includes(ext);
+        const type = mimeType || (isAudio ? 'audio/mpeg' : 'video/mp4');
+
+        playlist.push({ name: file.name, url, type, isAudio });
+
+        const li = document.createElement('li');
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'name';
+        nameSpan.textContent = file.name;
+
+        const typeSpan = document.createElement('span');
+        typeSpan.className = 'type';
+        typeSpan.textContent = isAudio ? 'audio' : 'video';
+
+        li.appendChild(nameSpan);
+        li.appendChild(typeSpan);
+
+        li.addEventListener('click', () => {
+          currentPlaylistIndex = index;
+          updatePlaylistHighlight();
+          loadMedia(playlist[currentPlaylistIndex].url, playlist[currentPlaylistIndex].type);
+        });
+
+        playlistEl.appendChild(li);
+      });
+
+      playlistStatusEl.textContent = playlist.length + ' file(s) loaded';
+      if (files.length > 0) {
+        currentPlaylistIndex = 0;
+        updatePlaylistHighlight();
+        loadMedia(playlist[0].url, playlist[0].type);
+      }
+    });
+
+    document.getElementById('loadUrlBtn').addEventListener('click', () => {
+      const urlInput = document.getElementById('urlInput');
+      handleUrlStream(urlInput.value.trim());
+    });
+
+    document.getElementById('urlInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('loadUrlBtn').click();
+    });
+
+    document.getElementById('loadGatewayBtn').addEventListener('click', () => {
+      const gatewayInput = document.getElementById('gatewayInput');
+      handleUrlStream(gatewayInput.value.trim());
+    });
+
+    document.getElementById('gatewayInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('loadGatewayBtn').click();
+    });
+
+    document.getElementById('loadIptvBtn').addEventListener('click', () => {
+      const iptvInput = document.getElementById('iptvInput');
+      handleUrlStream(iptvInput.value.trim());
+    });
+
+    document.getElementById('iptvInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('loadIptvBtn').click();
+    });
+
+    document.querySelectorAll('.tabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchTab(btn.dataset.tab);
+      });
+    });
+
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchTab(link.dataset.tab);
+      });
+    });
+
+    player.on('ended', () => {
+      if (playlist.length > 0 && currentPlaylistIndex < playlist.length - 1) {
+        currentPlaylistIndex++;
+        updatePlaylistHighlight();
+        loadMedia(playlist[currentPlaylistIndex].url, playlist[currentPlaylistIndex].type);
+      } else {
+        setStatus('Playback ended');
+      }
+    });
+
+    window.addEventListener('beforeunload', () => {
+      destroyStreamingInstances();
+      cleanupObjectUrls();
+    });
+  </script>
+</body>
+</html>
