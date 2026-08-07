@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olivia Gate — Vistamations Command Control</title>
+<style>
+  :root {
+    --ink: #0A0C0F;
+    --card: #14171C;
+    --border: rgba(255,255,255,0.05);
+    --amber: #E8A33D;
+    --cyan: #4FD1C5;
+    --rust: #C44536;
+    --bone: #E8E6DF;
+    --muted: #6B7280;
+    --radius: 8px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--ink); color: var(--bone);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background-image: radial-gradient(ellipse at 50% 0%, rgba(232,163,61,0.04) 0%, transparent 60%);
+  }
+  .gate {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px 32px; width: 100%; max-width: 560px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.4);
+  }
+  .gate .header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+  }
+  .gate .avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--amber), #c47d20);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700;
+    color: var(--ink);
+  }
+  .gate .from {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 2px; color: var(--amber);
+  }
+  .gate .context {
+    font-size: 13px; color: var(--bone); line-height: 1.5; margin-bottom: 18px;
+    padding: 12px; background: rgba(255,255,255,0.02); border-radius: 6px;
+    border-left: 2px solid var(--amber);
+  }
+  .gate label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted);
+    display: block; margin-bottom: 6px;
+  }
+  .gate textarea {
+    width: 100%; min-height: 100px; background: var(--ink);
+    border: 1px solid var(--border); border-radius: 6px;
+    color: var(--bone); font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; padding: 12px 14px; resize: vertical; outline: none;
+    line-height: 1.6;
+  }
+  .gate textarea:focus { border-color: rgba(232,163,61,0.3); }
+  .gate textarea::placeholder { color: rgba(255,255,255,0.1); }
+
+  .gate .route-info {
+    font-size: 10px; color: var(--muted); margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .gate .route-info span { color: var(--cyan); }
+
+  .gate .actions {
+    display: flex; gap: 8px; margin-top: 14px; align-items: center;
+  }
+  .btn {
+    padding: 10px 22px; border-radius: 6px; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 1px; cursor: pointer; border: none;
+    transition: all 0.2s;
+  }
+  .btn-send {
+    background: var(--amber); color: var(--ink); font-weight: 500;
+  }
+  .btn-send:hover { background: #d4952e; }
+  .btn-send:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-skip {
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+  }
+  .btn-skip:hover { border-color: rgba(255,255,255,0.12); color: var(--bone); }
+
+  .confirm {
+    display: none; padding: 14px; border-radius: 6px; margin-top: 12px;
+    font-size: 12px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px;
+  }
+  .confirm.show { display: block; }
+  .confirm.ok { background: rgba(79,209,197,0.08); border: 1px solid rgba(79,209,197,0.2); color: var(--cyan); }
+  .confirm.err { background: rgba(196,69,54,0.08); border: 1px solid rgba(196,69,54,0.2); color: var(--rust); }
+
+  .recent {
+    margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border);
+    font-size: 10px; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .recent .item {
+    padding: 4px 0; display: flex; gap: 10px;
+  }
+  .recent .item .ts { color: rgba(255,255,255,0.2); min-width: 60px; }
+  .recent .item .agent { color: var(--amber); min-width: 80px; }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <div class="header">
+    <div class="avatar">O</div>
+    <div>
+      <div class="from">Olivia — Orchestration Secretary</div>
+      <div style="font-size:12px;color:var(--bone);margin-top:2px" id="gate-subject">Awaiting your response</div>
+    </div>
+  </div>
+
+  <div class="context" id="gate-context">
+    No pending message. Olivia will notify you when there's something to respond to.
+  </div>
+
+  <label>Your response &mdash; Olivia routes to the right agent</label>
+  <textarea id="response-input"
+    placeholder="Example: 'Trinity, rebuild the app container and verify port 3000'
+'Claw, we need three more Knowledge dominion sources by tomorrow'
+'Gordon, check why Redis connections dropped at 14:00'
+'All agents, stage completion report requested'"
+  ></textarea>
+  <div class="route-info" id="route-hint">
+    Detected routing: <span id="route-target">—</span>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-send" id="send-btn" onclick="sendResponse()">SEND TO OLIVIA</button>
+    <button class="btn btn-skip" onclick="window.close()">Close gate</button>
+  </div>
+
+  <div class="confirm" id="confirm"></div>
+</div>
+
+<script>
+const API = '/api/olivia/respond';
+const QUEUE_API = '/api/olivia/queue';
+
+const AGENTS = {
+  'trinity':    { name:'Trinity',    role:'Infrastructure',   keywords:['docker','container','port','rebuild','health','nginx','redis','prometheus','infra','stack','compose','mcp','server.js'] },
+  'gordon':     { name:'Gordon',     role:'Docker Manager',   keywords:['docker','image','build','compose','volume','container','registry'] },
+  'merlin':     { name:'Merlin',     role:'UI Wizard',        keywords:['ui','css','animation','form','wizard','layout','grid','design','card','button','style','html'] },
+  'olivia':     { name:'Olivia',     role:'Orchestration',    keywords:['route','notify','notification','report','status','summary','gate','link','nav'] },
+  'claw':       { name:'Claw',       role:'Content Ideation', keywords:['content','research','topic','source','publication','article','knowledge','dominion','registry','evidence'] },
+  'big brother':{ name:'Big Brother',role:'Oversight',        keywords:['oversight','decision','architecture','stage','plan','review','verify','validate','report','all agents'] },
+  'dee':        { name:'Dee',        role:'Fast Tasks',       keywords:['quick','fast','check','test','diagnose','fix','simple','small'] },
+};
+
+function detectRouting(text) {
+  const lower = text.toLowerCase();
+  const scores = {};
+  for (const [key, agent] of Object.entries(AGENTS)) {
+    scores[key] = 0;
+    for (const kw of agent.keywords) {
+      if (lower.includes(kw)) scores[key] += 1;
+    }
+  }
+  const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+  if (sorted[0][1] === 0) return ['olivia']; // default to Olivia if no match
+  return sorted.filter(([,s]) => s > 0).slice(0, 3).map(([k]) => k);
+}
+
+document.getElementById('response-input').addEventListener('input', function() {
+  const text = this.value;
+  const routes = detectRouting(text);
+  const names = routes.map(k => AGENTS[k].name).join(', ');
+  document.getElementById('route-target').textContent = names || 'Olivia (default)';
+});
+
+async function sendResponse() {
+  const text = document.getElementById('response-input').value.trim();
+  if (!text) return;
+
+  const routes = detectRouting(text);
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  btn.textContent = 'SENDING...';
+
+  const payload = {
+    from: 'Pete',
+    message: text,
+    routedTo: routes,
+    timestamp: new Date().toISOString(),
+  };
+
+  try {
+    const resp = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await resp.json();
+    const confirm = document.getElementById('confirm');
+    if (resp.ok) {
+      confirm.className = 'confirm ok show';
+      confirm.innerHTML = '&#x2713; Response sent. Routed to: <strong>' +
+        routes.map(k => AGENTS[k].name).join(', ') + '</strong><br>' +
+        'Task ID: ' + (data.taskId || 'queued');
+      document.getElementById('response-input').value = '';
+      setTimeout(() => window.close(), 4000);
+    } else {
+      confirm.className = 'confirm err show';
+      confirm.textContent = 'Error: ' + (data.error || 'Unknown');
+    }
+  } catch (e) {
+    // Server unavailable — save locally and try later
+    try {
+      let local = JSON.parse(localStorage.getItem('olivia-pending') || '[]');
+      local.push(payload);
+      localStorage.setItem('olivia-pending', JSON.stringify(local));
+      const confirm = document.getElementById('confirm');
+      confirm.className = 'confirm ok show';
+      confirm.innerHTML = '&#x2713; Saved locally (Olivia server unreachable).<br>Routed to: <strong>' +
+        routes.map(k => AGENTS[k].name).join(', ') + '</strong><br>Will deliver when server is back.';
+      document.getElementById('response-input').value = '';
+    } catch (e2) {
+      const confirm = document.getElementById('confirm');
+      confirm.className = 'confirm err show';
+      confirm.textContent = 'Failed to save: ' + e2.message;
+    }
+  }
+  btn.disabled = false;
+  btn.textContent = 'SEND TO OLIVIA';
+}
+
+// Load pending context from URL params
+const params = new URLSearchParams(window.location.search);
+const context = params.get('msg');
+const subject = params.get('subject');
+if (context) {
+  document.getElementById('gate-context').textContent = decodeURIComponent(context);
+}
+if (subject) {
+  document.getElementById('gate-subject').textContent = decodeURIComponent(subject);
+}
+</script>
+
+</body>
+</html>

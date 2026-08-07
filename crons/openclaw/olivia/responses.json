@@ -1,0 +1,13 @@
+[
+  {
+    "id": "RESP-0001",
+    "from": "Pete",
+    "message": "ok sweet, standing by.  enable http://localhost/crons/openclaw/olivia/olivia-gate.html easy access sii can meessage you.  can't wait to work with you",
+    "routedTo": [
+      "merlin",
+      "olivia"
+    ],
+    "timestamp": "2026-08-07T08:49:43.866Z",
+    "status": "received"
+  }
+]

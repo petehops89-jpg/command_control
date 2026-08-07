@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const RESEARCH_LINKS_PATH = path.join(__dirname, 'crons', 'openclaw', 'research', 'inventory', 'links.json');
+const OLIVIA_RESPONSES_PATH = path.join(__dirname, 'crons', 'openclaw', 'olivia', 'responses.json');
+const OLIVIA_QUEUE_PATH = path.join(__dirname, 'crons', 'openclaw', 'olivia', 'queue.json');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -51,7 +53,8 @@ app.get('/metrics', async (_req, res) => {
   ].join('\n'));
 });
 
-// Research Inventory — capture links
+// ─── Research Inventory ───
+
 app.post('/research/capture', (req, res) => {
   try {
     const { links } = req.body;
@@ -77,10 +80,73 @@ app.post('/research/capture', (req, res) => {
   }
 });
 
-// Research Inventory — get links
 app.get('/research/links', (_req, res) => {
   try {
     const data = fs.readFileSync(RESEARCH_LINKS_PATH, 'utf8');
+    res.json(JSON.parse(data));
+  } catch (e) {
+    res.json([]);
+  }
+});
+
+// ─── Olivia Gate ───
+
+app.post('/olivia/respond', (req, res) => {
+  try {
+    const { from, message, routedTo, timestamp } = req.body;
+    if (!message) return res.status(400).json({ error: 'message required' });
+    const routes = routedTo && routedTo.length > 0 ? routedTo : ['olivia'];
+
+    let responses = [];
+    try { responses = JSON.parse(fs.readFileSync(OLIVIA_RESPONSES_PATH, 'utf8')); }
+    catch (e) { /* file doesn't exist */ }
+    const responseEntry = {
+      id: 'RESP-' + String(responses.length + 1).padStart(4, '0'),
+      from: from || 'Pete',
+      message,
+      routedTo: routes,
+      timestamp: timestamp || new Date().toISOString(),
+      status: 'received',
+    };
+    responses.push(responseEntry);
+    const dir = path.dirname(OLIVIA_RESPONSES_PATH);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(OLIVIA_RESPONSES_PATH, JSON.stringify(responses, null, 2), 'utf8');
+
+    let queue = [];
+    try { queue = JSON.parse(fs.readFileSync(OLIVIA_QUEUE_PATH, 'utf8')); }
+    catch (e) { /* file doesn't exist */ }
+    for (const agent of routes) {
+      queue.push({
+        taskId: 'TASK-' + String(queue.length + 1).padStart(4, '0'),
+        agent,
+        message,
+        from: from || 'Pete',
+        assignedAt: timestamp || new Date().toISOString(),
+        status: 'queued',
+        responseId: responseEntry.id,
+      });
+    }
+    fs.writeFileSync(OLIVIA_QUEUE_PATH, JSON.stringify(queue, null, 2), 'utf8');
+
+    res.json({ taskId: 'TASK-' + String(queue.length).padStart(4, '0'), routedTo: routes, status: 'queued' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/olivia/queue', (_req, res) => {
+  try {
+    const data = fs.readFileSync(OLIVIA_QUEUE_PATH, 'utf8');
+    res.json(JSON.parse(data));
+  } catch (e) {
+    res.json([]);
+  }
+});
+
+app.get('/olivia/responses', (_req, res) => {
+  try {
+    const data = fs.readFileSync(OLIVIA_RESPONSES_PATH, 'utf8');
     res.json(JSON.parse(data));
   } catch (e) {
     res.json([]);
