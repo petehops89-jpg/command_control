@@ -6,6 +6,7 @@ const path = require('path');
 const RESEARCH_LINKS_PATH = path.join(__dirname, 'crons', 'openclaw', 'research', 'inventory', 'links.json');
 const OLIVIA_RESPONSES_PATH = path.join(__dirname, 'crons', 'openclaw', 'olivia', 'responses.json');
 const OLIVIA_QUEUE_PATH = path.join(__dirname, 'crons', 'openclaw', 'olivia', 'queue.json');
+const OLIVIA_NORESP_PATH = path.join(__dirname, 'crons', 'openclaw', 'olivia', 'no-responses.json');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -150,6 +151,79 @@ app.get('/olivia/responses', (_req, res) => {
     res.json(JSON.parse(data));
   } catch (e) {
     res.json([]);
+  }
+});
+
+// Log a notification sent to Pete — starts the 1-hour response window
+app.post('/olivia/notified', (req, res) => {
+  try {
+    const { subject, message, sentAt } = req.body;
+    let noresp = [];
+    try { noresp = JSON.parse(fs.readFileSync(OLIVIA_NORESP_PATH, 'utf8')); }
+    catch (e) { /* file doesn't exist */ }
+    noresp.push({
+      id: 'NR-' + String(noresp.length + 1).padStart(4, '0'),
+      subject: subject || '',
+      message: (message || '').substring(0, 200),
+      notifiedAt: sentAt || new Date().toISOString(),
+      responded: false,
+      responseId: null,
+    });
+    const dir = path.dirname(OLIVIA_NORESP_PATH);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(OLIVIA_NORESP_PATH, JSON.stringify(noresp, null, 2), 'utf8');
+    res.json({ tracked: true, id: noresp[noresp.length-1].id });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get no-response items (unresponded after 1 hour, plus recent expired)
+app.get('/olivia/no-responses', (_req, res) => {
+  try {
+    const data = JSON.parse(fs.readFileSync(OLIVIA_NORESP_PATH, 'utf8'));
+    const now = new Date();
+    const expired = data.filter(nr => {
+      if (nr.responded) return false;
+      const sent = new Date(nr.notifiedAt);
+      const hours = (now - sent) / (1000 * 60 * 60);
+      nr.expiredAt = now.toISOString();
+      return hours >= 1;
+    });
+    // Mark expired ones in the original data
+    const updated = data.map(nr => {
+      const sent = new Date(nr.notifiedAt);
+      const hours = (now - sent) / (1000 * 60 * 60);
+      if (!nr.responded && hours >= 1) nr.status = 'expired';
+      return nr;
+    });
+    fs.writeFileSync(OLIVIA_NORESP_PATH, JSON.stringify(updated, null, 2), 'utf8');
+    res.json(expired);
+  } catch (e) {
+    res.json([]);
+  }
+});
+
+// Mark a notification as responded (called when Pete sends a message)
+app.post('/olivia/responded', (req, res) => {
+  try {
+    const { responseId } = req.body;
+    let data = [];
+    try { data = JSON.parse(fs.readFileSync(OLIVIA_NORESP_PATH, 'utf8')); }
+    catch (e) { return res.json({ ok: true }); }
+    // Mark the most recent unresponded notification as responded
+    const updated = data.map(nr => {
+      if (!nr.responded && responseId) {
+        nr.responded = true;
+        nr.responseId = responseId;
+        nr.respondedAt = new Date().toISOString();
+      }
+      return nr;
+    });
+    fs.writeFileSync(OLIVIA_NORESP_PATH, JSON.stringify(updated, null, 2), 'utf8');
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

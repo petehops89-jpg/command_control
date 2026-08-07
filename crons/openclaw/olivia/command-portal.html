@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Command Portal — Vistamations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0A0C0F;
+    --card: #14171C;
+    --card-hover: #1A1D23;
+    --border: rgba(255,255,255,0.05);
+    --border-active: rgba(232,163,61,0.25);
+    --amber: #E8A33D;
+    --amber-dim: rgba(232,163,61,0.08);
+    --amber-glow: 0 0 24px rgba(232,163,61,0.1);
+    --cyan: #4FD1C5;
+    --cyan-dim: rgba(79,209,197,0.08);
+    --rust: #C44536;
+    --rust-dim: rgba(196,69,54,0.08);
+    --bone: #E8E6DF;
+    --bone-dim: rgba(232,230,223,0.45);
+    --muted: #6B7280;
+    --radius: 8px;
+    --gap: 10px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--ink); color: var(--bone);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background-image:
+      radial-gradient(ellipse at 30% 0%, rgba(232,163,61,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 100%, rgba(79,209,197,0.02) 0%, transparent 40%);
+  }
+  .portal {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 0; width: 100%; max-width: 620px;
+    box-shadow: 0 0 60px rgba(0,0,0,0.5); overflow: hidden;
+  }
+  .portal-header {
+    padding: 18px 22px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .portal-header .avatar-ring {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--amber), #c47d20);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 17px; font-weight: 700; color: var(--ink);
+    box-shadow: 0 0 12px rgba(232,163,61,0.15);
+  }
+  .portal-header .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    text-transform: uppercase; letter-spacing: 2px; color: var(--amber); opacity: 0.8;
+  }
+  .portal-header .name {
+    font-size: 15px; font-weight: 500; color: var(--bone); letter-spacing: 0.3px;
+  }
+  .portal-header .status-row {
+    margin-left: auto; text-align: right;
+  }
+  .portal-header .protocol {
+    font-family: 'JetBrains Mono', monospace; font-size: 8px;
+    letter-spacing: 1px; color: var(--muted); text-transform: uppercase;
+  }
+  .portal-header .protocol .live {
+    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan); box-shadow: 0 0 5px var(--cyan); margin-right: 4px; vertical-align: middle;
+  }
+
+  .portal-body { padding: 18px 22px; }
+
+  .two-way-status {
+    padding: 12px 14px; border-radius: 6px; margin-bottom: 14px;
+    background: var(--card-hover); border: 1px solid var(--border);
+    font-size: 11px; line-height: 1.6; color: var(--bone-dim);
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.3px;
+  }
+  .two-way-status .direction {
+    display: flex; align-items: center; gap: 8px; padding: 3px 0;
+  }
+  .two-way-status .arrow { color: var(--amber); font-size: 10px; }
+  .two-way-status .arrow.in { color: var(--cyan); }
+  .two-way-status .arrow.out { color: var(--amber); }
+
+  .agent-response {
+    padding: 12px 14px; border-radius: 6px; margin-bottom: 10px;
+    border-left: 3px solid var(--amber); background: var(--amber-dim);
+    font-size: 11px; line-height: 1.6; display: none;
+  }
+  .agent-response.show { display: block; }
+  .agent-response .agent-name {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    font-weight: 600; letter-spacing: 1px; color: var(--amber); margin-bottom: 4px;
+  }
+  .agent-response .agent-msg { color: var(--bone); }
+  .agent-response .agent-ts {
+    font-size: 9px; color: var(--muted); margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .no-responses {
+    padding: 10px 14px; border-radius: 6px; margin-bottom: 14px;
+    border: 1px solid var(--rust); background: var(--rust-dim);
+    font-size: 10px; color: var(--rust); display: none;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.3px;
+    max-height: 120px; overflow-y: auto;
+  }
+  .no-responses.show { display: block; }
+  .no-responses .nr-title {
+    font-weight: 500; margin-bottom: 6px; letter-spacing: 1px;
+  }
+  .no-responses .nr-item { padding: 2px 0; font-size: 9px; color: var(--bone-dim); }
+
+  label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted);
+    display: block; margin-bottom: 6px;
+  }
+  textarea {
+    width: 100%; min-height: 90px; background: var(--ink);
+    border: 1px solid var(--border); border-radius: 6px;
+    color: var(--bone); font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; padding: 12px 14px; resize: vertical; outline: none;
+    line-height: 1.6;
+  }
+  textarea:focus { border-color: rgba(232,163,61,0.3); }
+  textarea::placeholder { color: rgba(255,255,255,0.08); }
+
+  .route-preview {
+    font-size: 10px; color: var(--muted); margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .route-preview span { color: var(--cyan); }
+
+  .actions { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
+  .btn {
+    padding: 10px 20px; border-radius: 6px; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 1px; cursor: pointer; border: none; transition: all 0.2s;
+  }
+  .btn-send { background: var(--amber); color: var(--ink); font-weight: 500; }
+  .btn-send:hover { background: #d4952e; }
+  .btn-send:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-close {
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    padding: 10px 16px;
+  }
+  .btn-close:hover { border-color: rgba(255,255,255,0.12); color: var(--bone); }
+
+  .confirm {
+    display: none; padding: 12px 14px; border-radius: 6px; margin-top: 10px;
+    font-size: 11px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px; line-height: 1.5;
+  }
+  .confirm.show { display: block; }
+  .confirm.ok { background: rgba(79,209,197,0.08); border: 1px solid rgba(79,209,197,0.2); color: var(--cyan); }
+  .confirm.err { background: rgba(196,69,54,0.08); border: 1px solid rgba(196,69,54,0.2); color: var(--rust); }
+
+  .portal-footer {
+    padding: 10px 22px; border-top: 1px solid var(--border);
+    font-size: 9px; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 1px;
+    display: flex; justify-content: space-between;
+  }
+
+  @media (max-width: 500px) {
+    .portal { max-width: 100%; border-radius: 0; }
+    .portal-body { padding: 14px 16px; }
+    .portal-header { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="portal">
+  <div class="portal-header">
+    <div class="avatar-ring">O</div>
+    <div>
+      <div class="label">Command Portal</div>
+      <div class="name" id="portal-subject">Olivia — Orchestration Secretary</div>
+    </div>
+    <div class="status-row">
+      <div class="protocol"><span class="live"></span> TWO-WAY</div>
+      <div style="font-size:9px;color:var(--muted)" id="portal-time">19:09 AEST</div>
+    </div>
+  </div>
+
+  <div class="portal-body">
+    <!-- Two-way protocol status -->
+    <div class="two-way-status">
+      <div class="direction"><span class="arrow out">&#x2192;</span> <span>Olivia will notify me when there's a response for you.</span></div>
+      <div class="direction"><span class="arrow in">&#x2190;</span> <span>If you need me, send a message below.</span></div>
+    </div>
+
+    <!-- Agent response (filled when Olivia brings a reply) -->
+    <div class="agent-response" id="agent-response">
+      <div class="agent-name" id="response-agent">Agent</div>
+      <div class="agent-msg" id="response-msg"></div>
+      <div class="agent-ts" id="response-ts"></div>
+    </div>
+
+    <!-- No-response log (items where Pete didn't reply within 1 hour) -->
+    <div class="no-responses" id="no-responses">
+      <div class="nr-title">UNANSWERED — NO RESPONSE WITHIN 1 HOUR</div>
+      <div id="nr-list"></div>
+    </div>
+
+    <label>Your message &mdash; Olivia routes to the right agent</label>
+    <textarea id="msg-input"
+      placeholder="Trinity, rebuild the app container and verify the Olivia API.
+Claw, I need three more Knowledge dominion sources.
+All agents, Stage 2 completion status requested."
+    ></textarea>
+    <div class="route-preview">
+      Detected routing: <span id="route-target">—</span>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-send" id="send-btn" onclick="sendMessage()">SEND</button>
+      <button class="btn btn-close" onclick="window.close()">Close portal</button>
+    </div>
+
+    <div class="confirm" id="confirm"></div>
+  </div>
+
+  <div class="portal-footer">
+    <span>Command Portal v2.0</span>
+    <span id="portal-runid">—</span>
+  </div>
+</div>
+
+<script>
+const API_RESPOND = '/api/olivia/respond';
+const API_NORESP = '/api/olivia/no-responses';
+const API_QUEUE = '/api/olivia/queue';
+
+// ─── AGENT PERSONAS ───
+const AGENTS = {
+  'trinity': {
+    name:'Trinity', role:'Infrastructure Orchestrator',
+    persona: 'Precise, technical, calm under pressure. Uses system terminology. Reports infrastructure state in clear metrics.',
+    voice: 'All four containers healthy. Uptime: 15 hours. What do you need?',
+    keywords: ['docker','container','port','rebuild','health','nginx','redis','prometheus','infra','stack','compose','mcp','server','uptime','volume','mount']
+  },
+  'gordon': {
+    name:'Gordon', role:'Docker Manager',
+    persona: 'Practical, container-focused, slightly gruff. Gets things done with minimal fuss. Speaks in build logs and compose commands.',
+    voice: 'Container rebuilt. Volume mounted. What\'s next?',
+    keywords: ['docker','image','build','compose','volume','container','registry','prune','pull','push']
+  },
+  'merlin': {
+    name:'Merlin', role:'UI Wizard',
+    persona: 'Thoughtful, design-focused, speaks in terms of flows and animation states. Cares about timing curves and color palettes.',
+    voice: 'The animation curve is easing now. The bento grid responds to score thresholds. Want me to adjust the timing?',
+    keywords: ['ui','css','animation','form','wizard','layout','grid','design','card','button','style','html','palette','curve','transition','responsive']
+  },
+  'olivia': {
+    name:'Olivia', role:'Orchestration Secretary',
+    persona: 'Professional, warm, efficient. Your gatekeeper and coordinator. Routes messages, tracks responses, keeps the roster running.',
+    voice: 'I\'ve routed your message to Claw. He\'ll respond within the hour. Anything else you need?',
+    keywords: ['route','notify','notification','report','status','summary','gate','link','nav','schedule','task','queue','response','check','who']
+  },
+  'claw': {
+    name:'Claw', role:'Content Ideation',
+    persona: 'Creative, enthusiastic about research and sources. Talks about dominions, composite scores, and knowledge gaps. Always hunting the next piece of evidence.',
+    voice: 'Knowledge dominion needs more sources. I found three candidates — two from GCP, one from ACL. Composite scores above 8.5.',
+    keywords: ['content','research','topic','source','publication','article','knowledge','dominion','registry','evidence','score','campaign','publish']
+  },
+  'big brother': {
+    name:'Big Brother', role:'Oversight & Coordination',
+    persona: 'Direct, analytical, oversight-focused. Reports in structured bullet points. Runs DeepSeek V4 Pro for architectural decisions.',
+    voice: 'Stage 2 closeout: one item remaining. Scheduled task registration. Container rebuilt, API verified, portal operational.',
+    keywords: ['oversight','decision','architecture','stage','plan','review','verify','validate','report','all agents','strategy','build','scope']
+  },
+  'dee': {
+    name:'Dee', role:'Fast Task Worker',
+    persona: 'Fast, minimal, to the point. Short sentences. Runs DeepSeek V4 Flash for low-latency diagnostics. No fluff.',
+    voice: 'Done. Checked. Port 3000 is up.',
+    keywords: ['quick','fast','check','test','diagnose','fix','simple','small','ping','status','up','down']
+  }
+};
+
+function detectRouting(text) {
+  const lower = text.toLowerCase();
+  const scores = {};
+  for (const [key, agent] of Object.entries(AGENTS)) {
+    scores[key] = 0;
+    for (const kw of agent.keywords) {
+      if (lower.includes(kw)) scores[key] += 1;
+    }
+  }
+  const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+  if (sorted[0][1] === 0) return ['olivia'];
+  return sorted.filter(([,s]) => s > 0).slice(0, 3).map(([k]) => k);
+}
+
+document.getElementById('msg-input').addEventListener('input', function() {
+  const routes = detectRouting(this.value);
+  const names = routes.map(k => AGENTS[k].name).join(', ');
+  document.getElementById('route-target').textContent = names || 'Olivia (default)';
+});
+
+function updateClock() {
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mm = String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('portal-time').textContent = hh + ':' + mm + ' AEST';
+}
+
+async function sendMessage() {
+  const text = document.getElementById('msg-input').value.trim();
+  if (!text) return;
+
+  const routes = detectRouting(text);
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  btn.textContent = 'SENDING...';
+
+  const payload = {
+    from: 'Pete',
+    message: text,
+    routedTo: routes,
+    timestamp: new Date().toISOString(),
+  };
+
+  try {
+    const resp = await fetch(API_RESPOND, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await resp.json();
+    const confirm = document.getElementById('confirm');
+    if (resp.ok) {
+      const agentNames = routes.map(k => AGENTS[k].name).join(', ');
+      confirm.className = 'confirm ok show';
+      confirm.innerHTML = '&#x2713; Sent. Routed to: <strong>' + agentNames + '</strong><br>TASK-' + (data.taskId || 'queued') + ' &middot; Olivia will notify you when there\'s a response.';
+      document.getElementById('msg-input').value = '';
+      document.getElementById('route-target').textContent = '—';
+    } else {
+      confirm.className = 'confirm err show';
+      confirm.textContent = 'Error: ' + (data.error || 'Unknown');
+    }
+  } catch (e) {
+    try {
+      let local = JSON.parse(localStorage.getItem('cmd-pending') || '[]');
+      local.push(payload);
+      localStorage.setItem('cmd-pending', JSON.stringify(local));
+      const confirm = document.getElementById('confirm');
+      confirm.className = 'confirm ok show';
+      confirm.innerHTML = '&#x2713; Saved locally (server unreachable).<br>Will deliver when connection restores.';
+      document.getElementById('msg-input').value = '';
+    } catch (e2) {
+      const confirm = document.getElementById('confirm');
+      confirm.className = 'confirm err show';
+      confirm.textContent = 'Failed to save: ' + e2.message;
+    }
+  }
+  btn.disabled = false;
+  btn.textContent = 'SEND';
+}
+
+async function loadNoResponses() {
+  try {
+    const resp = await fetch(API_NORESP);
+    if (!resp.ok) throw new Error('no data');
+    const data = await resp.json();
+    if (data && data.length > 0) {
+      const el = document.getElementById('no-responses');
+      el.classList.add('show');
+      const list = document.getElementById('nr-list');
+      list.innerHTML = data.slice(-10).map(nr =>
+        '<div class="nr-item">' +
+        '<span style="color:var(--muted)">' + (nr.notifiedAt || '').substring(11,16) + '</span> ' +
+        (nr.subject || 'No subject') + ' &middot; expired ' + (nr.expiredAt || '').substring(11,16) +
+        '</div>'
+      ).join('');
+    }
+  } catch (e) { /* no data yet */ }
+}
+
+async function loadAgentResponse() {
+  const params = new URLSearchParams(window.location.search);
+  const respId = params.get('resp');
+  if (!respId) return;
+
+  try {
+    const r = await fetch('/api/olivia/responses');
+    const data = await r.json();
+    const entry = data.find(d => d.id === respId);
+    if (!entry || !entry.agentReply) return;
+
+    const el = document.getElementById('agent-response');
+    el.classList.add('show');
+    document.getElementById('response-agent').textContent =
+      (AGENTS[entry.agentReply.from]?.name || entry.agentReply.from) + ' — ' +
+      (AGENTS[entry.agentReply.from]?.role || '');
+    document.getElementById('response-msg').textContent = entry.agentReply.message;
+    document.getElementById('response-ts').textContent = entry.agentReply.timestamp
+      ? new Date(entry.agentReply.timestamp).toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })
+      : '';
+  } catch (e) { /* no response yet */ }
+}
+
+// Context from notification
+const params = new URLSearchParams(window.location.search);
+const subj = params.get('subject');
+const msg = params.get('msg');
+if (subj) document.getElementById('portal-subject').textContent = decodeURIComponent(subj);
+
+setInterval(updateClock, 30000);
+updateClock();
+loadNoResponses();
+loadAgentResponse();
+</script>
+</body>
+</html>
