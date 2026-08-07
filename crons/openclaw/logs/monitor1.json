@@ -1,0 +1,559 @@
+{
+  "currentRunId": "RUN-20260807-101239-0QNP51",
+  "totalExecutions": 4,
+  "totalPublications": 3,
+  "totalAssets": 4,
+  "successRate": "75%",
+  "knowledgeLibraryCount": 4,
+  "recentLogs": [
+    {
+      "timestamp": "10:12:04.931",
+      "level": "info",
+      "message": "Lifecycle: 4/9 — REVIEW"
+    },
+    {
+      "timestamp": "10:12:04.931",
+      "level": "info",
+      "message": "Performing editorial review..."
+    },
+    {
+      "timestamp": "10:12:04.931",
+      "level": "info",
+      "message": "Review: Consistency=PASS Grammar=PASS Technical=PASS Citations=PASS BusinessValue=PASS"
+    },
+    {
+      "timestamp": "10:12:04.931",
+      "level": "info",
+      "message": "STAGE END: Editorial Review — complete (0ms)"
+    },
+    {
+      "timestamp": "10:12:04.931",
+      "level": "info",
+      "message": "STAGE START: Approval Queue"
+    },
+    {
+      "timestamp": "10:12:04.931",
+      "level": "info",
+      "message": "Lifecycle: 5/9 — APPROVED"
+    },
+    {
+      "timestamp": "10:12:04.931",
+      "level": "info",
+      "message": "Publication approved for deployment."
+    },
+    {
+      "timestamp": "10:12:04.931",
+      "level": "info",
+      "message": "STAGE END: Approval Queue — complete (0ms)"
+    },
+    {
+      "timestamp": "10:12:04.931",
+      "level": "info",
+      "message": "STAGE START: Deployment"
+    },
+    {
+      "timestamp": "10:12:04.931",
+      "level": "info",
+      "message": "Lifecycle: 6/9 — PUBLISHED"
+    },
+    {
+      "timestamp": "10:12:04.932",
+      "level": "info",
+      "message": "Publication written to C:\\vistamations-music\\crons\\openclaw\\publications\\RUN-20260807-101204-Y97R28.html"
+    },
+    {
+      "timestamp": "10:12:04.933",
+      "level": "info",
+      "message": "Value Score: 81/100 (Business: 86, Originality: 71, Depth: 81, Relevance: 81, Utility: 84)"
+    },
+    {
+      "timestamp": "10:12:04.933",
+      "level": "info",
+      "message": "Confidence: 70% | Estimated: $10,577"
+    },
+    {
+      "timestamp": "10:12:04.933",
+      "level": "info",
+      "message": "STAGE END: Deployment — complete (2ms)"
+    },
+    {
+      "timestamp": "10:12:04.933",
+      "level": "info",
+      "message": "STAGE START: Asset Registration"
+    },
+    {
+      "timestamp": "10:12:04.933",
+      "level": "info",
+      "message": "Lifecycle: 7/9 — INDEXED"
+    },
+    {
+      "timestamp": "10:12:04.934",
+      "level": "info",
+      "message": "Asset registered: ASSET-FOUNDATION-003 (v1.0.0)"
+    },
+    {
+      "timestamp": "10:12:04.934",
+      "level": "info",
+      "message": "STAGE END: Asset Registration — complete (1ms)"
+    },
+    {
+      "timestamp": "10:12:04.934",
+      "level": "info",
+      "message": "STAGE START: Monitor1 Update"
+    },
+    {
+      "timestamp": "10:12:04.948",
+      "level": "info",
+      "message": "STAGE END: Monitor1 Update — complete (14ms)"
+    },
+    {
+      "timestamp": "10:12:04.948",
+      "level": "info",
+      "message": "STAGE START: Knowledge Library Index"
+    },
+    {
+      "timestamp": "10:12:04.948",
+      "level": "info",
+      "message": "Lifecycle: 8/9 — VERSIONED"
+    },
+    {
+      "timestamp": "10:12:04.949",
+      "level": "info",
+      "message": "Indexed to knowledge library: C:\\vistamations-music\\crons\\openclaw\\knowledge-library\\RUN-20260807-101204-Y97R28.json"
+    },
+    {
+      "timestamp": "10:12:04.949",
+      "level": "info",
+      "message": "STAGE END: Knowledge Library Index — complete (1ms)"
+    },
+    {
+      "timestamp": "10:12:04.949",
+      "level": "info",
+      "message": "STAGE START: Archive"
+    },
+    {
+      "timestamp": "10:12:04.949",
+      "level": "info",
+      "message": "Lifecycle: 9/9 — ARCHIVED"
+    },
+    {
+      "timestamp": "10:12:04.950",
+      "level": "info",
+      "message": "Run archived to C:\\vistamations-music\\crons\\openclaw\\archive\\RUN-20260807-101204-Y97R28.json"
+    },
+    {
+      "timestamp": "10:12:04.950",
+      "level": "info",
+      "message": "STAGE END: Archive — complete (1ms)"
+    },
+    {
+      "timestamp": "10:12:04.950",
+      "level": "info",
+      "message": "Execution complete. ASSET_ID: ASSET-FOUNDATION-003 | PROJECT_ID: FOUNDATION-001"
+    },
+    {
+      "timestamp": "10:12:04.950",
+      "level": "info",
+      "message": "Value Score: 81/100 | Confidence: 70%"
+    }
+  ],
+  "publications": [
+    {
+      "runId": "RUN-20260807-094624-3P3AZT",
+      "projectId": null,
+      "assetId": null,
+      "timestamp": "2026-08-06 23:46:24",
+      "type": "Education Tutorial",
+      "title": "Education Tutorial: Knowledge Management — 7 August 2026",
+      "dominion": null,
+      "url": "/crons/openclaw/publications/RUN-20260807-094624-3P3AZT.html",
+      "status": "running",
+      "lifecycleState": null,
+      "agent": "OpenClaw Publishing Agent AG-OPENCLAW-001",
+      "valueScore": null,
+      "estimatedValue": "$4,672"
+    },
+    {
+      "runId": "RUN-20260807-095616-8GPFVF",
+      "projectId": null,
+      "assetId": null,
+      "timestamp": "2026-08-06 23:56:16",
+      "type": "Infrastructure Guide",
+      "title": "Infrastructure Guide: Edge Deployment — 7 August 2026",
+      "dominion": null,
+      "url": "/crons/openclaw/publications/RUN-20260807-095616-8GPFVF.html",
+      "status": "running",
+      "lifecycleState": null,
+      "agent": "OpenClaw Publishing Agent AG-OPENCLAW-001",
+      "valueScore": null,
+      "estimatedValue": "$6,467"
+    },
+    {
+      "runId": "RUN-20260807000101-REPORT",
+      "projectId": null,
+      "assetId": null,
+      "timestamp": "2026-08-07 00:01:01",
+      "type": "Architecture Documentation",
+      "title": "OpenClaw Publishing Engine — Implementation Report & Operational Manual",
+      "dominion": null,
+      "url": "/crons/openclaw/publications/RUN-20260807000101-REPORT.html",
+      "status": "published",
+      "lifecycleState": null,
+      "agent": "OpenClaw Publishing Agent AG-OPENCLAW-001",
+      "valueScore": null,
+      "estimatedValue": "$18,500"
+    },
+    {
+      "runId": "RUN-20260807-100959-1FDAWN",
+      "projectId": null,
+      "assetId": null,
+      "timestamp": "2026-08-07 00:09:59",
+      "type": "Business Analysis",
+      "title": "Business Analysis: AI Investment — 7 August 2026",
+      "dominion": null,
+      "url": "/crons/openclaw/publications/RUN-20260807-100959-1FDAWN.html",
+      "status": "published",
+      "lifecycleState": null,
+      "agent": "OpenClaw Publishing Agent AG-OPENCLAW-001",
+      "valueScore": null,
+      "estimatedValue": "$6,395"
+    },
+    {
+      "runId": "RUN-20260807-101057-LENGLT",
+      "projectId": "FOUNDATION-001",
+      "assetId": "ASSET-FOUNDATION-002",
+      "timestamp": "2026-08-07 00:10:57",
+      "type": "Architecture Documentation",
+      "title": "Architecture Documentation: Enterprise Software — 7 August 2026",
+      "dominion": "DOM-001",
+      "url": "/crons/openclaw/publications/RUN-20260807-101057-LENGLT.html",
+      "status": "running",
+      "lifecycleState": "archived",
+      "agent": "OpenClaw Publishing Agent AG-OPENCLAW-001",
+      "valueScore": {
+        "composite": 78,
+        "confidence": 77,
+        "breakdown": {
+          "businessValue": 82,
+          "originality": 81,
+          "depth": 68,
+          "relevance": 85,
+          "utility": 75
+        },
+        "estimatedCommercialValue": "$6,462",
+        "reviewStatus": "Automated Review"
+      },
+      "estimatedValue": "$6,462"
+    },
+    {
+      "runId": "RUN-20260807-101204-Y97R28",
+      "projectId": "FOUNDATION-001",
+      "assetId": "ASSET-FOUNDATION-003",
+      "timestamp": "2026-08-07 00:12:04",
+      "type": "Architecture Documentation",
+      "title": "Architecture Documentation: Enterprise Software — 7 August 2026",
+      "dominion": "DOM-001",
+      "url": "/crons/openclaw/publications/RUN-20260807-101204-Y97R28.html",
+      "status": "running",
+      "lifecycleState": "archived",
+      "agent": "OpenClaw Publishing Agent AG-OPENCLAW-001",
+      "valueScore": {
+        "composite": 81,
+        "confidence": 70,
+        "breakdown": {
+          "businessValue": 86,
+          "originality": 71,
+          "depth": 81,
+          "relevance": 81,
+          "utility": 84
+        },
+        "estimatedCommercialValue": "$10,577",
+        "reviewStatus": "Automated Review"
+      },
+      "estimatedValue": "$10,577"
+    },
+    {
+      "runId": "RUN-20260807-101239-0QNP51",
+      "projectId": null,
+      "assetId": null,
+      "timestamp": "2026-08-07 00:12:39",
+      "type": "Technology Review",
+      "title": "Technology Review: Autonomous AI Infrastructure — 7 August 2026",
+      "dominion": null,
+      "url": "/crons/openclaw/publications/RUN-20260807-101239-0QNP51.html",
+      "status": "published",
+      "lifecycleState": null,
+      "agent": "OpenClaw Publishing Agent AG-OPENCLAW-001",
+      "valueScore": null,
+      "estimatedValue": "$10,549"
+    }
+  ],
+  "assets": [
+    {
+      "assetId": "ASSET-FOUNDATION-004",
+      "projectId": "FOUNDATION-001",
+      "runId": "RUN-20260807-101239-0QNP51",
+      "dominion": "DOM-002",
+      "type": "Technology Review",
+      "title": "Technology Review: Autonomous AI Infrastructure — 7 August 2026",
+      "url": "/crons/openclaw/publications/RUN-20260807-101239-0QNP51.html",
+      "version": "1.0.0",
+      "status": "published",
+      "lifecycleState": "indexed",
+      "valueScore": {
+        "composite": 80,
+        "confidence": 72,
+        "breakdown": {
+          "businessValue": 82,
+          "originality": 77,
+          "depth": 82,
+          "relevance": 80,
+          "utility": 81
+        },
+        "estimatedCommercialValue": "$10,549",
+        "reviewStatus": "Automated Review"
+      },
+      "timestamp": "2026-08-07T00:12:39.397Z",
+      "revisions": []
+    },
+    {
+      "assetId": "ASSET-FOUNDATION-003",
+      "projectId": "FOUNDATION-001",
+      "runId": "RUN-20260807-101204-Y97R28",
+      "dominion": "DOM-001",
+      "type": "Architecture Documentation",
+      "title": "Architecture Documentation: Enterprise Software — 7 August 2026",
+      "url": "/crons/openclaw/publications/RUN-20260807-101204-Y97R28.html",
+      "version": "1.0.0",
+      "status": "published",
+      "lifecycleState": "indexed",
+      "valueScore": {
+        "composite": 81,
+        "confidence": 70,
+        "breakdown": {
+          "businessValue": 86,
+          "originality": 71,
+          "depth": 81,
+          "relevance": 81,
+          "utility": 84
+        },
+        "estimatedCommercialValue": "$10,577",
+        "reviewStatus": "Automated Review"
+      },
+      "timestamp": "2026-08-07T00:12:04.902Z",
+      "revisions": []
+    },
+    {
+      "assetId": "ASSET-FOUNDATION-002",
+      "projectId": "FOUNDATION-001",
+      "runId": "RUN-20260807-101057-LENGLT",
+      "dominion": "DOM-001",
+      "type": "Architecture Documentation",
+      "title": "Architecture Documentation: Enterprise Software — 7 August 2026",
+      "url": "/crons/openclaw/publications/RUN-20260807-101057-LENGLT.html",
+      "version": "1.0.0",
+      "status": "published",
+      "lifecycleState": "indexed",
+      "valueScore": {
+        "composite": 78,
+        "confidence": 77,
+        "breakdown": {
+          "businessValue": 82,
+          "originality": 81,
+          "depth": 68,
+          "relevance": 85,
+          "utility": 75
+        },
+        "estimatedCommercialValue": "$6,462",
+        "reviewStatus": "Automated Review"
+      },
+      "timestamp": "2026-08-07T00:10:57.307Z",
+      "revisions": []
+    },
+    {
+      "assetId": "ASSET-CORP-001",
+      "projectId": "CORP-001",
+      "runId": "RUN-20260807-100959-1FDAWN",
+      "dominion": "DOM-005",
+      "type": "Business Analysis",
+      "title": "Business Analysis: AI Investment — 7 August 2026",
+      "url": "/crons/openclaw/publications/RUN-20260807-100959-1FDAWN.html",
+      "version": "1.0.0",
+      "status": "published",
+      "lifecycleState": "indexed",
+      "valueScore": {
+        "composite": 80,
+        "confidence": 76,
+        "breakdown": {
+          "businessValue": 87,
+          "originality": 78,
+          "depth": 73,
+          "relevance": 83,
+          "utility": 77
+        },
+        "estimatedCommercialValue": "$6,395",
+        "reviewStatus": "Automated Review"
+      },
+      "timestamp": "2026-08-07T00:09:59.212Z",
+      "revisions": []
+    }
+  ],
+  "projects": [
+    {
+      "id": "FOUNDATION-001",
+      "name": "OpenClaw Infrastructure",
+      "dominion": "DOM-001",
+      "stats": {
+        "totalRuns": 53,
+        "publications": 2,
+        "published": 2,
+        "valueScore": 80,
+        "accumulatedValue": 17039,
+        "lastRun": "2026-08-07T00:12:04.902Z"
+      }
+    },
+    {
+      "id": "MEDIA-001",
+      "name": "Media Production",
+      "dominion": "DOM-003",
+      "stats": {
+        "totalRuns": 0,
+        "publications": 0,
+        "published": 0,
+        "valueScore": 0,
+        "accumulatedValue": 0
+      }
+    },
+    {
+      "id": "RESEARCH-001",
+      "name": "AI Infrastructure Research",
+      "dominion": "DOM-002",
+      "stats": {
+        "totalRuns": 0,
+        "publications": 0,
+        "published": 0,
+        "valueScore": 0,
+        "accumulatedValue": 0
+      }
+    },
+    {
+      "id": "RESEARCH-002",
+      "name": "Governance & Security",
+      "dominion": "DOM-002",
+      "stats": {
+        "totalRuns": 0,
+        "publications": 0,
+        "published": 0,
+        "valueScore": 0,
+        "accumulatedValue": 0
+      }
+    },
+    {
+      "id": "RESEARCH-003",
+      "name": "Enterprise Technology",
+      "dominion": "DOM-002",
+      "stats": {
+        "totalRuns": 0,
+        "publications": 0,
+        "published": 0,
+        "valueScore": 0,
+        "accumulatedValue": 0
+      }
+    },
+    {
+      "id": "BOOK-001",
+      "name": "Thomas Bresche Narrative",
+      "dominion": "DOM-003",
+      "stats": {
+        "totalRuns": 0,
+        "publications": 0,
+        "published": 0,
+        "valueScore": 0,
+        "accumulatedValue": 0
+      }
+    },
+    {
+      "id": "MUSIC-001",
+      "name": "Audio Production",
+      "dominion": "DOM-003",
+      "stats": {
+        "totalRuns": 0,
+        "publications": 0,
+        "published": 0,
+        "valueScore": 0,
+        "accumulatedValue": 0
+      }
+    },
+    {
+      "id": "SIM-ENGINE-001",
+      "name": "Simulation Engine",
+      "dominion": "DOM-004",
+      "stats": {
+        "totalRuns": 0,
+        "publications": 0,
+        "published": 0,
+        "valueScore": 0,
+        "accumulatedValue": 0
+      }
+    },
+    {
+      "id": "EXPANSION-001",
+      "name": "Distribution Strategy",
+      "dominion": "DOM-004",
+      "stats": {
+        "totalRuns": 0,
+        "publications": 0,
+        "published": 0,
+        "valueScore": 0,
+        "accumulatedValue": 0
+      }
+    },
+    {
+      "id": "CORP-001",
+      "name": "Corporate Governance",
+      "dominion": "DOM-005",
+      "stats": {
+        "totalRuns": 0,
+        "publications": 0,
+        "published": 0,
+        "valueScore": 0,
+        "accumulatedValue": 0
+      }
+    }
+  ],
+  "dominionStats": {
+    "DOM-001": {
+      "name": "Foundation",
+      "totalAssets": 2,
+      "totalValue": 17039,
+      "avgScore": 80
+    },
+    "DOM-002": {
+      "name": "Knowledge",
+      "totalAssets": 1,
+      "totalValue": 10549,
+      "avgScore": 80
+    },
+    "DOM-003": {
+      "name": "Media",
+      "totalAssets": 0,
+      "totalValue": 0,
+      "avgScore": 0
+    },
+    "DOM-004": {
+      "name": "Expansion",
+      "totalAssets": 0,
+      "totalValue": 0,
+      "avgScore": 0
+    },
+    "DOM-005": {
+      "name": "Corporation",
+      "totalAssets": 1,
+      "totalValue": 6395,
+      "avgScore": 80
+    }
+  },
+  "engineVersion": "2.0.0",
+  "lastUpdated": "2026-08-07 00:12:39 AEST",
+  "engineStatus": "running"
+}

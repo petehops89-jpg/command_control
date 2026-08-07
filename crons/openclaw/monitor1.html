@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitor1 v2 — Vistamations Publishing Engine</title>
+<style>
+  :root {
+    --bg: #06060d;
+    --card-bg: rgba(15, 15, 28, 0.82);
+    --card-border: rgba(255, 255, 255, 0.06);
+    --text: #d4d4e8;
+    --text-dim: rgba(212, 212, 232, 0.5);
+    --accent: #00e5ff;
+    --accent2: #7c4dff;
+    --accent3: #ff4081;
+    --accent4: #00e676;
+    --gold: #d4af37;
+    --radius: 12px;
+    --gap: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .app { max-width: 1500px; margin: 0 auto; padding: 16px 20px 40px; }
+
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0 12px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 12px;
+  }
+  .header .brand { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: var(--accent2); opacity: 0.8; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent4); box-shadow: 0 0 8px var(--accent4); display: inline-block; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  h1 { font-size: 22px; font-weight: 300; letter-spacing: 2px; color: var(--accent); margin-bottom: 2px; }
+  .sub { font-size: 10px; color: var(--text-dim); margin-bottom: 14px; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--gap); margin-bottom: 14px; }
+  .stat-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 12px 14px; backdrop-filter: blur(12px);
+  }
+  .stat-card .label { font-size: 8px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); }
+  .stat-card .value { font-size: 26px; font-weight: 300; color: var(--accent); letter-spacing: 1px; }
+  .stat-card .sub { font-size: 9px; color: var(--text-dim); margin-top: 2px; margin-bottom: 0; }
+
+  .section-title {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--accent2); margin: 18px 0 10px; padding-bottom: 5px;
+    border-bottom: 1px solid rgba(124,77,255,0.15);
+  }
+
+  .tab-bar { display: flex; gap: 0; margin: 0 0 14px; }
+  .tab {
+    padding: 7px 16px; font-size: 10px; letter-spacing: 1px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.06); background: var(--card-bg);
+    color: var(--text-dim); border-radius: 0; outline: none;
+    font-family: inherit; transition: all 0.2s;
+  }
+  .tab:first-child { border-radius: 6px 0 0 6px; }
+  .tab:last-child { border-radius: 0 6px 6px 0; }
+  .tab.active { color: var(--accent); border-color: rgba(0,229,255,0.3); background: rgba(0,229,255,0.06); }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .dominion-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--gap); margin-bottom: 14px; }
+  .dominion-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 14px; backdrop-filter: blur(12px);
+  }
+  .dominion-card h3 { font-size: 13px; font-weight: 400; letter-spacing: 0.5px; margin-bottom: 8px; color: #fff; }
+  .dominion-card .dom-stat { display: flex; justify-content: space-between; font-size: 10px; padding: 3px 0; }
+  .dominion-card .dom-stat .dv { color: var(--accent); }
+  .dominion-card .dom-total { font-size: 24px; font-weight: 300; color: var(--accent); margin-bottom: 6px; }
+
+  .project-row {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
+    backdrop-filter: blur(12px);
+    display: grid; grid-template-columns: 1fr 2fr 100px 100px 100px 90px;
+    align-items: center; gap: 12px; font-size: 11px;
+  }
+  .project-row .pr-id { color: var(--accent); font-size: 12px; letter-spacing: 0.5px; }
+  .project-row .pr-name { color: #fff; }
+  .project-row .pr-stat { text-align: center; }
+  .project-row .pr-stat .num { font-size: 16px; font-weight: 300; color: var(--accent); }
+  .project-row .pr-stat .lbl { font-size: 8px; text-transform: uppercase; color: var(--text-dim); }
+  .project-row .pr-dom { text-align: right; font-size: 9px; color: var(--text-dim); letter-spacing: 1px; }
+
+  .log-panel {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 0; backdrop-filter: blur(12px);
+    max-height: 350px; overflow-y: auto;
+  }
+  .log-entry {
+    padding: 7px 14px; border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 10px; font-family: inherit; display: flex; gap: 8px; align-items: flex-start;
+  }
+  .log-ts { color: rgba(255,255,255,0.3); white-space: nowrap; min-width: 65px; }
+  .log-level { font-weight: 600; min-width: 36px; font-size: 9px; }
+  .log-level.info { color: var(--accent4); }
+  .log-level.warn { color: #ffb300; }
+  .log-level.error { color: var(--accent3); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 10px; }
+  th { text-align: left; padding: 7px 10px; color: var(--text-dim); font-size: 8px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .badge { display: inline-block; padding: 2px 7px; border-radius: 7px; font-size: 8px; letter-spacing: 1px; }
+  .badge.published { background: rgba(0,230,118,0.12); color: var(--accent4); }
+  .badge.review { background: rgba(255,179,0,0.12); color: #ffb300; }
+  .badge.failed { background: rgba(255,64,129,0.12); color: var(--accent3); }
+  .badge.archived { background: rgba(255,255,255,0.06); color: var(--text-dim); }
+  .badge.draft { background: rgba(124,77,255,0.12); color: var(--accent2); }
+
+  .score-bar { width: 60px; height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; display: inline-block; vertical-align: middle; margin-left: 4px; }
+  .score-fill { height: 100%; border-radius: 2px; }
+  .score-fill.high { background: var(--accent4); }
+  .score-fill.mid { background: var(--accent); }
+  .score-fill.low { background: var(--accent3); }
+
+  .nav-back { display: inline-block; color: var(--accent); text-decoration: none; font-size: 10px; padding: 6px 12px; border: 1px solid rgba(0,229,255,0.2); border-radius: 6px; }
+  .nav-back:hover { background: rgba(0,229,255,0.08); }
+
+  .lifecycle-trail { display: flex; gap: 0; margin: 8px 0; }
+  .lc-step { padding: 3px 8px; font-size: 8px; letter-spacing: 0.5px; background: rgba(255,255,255,0.03); color: var(--text-dim); border: 1px solid rgba(255,255,255,0.04); flex: 1; text-align: center; }
+  .lc-step:first-child { border-radius: 4px 0 0 4px; }
+  .lc-step:last-child { border-radius: 0 4px 4px 0; }
+  .lc-step.done { background: rgba(0,230,118,0.06); color: var(--accent4); border-color: rgba(0,230,118,0.15); }
+  .lc-step.active { background: rgba(0,229,255,0.08); color: var(--accent); border-color: rgba(0,229,255,0.2); }
+
+  @media (max-width: 900px) {
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+    .dominion-grid { grid-template-columns: repeat(3, 1fr); }
+    .project-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div>
+      <span class="brand">OpenClaw Publishing Engine v2</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="status-dot"></span>
+      <span style="font-size:10px;opacity:0.6">Monitor1 Active</span>
+      <span style="font-size:10px;opacity:0.3;margin-left:4px">v2.0.0</span>
+      <span style="font-size:9px;opacity:0.3;margin-left:2px">RUN: <span id="current-run">--</span></span>
+    </div>
+  </div>
+
+  <h1>Monitor1</h1>
+  <div class="sub">LLM Scheduled Publishing Engine — Project Hierarchy &middot; Asset Registry &middot; Five Dominions</div>
+
+  <div class="lifecycle-trail">
+    <div class="lc-step done">idea</div>
+    <div class="lc-step done">research</div>
+    <div class="lc-step done">draft</div>
+    <div class="lc-step done">review</div>
+    <div class="lc-step done">approved</div>
+    <div class="lc-step done">published</div>
+    <div class="lc-step done">indexed</div>
+    <div class="lc-step done">versioned</div>
+    <div class="lc-step active">archived</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="label">Executions</div>
+      <div class="value" id="stat-runs">0</div>
+      <div class="sub">lifetime runs</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Assets</div>
+      <div class="value" id="stat-assets">0</div>
+      <div class="sub">registered</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Projects</div>
+      <div class="value" id="stat-projects">0</div>
+      <div class="sub">active initiatives</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Avg Value Score</div>
+      <div class="value" id="stat-avgscore">--</div>
+      <div class="sub">composite / 100</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">KB Size</div>
+      <div class="value" id="stat-kb">0</div>
+      <div class="sub">indexed items</div>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('dominions')">Five Dominions</button>
+    <button class="tab" onclick="switchTab('projects')">Projects</button>
+    <button class="tab" onclick="switchTab('assets')">Asset Registry</button>
+    <button class="tab" onclick="switchTab('publications')">Publications</button>
+    <button class="tab" onclick="switchTab('logs')">Event Log</button>
+  </div>
+
+  <div id="tab-dominions" class="panel active">
+    <div class="section-title">Five Dominions — Accumulated Value</div>
+    <div class="dominion-grid" id="dominion-grid">
+      <div class="dominion-card"><h3>Foundation</h3><div class="dom-total">0</div><div style="font-size:10px;color:var(--text-dim)">DOM-001</div></div>
+      <div class="dominion-card"><h3>Knowledge</h3><div class="dom-total">0</div><div style="font-size:10px;color:var(--text-dim)">DOM-002</div></div>
+      <div class="dominion-card"><h3>Media</h3><div class="dom-total">0</div><div style="font-size:10px;color:var(--text-dim)">DOM-003</div></div>
+      <div class="dominion-card"><h3>Expansion</h3><div class="dom-total">0</div><div style="font-size:10px;color:var(--text-dim)">DOM-004</div></div>
+      <div class="dominion-card"><h3>Corporation</h3><div class="dom-total">0</div><div style="font-size:10px;color:var(--text-dim)">DOM-005</div></div>
+    </div>
+  </div>
+
+  <div id="tab-projects" class="panel">
+    <div class="section-title">Project Hierarchy — RUN_ID → PROJECT_ID grouping</div>
+    <div id="project-list">
+      <div style="color:var(--text-dim);padding:20px;text-align:center">Loading...</div>
+    </div>
+  </div>
+
+  <div id="tab-assets" class="panel">
+    <div class="section-title">Asset Registry — Permanent IDs with version tracking</div>
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);overflow:hidden;backdrop-filter:blur(12px)">
+      <table>
+        <thead><tr><th>ASSET_ID</th><th>PROJECT_ID</th><th>Type</th><th>Title</th><th>Version</th><th>Value Score</th><th>Lifecycle</th></tr></thead>
+        <tbody id="asset-registry"><tr><td colspan="7" style="color:var(--text-dim);text-align:center;padding:20px">No assets registered yet.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="tab-publications" class="panel">
+    <div class="section-title">Publication Registry</div>
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);overflow:hidden;backdrop-filter:blur(12px)">
+      <table>
+        <thead><tr><th>RUN_ID</th><th>PROJECT</th><th>ASSET</th><th>Type</th><th>Title</th><th>Value Score</th><th>Conf.</th><th>Lifecycle</th></tr></thead>
+        <tbody id="pub-registry"><tr><td colspan="8" style="color:var(--text-dim);text-align:center;padding:20px">No publications yet.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="tab-logs" class="panel">
+    <div class="section-title">Runtime Event Log</div>
+    <div class="log-panel" id="event-log">
+      <div class="log-entry"><span class="log-ts">--:--:--</span><span class="log-level info">INFO</span><span>Monitor1 v2 initialized.</span></div>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;display:flex;gap:12px;align-items:center">
+    <a href="/index.html" class="nav-back">&#x2190; Command Control</a>
+    <span style="font-size:10px;opacity:0.3">Schedule: 09:00 | 12:00 | 15:00 | 18:00 AEST</span>
+  </div>
+
+</div>
+
+<script>
+const API = '/crons/openclaw/logs/monitor1.json';
+
+function switchTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const btns = document.querySelectorAll('.tab');
+  for (const b of btns) { if (b.textContent.toLowerCase().includes(name.replace('-',' '))) b.classList.add('active'); }
+}
+
+function scoreClass(v) { return v >= 80 ? 'high' : v >= 60 ? 'mid' : 'low'; }
+
+function formatValue(dollarStr) {
+  if (!dollarStr) return '$0';
+  const n = parseInt(dollarStr.replace(/[$,]/g, ''), 10);
+  if (n >= 1000000) return '$' + (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return '$' + (n / 1000).toFixed(0) + 'K';
+  return dollarStr;
+}
+
+function lcBadge(state) {
+  const map = { idea:'draft', research:'draft', draft:'draft', review:'review', approved:'review', published:'published', indexed:'published', versioned:'published', archived:'archived' };
+  return map[state] || 'draft';
+}
+
+async function loadMonitor() {
+  try {
+    const resp = await fetch(API);
+    if (!resp.ok) throw new Error('Not loaded');
+    const d = await resp.json();
+
+    document.getElementById('stat-runs').textContent = d.totalExecutions || 0;
+    document.getElementById('stat-assets').textContent = d.totalAssets || 0;
+    document.getElementById('stat-projects').textContent = (d.projects || []).length;
+    document.getElementById('stat-kb').textContent = d.knowledgeLibraryCount || 0;
+    document.getElementById('current-run').textContent = d.currentRunId || '--';
+
+    let totalScore = 0, scoreCount = 0;
+    (d.assets || []).forEach(a => { if (a.valueScore?.composite) { totalScore += a.valueScore.composite; scoreCount++; } });
+    document.getElementById('stat-avgscore').textContent = scoreCount > 0 ? Math.round(totalScore / scoreCount) : '--';
+
+    // Dominions
+    if (d.dominionStats) {
+      let html = '';
+      for (const [id, dom] of Object.entries(d.dominionStats)) {
+        html += `<div class="dominion-card">
+          <h3>${dom.name}</h3>
+          <div class="dom-total">${dom.totalAssets}</div>
+          <div class="dom-stat"><span>assets</span><span class="dv">${formatValue('$' + (dom.totalValue || 0))}</span></div>
+          <div class="dom-stat"><span>avg score</span><span class="dv">${dom.avgScore || 0}/100</span></div>
+          <div style="font-size:9px;color:var(--text-dim);margin-top:4px">${id}</div>
+        </div>`;
+      }
+      document.getElementById('dominion-grid').innerHTML = html;
+    }
+
+    // Projects
+    if (d.projects && d.projects.length > 0) {
+      let ph = '';
+      d.projects.forEach(p => {
+        const s = p.stats || {};
+        const domNames = { 'DOM-001':'Foundation','DOM-002':'Knowledge','DOM-003':'Media','DOM-004':'Expansion','DOM-005':'Corporation' };
+        ph += `<div class="project-row">
+          <div><div class="pr-id">${p.id}</div></div>
+          <div><div class="pr-name">${p.name}</div></div>
+          <div class="pr-stat"><div class="num">${s.totalRuns || 0}</div><div class="lbl">runs</div></div>
+          <div class="pr-stat"><div class="num">${s.publications || 0}</div><div class="lbl">assets</div></div>
+          <div class="pr-stat"><div class="num">${s.valueScore || 0}</div><div class="lbl">avg score</div></div>
+          <div class="pr-dom">${domNames[p.dominion] || p.dominion}</div>
+        </div>`;
+      });
+      document.getElementById('project-list').innerHTML = ph;
+    }
+
+    // Asset registry
+    if (d.assets && d.assets.length > 0) {
+      let ah = '';
+      d.assets.forEach(a => {
+        const vs = a.valueScore?.composite || 0;
+        ah += `<tr>
+          <td style="color:var(--accent)">${a.assetId}</td>
+          <td style="color:var(--accent2)">${a.projectId}</td>
+          <td>${a.type}</td>
+          <td><a href="${a.url}" style="color:var(--accent);text-decoration:none">${(a.title || '').substring(0, 40)}</a></td>
+          <td>v${a.version || '1.0.0'}</td>
+          <td>${vs}/100 <span class="score-bar"><span class="score-fill ${scoreClass(vs)}" style="width:${vs}%"></span></span></td>
+          <td><span class="badge ${lcBadge(a.lifecycleState)}">${a.lifecycleState || 'published'}</span></td>
+        </tr>`;
+      });
+      document.getElementById('asset-registry').innerHTML = ah;
+    }
+
+    // Publications
+    if (d.publications && d.publications.length > 0) {
+      let ph = '';
+      d.publications.forEach(p => {
+        const vs = p.valueScore?.composite || 0;
+        const conf = p.valueScore?.confidence || 0;
+        ph += `<tr>
+          <td style="color:var(--accent);font-size:9px">${p.runId}</td>
+          <td style="color:var(--accent2);font-size:9px">${p.projectId || '—'}</td>
+          <td style="color:var(--gold);font-size:9px">${p.assetId || '—'}</td>
+          <td>${p.type}</td>
+          <td><a href="${p.url}" style="color:var(--accent);text-decoration:none">${(p.title || '').substring(0, 40)}</a></td>
+          <td>${vs}/100 <span class="score-bar"><span class="score-fill ${scoreClass(vs)}" style="width:${vs}%"></span></span></td>
+          <td>${conf}%</td>
+          <td><span class="badge ${lcBadge(p.lifecycleState)}">${p.lifecycleState || 'published'}</span></td>
+        </tr>`;
+      });
+      document.getElementById('pub-registry').innerHTML = ph;
+    }
+
+    // Event log
+    if (d.recentLogs && d.recentLogs.length > 0) {
+      document.getElementById('event-log').innerHTML = d.recentLogs.map(l =>
+        `<div class="log-entry"><span class="log-ts">${l.timestamp}</span><span class="log-level ${l.level}">${(l.level||'').toUpperCase()}</span><span>${l.message}</span></div>`
+      ).join('');
+    }
+  } catch (e) {
+    console.log('Monitor data pending:', e.message);
+  }
+}
+
+loadMonitor();
+setInterval(loadMonitor, 10000);
+</script>
+</body>
+</html>

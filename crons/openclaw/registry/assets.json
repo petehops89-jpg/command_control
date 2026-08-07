@@ -1,0 +1,110 @@
+[
+  {
+    "assetId": "ASSET-CORP-001",
+    "projectId": "CORP-001",
+    "runId": "RUN-20260807-100959-1FDAWN",
+    "dominion": "DOM-005",
+    "type": "Business Analysis",
+    "title": "Business Analysis: AI Investment — 7 August 2026",
+    "url": "/crons/openclaw/publications/RUN-20260807-100959-1FDAWN.html",
+    "version": "1.0.0",
+    "status": "published",
+    "lifecycleState": "indexed",
+    "valueScore": {
+      "composite": 80,
+      "confidence": 76,
+      "breakdown": {
+        "businessValue": 87,
+        "originality": 78,
+        "depth": 73,
+        "relevance": 83,
+        "utility": 77
+      },
+      "estimatedCommercialValue": "$6,395",
+      "reviewStatus": "Automated Review"
+    },
+    "timestamp": "2026-08-07T00:09:59.212Z",
+    "revisions": []
+  },
+  {
+    "assetId": "ASSET-FOUNDATION-002",
+    "projectId": "FOUNDATION-001",
+    "runId": "RUN-20260807-101057-LENGLT",
+    "dominion": "DOM-001",
+    "type": "Architecture Documentation",
+    "title": "Architecture Documentation: Enterprise Software — 7 August 2026",
+    "url": "/crons/openclaw/publications/RUN-20260807-101057-LENGLT.html",
+    "version": "1.0.0",
+    "status": "published",
+    "lifecycleState": "indexed",
+    "valueScore": {
+      "composite": 78,
+      "confidence": 77,
+      "breakdown": {
+        "businessValue": 82,
+        "originality": 81,
+        "depth": 68,
+        "relevance": 85,
+        "utility": 75
+      },
+      "estimatedCommercialValue": "$6,462",
+      "reviewStatus": "Automated Review"
+    },
+    "timestamp": "2026-08-07T00:10:57.307Z",
+    "revisions": []
+  },
+  {
+    "assetId": "ASSET-FOUNDATION-003",
+    "projectId": "FOUNDATION-001",
+    "runId": "RUN-20260807-101204-Y97R28",
+    "dominion": "DOM-001",
+    "type": "Architecture Documentation",
+    "title": "Architecture Documentation: Enterprise Software — 7 August 2026",
+    "url": "/crons/openclaw/publications/RUN-20260807-101204-Y97R28.html",
+    "version": "1.0.0",
+    "status": "published",
+    "lifecycleState": "indexed",
+    "valueScore": {
+      "composite": 81,
+      "confidence": 70,
+      "breakdown": {
+        "businessValue": 86,
+        "originality": 71,
+        "depth": 81,
+        "relevance": 81,
+        "utility": 84
+      },
+      "estimatedCommercialValue": "$10,577",
+      "reviewStatus": "Automated Review"
+    },
+    "timestamp": "2026-08-07T00:12:04.902Z",
+    "revisions": []
+  },
+  {
+    "assetId": "ASSET-FOUNDATION-004",
+    "projectId": "FOUNDATION-001",
+    "runId": "RUN-20260807-101239-0QNP51",
+    "dominion": "DOM-002",
+    "type": "Technology Review",
+    "title": "Technology Review: Autonomous AI Infrastructure — 7 August 2026",
+    "url": "/crons/openclaw/publications/RUN-20260807-101239-0QNP51.html",
+    "version": "1.0.0",
+    "status": "published",
+    "lifecycleState": "indexed",
+    "valueScore": {
+      "composite": 80,
+      "confidence": 72,
+      "breakdown": {
+        "businessValue": 82,
+        "originality": 77,
+        "depth": 82,
+        "relevance": 80,
+        "utility": 81
+      },
+      "estimatedCommercialValue": "$10,549",
+      "reviewStatus": "Automated Review"
+    },
+    "timestamp": "2026-08-07T00:12:39.397Z",
+    "revisions": []
+  }
+]

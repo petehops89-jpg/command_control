@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}} — Vistamations Knowledge Library</title>
+<style>
+  :root {
+    --bg: #06060d;
+    --card-bg: rgba(15, 15, 28, 0.82);
+    --card-border: rgba(255, 255, 255, 0.06);
+    --text: #d4d4e8;
+    --text-dim: rgba(212, 212, 232, 0.55);
+    --accent: #00e5ff;
+    --accent2: #7c4dff;
+    --accent3: #ff4081;
+    --accent4: #00e676;
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', monospace;
+    background:
+      radial-gradient(ellipse at 30% 0%, rgba(0,229,255,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 100%, rgba(124,77,255,0.04) 0%, transparent 50%),
+      var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 20px 24px 60px;
+  }
+
+  .meta-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .meta-bar .brand {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    opacity: 0.7;
+  }
+  .meta-bar .run-id {
+    font-size: 9px;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  .pub-type {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  .metadata-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+  .meta-item {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    backdrop-filter: blur(12px);
+  }
+  .meta-item .meta-label {
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 2px;
+  }
+  .meta-item .meta-value {
+    font-size: 11px;
+    color: var(--text);
+  }
+
+  .content {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .content p {
+    margin-bottom: 16px;
+  }
+  .content h2 {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    color: var(--accent);
+    margin: 36px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0,229,255,0.1);
+  }
+  .content h3 {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--accent2);
+    margin: 24px 0 10px;
+  }
+  .content ul, .content ol {
+    margin: 12px 0 20px 20px;
+  }
+  .content li {
+    margin-bottom: 6px;
+  }
+  .content strong {
+    color: #fff;
+  }
+  .content blockquote {
+    border-left: 2px solid var(--accent2);
+    padding: 8px 16px;
+    margin: 16px 0;
+    background: rgba(124,77,255,0.05);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+  .content code {
+    background: rgba(255,255,255,0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--accent);
+  }
+  .content pre {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .content a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0,229,255,0.2);
+  }
+  .content a:hover { border-color: var(--accent); }
+
+  .source-bar {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .source-bar h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .source-bar a {
+    display: block;
+    font-size: 11px;
+    color: var(--accent2);
+    text-decoration: none;
+    margin-bottom: 4px;
+    word-break: break-all;
+  }
+
+  .footer-bar {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: var(--text-dim);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 22px; }
+    .container { padding: 14px 16px 40px; }
+    .metadata-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="meta-bar">
+    <span class="brand">Vistamations Knowledge Library</span>
+    <span class="run-id">{{RUN_ID}}</span>
+  </div>
+
+  <div class="pub-type">{{PUBLICATION_TYPE}}</div>
+  <h1>{{TITLE}}</h1>
+  <div class="subtitle">{{SUBTITLE}}</div>
+
+  <div class="metadata-grid">
+    <div class="meta-item">
+      <div class="meta-label">Author Agent</div>
+      <div class="meta-value">{{AUTHOR_AGENT}}</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Timestamp</div>
+      <div class="meta-value">{{TIMESTAMP}}</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Estimated Business Value</div>
+      <div class="meta-value" style="color:var(--accent4)">{{ESTIMATED_VALUE}}</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Version</div>
+      <div class="meta-value">{{VERSION}}</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Research Scope</div>
+      <div class="meta-value">{{RESEARCH_SCOPE}}</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Model</div>
+      <div class="meta-value">{{MODEL}}</div>
+    </div>
+  </div>
+
+  <div class="content">
+{{CONTENT}}
+  </div>
+
+  <div class="source-bar">
+    <h3>Source References</h3>
+{{SOURCES}}
+  </div>
+
+  <div class="footer-bar">
+    <span>OpenClaw Publishing Engine &middot; Vistamations Command Control</span>
+    <span>Monitor1 verified: {{VERIFIED_AT}}</span>
+  </div>
+
+</div>
+</body>
+</html>

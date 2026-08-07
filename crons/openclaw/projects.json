@@ -1,0 +1,60 @@
+[
+  {
+    "id": "FOUNDATION-001",
+    "name": "OpenClaw Infrastructure",
+    "dominion": "DOM-001",
+    "stats": {
+      "totalRuns": 54,
+      "publications": 3,
+      "published": 3,
+      "valueScore": 80,
+      "accumulatedValue": 27588,
+      "lastRun": "2026-08-07T00:12:39.397Z"
+    }
+  },
+  {
+    "id": "MEDIA-001",
+    "name": "Media Production",
+    "dominion": "DOM-003"
+  },
+  {
+    "id": "RESEARCH-001",
+    "name": "AI Infrastructure Research",
+    "dominion": "DOM-002"
+  },
+  {
+    "id": "RESEARCH-002",
+    "name": "Governance & Security",
+    "dominion": "DOM-002"
+  },
+  {
+    "id": "RESEARCH-003",
+    "name": "Enterprise Technology",
+    "dominion": "DOM-002"
+  },
+  {
+    "id": "BOOK-001",
+    "name": "Thomas Bresche Narrative",
+    "dominion": "DOM-003"
+  },
+  {
+    "id": "MUSIC-001",
+    "name": "Audio Production",
+    "dominion": "DOM-003"
+  },
+  {
+    "id": "SIM-ENGINE-001",
+    "name": "Simulation Engine",
+    "dominion": "DOM-004"
+  },
+  {
+    "id": "EXPANSION-001",
+    "name": "Distribution Strategy",
+    "dominion": "DOM-004"
+  },
+  {
+    "id": "CORP-001",
+    "name": "Corporate Governance",
+    "dominion": "DOM-005"
+  }
+]
