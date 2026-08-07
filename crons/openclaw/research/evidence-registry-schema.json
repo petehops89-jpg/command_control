@@ -1,0 +1,30 @@
+{
+  "schema": "VM-Evidence-Registry-v2",
+  "description": "Research capture pipeline — paste URL → assess → rate → categorise → assign ID → store",
+  "idFormat": "VM-XXXX (auto-incrementing, zero-padded to 4 digits)",
+  "fields": {
+    "id": { "type": "string", "format": "VM-0001", "description": "Auto-assigned evidence ID, stamped on card via animation" },
+    "url": { "type": "string", "format": "uri", "description": "Source URL" },
+    "domain": { "type": "string", "description": "Parsed from URL hostname" },
+    "title": { "type": "string", "description": "Derived from URL path segments, editable" },
+    "category": { "type": "enum", "values": ["AI/Agents","Cloud/Infra","Publishing","Security","DevTools","Business","Research","Media","OSS","Governance"] },
+    "dominion": { "type": "enum", "values": ["DOM-001","DOM-002","DOM-003","DOM-004","DOM-005"], "mapping": { "DOM-001":"Foundation","DOM-002":"Knowledge","DOM-003":"Media","DOM-004":"Expansion","DOM-005":"Corporation" } },
+    "qualityScore": { "type": "integer", "range": "1-10", "description": "Quality rating" },
+    "relevanceScore": { "type": "integer", "range": "1-10", "description": "Relevance to Vistamations scope" },
+    "authorityScore": { "type": "integer", "range": "1-10", "description": "Source authority rating" },
+    "compositeScore": { "type": "float", "range": "1.0-10.0", "description": "Average of quality, relevance, authority — drives card size in bento grid" },
+    "source": { "type": "string", "description": "Named origin (e.g. GCP Agent Platform Studio, GitHub, Google Cloud Blog)" },
+    "capturedAt": { "type": "string", "format": "ISO 8601", "description": "Timestamp of capture" },
+    "status": { "type": "enum", "values": ["stored","verified","flagged"], "description": "Evidence assessment status" }
+  },
+  "workflow": {
+    "steps": ["paste", "assess", "rate", "categorise", "assign_id", "store"],
+    "animation": "Ink stamp slam — VM-XXXX ID appears with rotation/bounce keyframe on card",
+    "grid": "Bento grid — card size scales with compositeScore (9-10: large, 7-8: medium, 5-6: small, <5: minimal)"
+  },
+  "api": {
+    "get": "/api/research/links",
+    "post": "/api/research/capture",
+    "fallback": "/crons/openclaw/research/inventory/links.json"
+  }
+}

@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evidence Registry — Vistamations OpenClaw</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0A0C0F;
+    --card: #14171C;
+    --card-hover: #1A1D23;
+    --border: rgba(255,255,255,0.05);
+    --border-active: rgba(232,163,61,0.25);
+    --amber: #E8A33D;
+    --amber-dim: rgba(232,163,61,0.08);
+    --amber-glow: 0 0 24px rgba(232,163,61,0.1);
+    --cyan: #4FD1C5;
+    --cyan-dim: rgba(79,209,197,0.08);
+    --rust: #C44536;
+    --rust-dim: rgba(196,69,54,0.08);
+    --bone: #E8E6DF;
+    --bone-dim: rgba(232,230,223,0.45);
+    --muted: #6B7280;
+    --radius: 8px;
+    --gap: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--ink);
+    color: var(--bone);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(232,163,61,0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(79,209,197,0.02) 0%, transparent 40%);
+  }
+
+  .app { max-width: 1340px; margin: 0 auto; padding: 20px 24px 60px; }
+
+  /* ─── HEADER ─── */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px;
+  }
+  .header .case-id {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 3px; color: var(--amber); opacity: 0.7;
+  }
+  .header .meta { font-size: 10px; color: var(--muted); }
+  .header .meta .live-dot {
+    display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--cyan); box-shadow: 0 0 6px var(--cyan);
+    margin-right: 6px; vertical-align: middle; animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  h1 { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 300; letter-spacing: 1px; color: var(--bone); margin-bottom: 2px; }
+  .subtitle { font-size: 12px; color: var(--muted); margin-bottom: 20px; font-weight: 300; letter-spacing: 0.3px; }
+
+  /* ─── STATS BAR ─── */
+  .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--gap); margin-bottom: 16px; }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .stat-card .label { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); }
+  .stat-card .value { font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 300; color: var(--amber); letter-spacing: 1px; }
+  .stat-card .sub { font-size: 10px; color: var(--bone-dim); margin-top: 2px; }
+
+  /* ─── WORKFLOW TRAIL ─── */
+  .workflow {
+    display: flex; gap: 0; margin-bottom: 16px;
+  }
+  .wf-step {
+    flex: 1; padding: 8px 6px; font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.5px; text-align: center;
+    color: var(--muted); background: var(--card);
+    border: 1px solid var(--border); transition: all 0.3s;
+    position: relative;
+  }
+  .wf-step:first-child { border-radius: 6px 0 0 6px; }
+  .wf-step:last-child { border-radius: 0 6px 6px 0; }
+  .wf-step.done { color: var(--cyan); background: var(--cyan-dim); border-color: rgba(79,209,197,0.15); }
+  .wf-step.done::after { content: '\2713'; margin-left: 4px; font-size: 10px; }
+  .wf-step.active { color: var(--amber); background: var(--amber-dim); border-color: rgba(232,163,61,0.2); }
+  .wf-step .wf-num { display: block; font-size: 8px; opacity: 0.5; margin-bottom: 1px; }
+
+  /* ─── CAPTURE ZONE ─── */
+  .capture-zone {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px; margin-bottom: 16px;
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  .capture-zone:focus-within { border-color: var(--border-active); box-shadow: var(--amber-glow); }
+  .capture-zone .zone-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 8px;
+  }
+  .paste-area {
+    width: 100%; min-height: 72px; background: var(--ink);
+    border: 1px solid var(--border); border-radius: 6px;
+    color: var(--bone); font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; padding: 12px 14px; resize: vertical; outline: none;
+    line-height: 1.6;
+  }
+  .paste-area::placeholder { color: rgba(255,255,255,0.12); }
+  .paste-area:focus { border-color: rgba(232,163,61,0.3); }
+
+  .url-preview {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; min-height: 24px;
+  }
+  .url-chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    padding: 4px 10px; border-radius: 4px; background: var(--ink);
+    border: 1px solid var(--border); color: var(--bone-dim);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;
+  }
+  .url-chip .domain { color: var(--amber); opacity: 0.7; }
+
+  .assess-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto;
+    gap: var(--gap); margin-top: 10px; align-items: end;
+  }
+  .assess-row label {
+    font-family: 'JetBrains Mono', monospace; font-size: 8px;
+    text-transform: uppercase; letter-spacing: 1px; color: var(--muted);
+    display: block; margin-bottom: 4px;
+  }
+  .assess-row select, .assess-row input {
+    width: 100%; background: var(--ink); border: 1px solid var(--border);
+    border-radius: 5px; color: var(--bone); font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; padding: 8px 10px; outline: none;
+  }
+  .assess-row select:focus, .assess-row input:focus { border-color: rgba(232,163,61,0.3); }
+  .assess-row select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M0 2l4 4 4-4' fill='%236B7280'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; padding-right: 24px; }
+
+  .btn {
+    padding: 9px 20px; border-radius: 6px; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 1px; cursor: pointer; border: none;
+    transition: all 0.2s; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-capture {
+    background: var(--amber); color: var(--ink); font-weight: 500;
+  }
+  .btn-capture:hover { background: #d4952e; box-shadow: var(--amber-glow); }
+  .btn-capture:active { transform: scale(0.97); }
+
+  .btn-outline {
+    background: transparent; border: 1px solid rgba(255,255,255,0.08);
+    color: var(--bone-dim);
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.15); color: var(--bone); }
+
+  /* ─── FILTER BAR ─── */
+  .filter-bar {
+    display: flex; gap: var(--gap); margin-bottom: 14px; align-items: center;
+  }
+  .filter-bar select, .filter-bar input {
+    background: var(--card); border: 1px solid var(--border); border-radius: 5px;
+    color: var(--bone); font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; padding: 7px 10px; outline: none;
+  }
+  .filter-bar input { min-width: 220px; flex: 1; }
+  .filter-bar select:focus, .filter-bar input:focus { border-color: rgba(232,163,61,0.3); }
+  .filter-bar .count { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+
+  /* ─── BENTO GRID ─── */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 120px;
+    gap: var(--gap);
+  }
+  /* Rating-based sizing */
+  .bento-item { grid-column: span 2; grid-row: span 1; }
+  .bento-item.score-9 { grid-column: span 3; grid-row: span 2; }
+  .bento-item.score-8 { grid-column: span 3; grid-row: span 2; }
+  .bento-item.score-7 { grid-column: span 2; grid-row: span 2; }
+  .bento-item.score-6 { grid-column: span 2; grid-row: span 1; }
+  .bento-item.score-5 { grid-column: span 2; grid-row: span 1; }
+  .bento-item.score-lt5 { grid-column: span 1; grid-row: span 1; }
+
+  /* ─── EVIDENCE CARD ─── */
+  .evidence-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 16px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    transition: all 0.25s; position: relative; overflow: hidden;
+    cursor: pointer; height: 100%;
+  }
+  .evidence-card:hover {
+    background: var(--card-hover); border-color: rgba(255,255,255,0.08);
+    transform: translateY(-1px);
+  }
+  .evidence-card.verified { border-left: 2px solid var(--cyan); }
+  .evidence-card.flagged { border-left: 2px solid var(--rust); }
+
+  .evidence-card .card-id {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    font-weight: 500; color: var(--amber); letter-spacing: 1px; margin-bottom: 6px;
+  }
+  .evidence-card .card-domain {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .evidence-card .card-title {
+    font-family: 'Inter', sans-serif; font-size: 13px;
+    font-weight: 400; line-height: 1.4; color: var(--bone);
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden; margin-bottom: 6px;
+  }
+  .evidence-card .card-url {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--muted); overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap; margin-bottom: 6px; opacity: 0.6;
+  }
+
+  .evidence-card .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: auto;
+  }
+  .card-score {
+    font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 300;
+    letter-spacing: -0.5px;
+  }
+  .card-score.high { color: var(--cyan); }
+  .card-score.mid { color: var(--amber); }
+  .card-score.low { color: var(--rust); }
+
+  .card-badges { display: flex; gap: 4px; }
+  .badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 8px; text-transform: uppercase;
+    letter-spacing: 0.5px; padding: 2px 7px; border-radius: 3px;
+  }
+  .badge.category { background: var(--amber-dim); color: var(--amber); }
+  .badge.source { background: rgba(255,255,255,0.04); color: var(--muted); }
+  .badge.ts { background: rgba(255,255,255,0.03); color: var(--muted); font-size: 7px; }
+
+  .card-actions {
+    position: absolute; top: 8px; right: 8px;
+    display: flex; gap: 4px; opacity: 0; transition: opacity 0.2s;
+  }
+  .evidence-card:hover .card-actions { opacity: 1; }
+  .card-actions button {
+    width: 22px; height: 22px; border-radius: 4px; border: 1px solid var(--border);
+    background: var(--ink); color: var(--muted); font-size: 10px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .card-actions button:hover { border-color: rgba(255,255,255,0.15); color: var(--bone); }
+  .card-actions button.flag:hover { border-color: var(--rust); color: var(--rust); }
+  .card-actions button.verify:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  /* ─── INK STAMP ANIMATION ─── */
+  @keyframes stamp-slam {
+    0%   { opacity: 0; transform: translate(-50%, -50%) rotate(-18deg) scale(2.5); }
+    15%  { opacity: 1; }
+    30%  { transform: translate(-50%, -50%) rotate(-6deg) scale(0.9); }
+    42%  { transform: translate(-50%, -50%) rotate(2deg) scale(1.05); }
+    55%  { transform: translate(-50%, -50%) rotate(-1deg) scale(0.97); }
+    68%  { transform: translate(-50%, -50%) rotate(0deg) scale(1.02); }
+    82%  { transform: translate(-50%, -50%) rotate(0deg) scale(0.99); }
+    100% { opacity: 0.85; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  }
+  .stamp-overlay {
+    position: absolute; top: 50%; left: 50%;
+    font-family: 'JetBrains Mono', monospace; font-size: 28px;
+    font-weight: 700; letter-spacing: 3px;
+    color: var(--amber); opacity: 0;
+    pointer-events: none; z-index: 10;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    white-space: nowrap;
+  }
+  .stamp-overlay.fire {
+    animation: stamp-slam 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+
+  /* ─── EMPTY STATE ─── */
+  .empty-state {
+    grid-column: 1 / -1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 60px 20px; color: var(--muted);
+  }
+  .empty-state .icon { font-size: 40px; margin-bottom: 12px; opacity: 0.3; }
+  .empty-state .msg {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 1px; opacity: 0.5;
+  }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; padding: 12px 20px;
+    border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.5px; opacity: 0; transform: translateY(12px);
+    transition: all 0.3s; z-index: 200; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.ok { background: rgba(79,209,197,0.12); border: 1px solid rgba(79,209,197,0.25); color: var(--cyan); }
+  .toast.err { background: rgba(196,69,54,0.12); border: 1px solid rgba(196,69,54,0.25); color: var(--rust); }
+
+  .nav-row {
+    margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--border);
+    display: flex; gap: 12px; align-items: center;
+  }
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); text-decoration: none;
+    padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px;
+    letter-spacing: 1px; transition: all 0.2s;
+  }
+  .nav-link:hover { border-color: rgba(255,255,255,0.12); color: var(--bone); }
+  .nav-link.primary { border-color: rgba(232,163,61,0.25); color: var(--amber); }
+  .nav-link.primary:hover { background: var(--amber-dim); }
+
+  .capture-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 6px; min-height: 18px; }
+
+  @media (max-width: 900px) {
+    .bento { grid-template-columns: repeat(3, 1fr); }
+    .bento-item.score-9, .bento-item.score-8, .bento-item.score-7 { grid-column: span 3; grid-row: span 2; }
+    .bento-item.score-6, .bento-item.score-5 { grid-column: span 2; grid-row: span 1; }
+    .assess-row { grid-template-columns: 1fr 1fr 1fr; }
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .bento-item { grid-column: span 2 !important; grid-row: span 1 !important; }
+    .assess-row { grid-template-columns: 1fr 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <span class="case-id">CASE-FILE VM-REGISTRY-001</span>
+      <span style="font-size:10px;color:var(--muted);margin-left:10px">OpenClaw Research Division</span>
+    </div>
+    <div class="meta">
+      <span class="live-dot"></span> Registry Active &middot; <span id="inventory-count">0</span> items
+    </div>
+  </div>
+
+  <h1>Evidence Registry</h1>
+  <div class="subtitle">Research capture pipeline — paste a URL to assess, rate, categorise, assign an ID, and store.</div>
+
+  <!-- WORKFLOW -->
+  <div class="workflow">
+    <div class="wf-step done" id="wf-1"><span class="wf-num">01</span>PASTE</div>
+    <div class="wf-step" id="wf-2"><span class="wf-num">02</span>ASSESS</div>
+    <div class="wf-step" id="wf-3"><span class="wf-num">03</span>RATE</div>
+    <div class="wf-step" id="wf-4"><span class="wf-num">04</span>CATEGORISE</div>
+    <div class="wf-step" id="wf-5"><span class="wf-num">05</span>ASSIGN ID</div>
+    <div class="wf-step" id="wf-6"><span class="wf-num">06</span>STORE</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card"><div class="label">Total Evidence</div><div class="value" id="stat-total">0</div><div class="sub">items in registry</div></div>
+    <div class="stat-card"><div class="label">Verified</div><div class="value" id="stat-verified" style="color:var(--cyan)">0</div><div class="sub">confirmed sources</div></div>
+    <div class="stat-card"><div class="label">Avg Rating</div><div class="value" id="stat-avg">—</div><div class="sub">composite / 10</div></div>
+    <div class="stat-card"><div class="label">Sources</div><div class="value" id="stat-sources">0</div><div class="sub">unique origins</div></div>
+    <div class="stat-card"><div class="label">Categories</div><div class="value" id="stat-cats">0</div><div class="sub">domains covered</div></div>
+  </div>
+
+  <!-- CAPTURE ZONE -->
+  <div class="capture-zone" id="capture-zone">
+    <div class="zone-label">Intake — Paste URLs (one per line)</div>
+    <textarea class="paste-area" id="paste-input"
+      placeholder="https://console.cloud.google.com/agent-platform/studio/...
+https://github.com/openai/symphony
+https://cloud.google.com/blog/products/compute/state-of-ai-infrastructure-report-overview"
+      rows="3"
+      onfocus="document.getElementById('capture-zone').classList.add('active')"
+      onblur="document.getElementById('capture-zone').classList.remove('active')"
+      oninput="previewUrls()"
+      onpaste="setTimeout(previewUrls, 30)"
+    ></textarea>
+    <div class="url-preview" id="url-preview"></div>
+    <div class="capture-count" id="capture-count"></div>
+
+    <div class="assess-row">
+      <div>
+        <label>Dominion</label>
+        <select id="dominion">
+          <option value="DOM-002">Knowledge</option>
+          <option value="DOM-001">Foundation</option>
+          <option value="DOM-003">Media</option>
+          <option value="DOM-004">Expansion</option>
+          <option value="DOM-005">Corporation</option>
+        </select>
+      </div>
+      <div>
+        <label>Category</label>
+        <select id="category">
+          <option value="AI/Agents">AI / Agents</option>
+          <option value="Cloud/Infra">Cloud / Infra</option>
+          <option value="Publishing">Publishing</option>
+          <option value="Security">Security</option>
+          <option value="DevTools">DevTools</option>
+          <option value="Business">Business / Strategy</option>
+          <option value="Research">Research Paper</option>
+          <option value="Media">Media / Content</option>
+          <option value="OSS">Open Source</option>
+          <option value="Governance">Governance</option>
+        </select>
+      </div>
+      <div>
+        <label>Quality</label>
+        <select id="quality"><option>9</option><option>8</option><option>10</option><option>7</option><option>6</option><option>5</option><option>4</option><option>3</option></select>
+      </div>
+      <div>
+        <label>Relevance</label>
+        <select id="relevance"><option>9</option><option>8</option><option>10</option><option>7</option><option>6</option><option>5</option></select>
+      </div>
+      <div>
+        <label>Authority</label>
+        <select id="authority"><option>8</option><option>9</option><option>10</option><option>7</option><option>6</option><option>5</option></select>
+      </div>
+      <div>
+        <label>Source Name</label>
+        <input type="text" id="source-name" value="GCP Agent Platform Studio" placeholder="origin">
+      </div>
+      <button class="btn btn-capture" onclick="captureEvidence()" id="capture-btn">
+        <span>&#x2B55;</span> LOG EVIDENCE
+      </button>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <select id="filter-dominion" onchange="renderGrid()">
+      <option value="">All Dominions</option>
+      <option value="DOM-001">Foundation</option>
+      <option value="DOM-002">Knowledge</option>
+      <option value="DOM-003">Media</option>
+      <option value="DOM-004">Expansion</option>
+      <option value="DOM-005">Corporation</option>
+    </select>
+    <select id="filter-category" onchange="renderGrid()">
+      <option value="">All Categories</option>
+      <option value="AI/Agents">AI / Agents</option>
+      <option value="Cloud/Infra">Cloud / Infra</option>
+      <option value="Publishing">Publishing</option>
+      <option value="Security">Security</option>
+      <option value="DevTools">DevTools</option>
+      <option value="Business">Business / Strategy</option>
+      <option value="Research">Research Paper</option>
+      <option value="Media">Media / Content</option>
+      <option value="OSS">Open Source</option>
+      <option value="Governance">Governance</option>
+    </select>
+    <select id="filter-status" onchange="renderGrid()">
+      <option value="">All Status</option>
+      <option value="verified">Verified</option>
+      <option value="flagged">Flagged</option>
+      <option value="stored">Stored</option>
+    </select>
+    <input type="text" id="filter-search" placeholder="Search title, URL, or ID..." oninput="renderGrid()">
+    <span class="count" id="filter-count"></span>
+  </div>
+
+  <!-- BENTO GRID -->
+  <div class="bento" id="evidence-grid">
+    <div class="empty-state">
+      <div class="icon">&#x1F50D;</div>
+      <div class="msg">NO EVIDENCE LOGGED</div>
+      <div style="font-size:10px;opacity:0.3;margin-top:4px">Paste URLs above to begin investigation</div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-row">
+    <a href="/crons/openclaw/monitor1.html" class="nav-link primary">&#x2190; Monitor1</a>
+    <a href="/index.html" class="nav-link">&#x2190; Command Control</a>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-left:auto">Evidence Registry v2.0 — VM-series</span>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '/api/research/links';
+const CAPTURE_API = '/api/research/capture';
+
+let registry = [];
+let nextId = 1;
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast ' + (type === 'error' ? 'err' : 'ok') + ' show';
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function previewUrls() {
+  const text = document.getElementById('paste-input').value.trim();
+  const container = document.getElementById('url-preview');
+  const countEl = document.getElementById('capture-count');
+  if (!text) { container.innerHTML = ''; countEl.textContent = ''; return; }
+  const lines = text.split('\n').filter(l => l.trim() && (l.startsWith('http://') || l.startsWith('https://') || l.startsWith('www.')));
+  container.innerHTML = lines.map(l => {
+    let domain = ''; try { domain = new URL(l.startsWith('www.') ? 'https://' + l : l).hostname; } catch(e) {}
+    const short = l.length > 50 ? l.substring(0, 47) + '...' : l;
+    return '<span class="url-chip"><span class="domain">' + (domain || 'link') + '</span> ' + short + '</span>';
+  }).join('');
+  countEl.textContent = lines.length + ' URL' + (lines.length !== 1 ? 's' : '') + ' detected';
+  advanceWorkflow(2);
+}
+
+function advanceWorkflow(step) {
+  for (let i = 1; i <= 6; i++) {
+    const el = document.getElementById('wf-' + i);
+    el.classList.remove('done', 'active');
+    if (i < step) el.classList.add('done');
+    if (i === step) el.classList.add('active');
+  }
+}
+
+function extractDomain(url) {
+  try { return new URL(url.startsWith('www.') ? 'https://' + url : url).hostname; }
+  catch (e) { return url.split('/')[0] || ''; }
+}
+
+function parseTitle(url) {
+  const parts = url.replace(/https?:\/\//, '').replace(/www\./, '');
+  const segs = parts.split('/').filter(s => s);
+  if (segs.length > 1) {
+    return segs.slice(1).join(' / ').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).substring(0, 80);
+  }
+  return segs[0] || url;
+}
+
+function stampCard(cardEl, id) {
+  // Remove any existing stamp
+  const existing = cardEl.querySelector('.stamp-overlay');
+  if (existing) existing.remove();
+
+  const stamp = document.createElement('div');
+  stamp.className = 'stamp-overlay';
+  stamp.textContent = id;
+  cardEl.style.position = 'relative';
+  cardEl.appendChild(stamp);
+
+  // Trigger animation
+  requestAnimationFrame(() => {
+    stamp.classList.add('fire');
+  });
+
+  // Clean up after animation
+  setTimeout(() => {
+    stamp.style.opacity = '0.75';
+  }, 800);
+}
+
+async function captureEvidence() {
+  const text = document.getElementById('paste-input').value.trim();
+  if (!text) { showToast('Paste URLs first', 'error'); return; }
+
+  const lines = text.split('\n').filter(l => l.trim() && (l.startsWith('http://') || l.startsWith('https://') || l.startsWith('www.')));
+  if (lines.length === 0) { showToast('No valid URLs detected', 'error'); return; }
+
+  advanceWorkflow(3);
+  advanceWorkflow(4);
+  advanceWorkflow(5);
+
+  const dominion = document.getElementById('dominion').value;
+  const category = document.getElementById('category').value;
+  const quality = parseInt(document.getElementById('quality').value);
+  const relevance = parseInt(document.getElementById('relevance').value);
+  const authority = parseInt(document.getElementById('authority').value);
+  const source = document.getElementById('source-name').value || 'Manual Capture';
+  const composite = Math.round((quality + relevance + authority) / 3 * 10) / 10;
+  const now = new Date().toISOString();
+
+  const newItems = lines.map((url) => {
+    const id = 'VM-' + String(nextId + registry.length).padStart(4, '0');
+    return {
+      id: id,
+      url: url.trim(),
+      domain: extractDomain(url),
+      title: parseTitle(url),
+      category: category,
+      dominion: dominion,
+      qualityScore: quality,
+      relevanceScore: relevance,
+      authorityScore: authority,
+      compositeScore: composite,
+      source: source,
+      capturedAt: now,
+      status: 'stored',
+    };
+  });
+
+  // Add to local registry
+  registry = [...registry, ...newItems];
+  const capturedIds = newItems.map(n => n.id);
+
+  // Persist to server
+  try {
+    const resp = await fetch(CAPTURE_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ links: newItems }),
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      showToast(data.count + ' item(s) logged — ' + capturedIds.join(', '), 'ok');
+    } else {
+      const data = await resp.json();
+      showToast(data.error || 'Server rejected capture', 'error');
+    }
+  } catch (e) {
+    showToast('Stored locally (server unreachable)', 'error');
+  }
+
+  // Clear input
+  document.getElementById('paste-input').value = '';
+  document.getElementById('url-preview').innerHTML = '';
+  document.getElementById('capture-count').textContent = '';
+  advanceWorkflow(6);
+
+  updateStats();
+  renderGrid();
+
+  // Trigger stamp animation on the newly added cards
+  setTimeout(() => {
+    capturedIds.forEach(id => {
+      const card = document.querySelector('[data-id="' + id + '"]');
+      if (card) stampCard(card, id);
+    });
+  }, 100);
+
+  // Reset workflow
+  setTimeout(() => {
+    for (let i = 1; i <= 6; i++) {
+      document.getElementById('wf-' + i).classList.remove('done', 'active');
+    }
+    document.getElementById('wf-1').classList.add('done');
+  }, 3500);
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent = registry.length;
+  document.getElementById('inventory-count').textContent = registry.length;
+  document.getElementById('stat-verified').textContent = registry.filter(r => r.status === 'verified').length;
+
+  if (registry.length > 0) {
+    const avg = (registry.reduce((s, r) => s + r.compositeScore, 0) / registry.length);
+    document.getElementById('stat-avg').textContent = avg.toFixed(1);
+  } else {
+    document.getElementById('stat-avg').textContent = '—';
+  }
+
+  const sources = new Set(registry.map(r => r.source)).size;
+  document.getElementById('stat-sources').textContent = sources;
+
+  const cats = new Set(registry.map(r => r.category)).size;
+  document.getElementById('stat-cats').textContent = cats;
+}
+
+function scoreClass(score) {
+  return 'score-' + (score >= 9 ? '9' : score >= 8 ? '8' : score >= 7 ? '7' : score >= 6 ? '6' : score >= 5 ? '5' : 'lt5');
+}
+
+function scoreColor(score) {
+  return score >= 8 ? 'high' : score >= 5 ? 'mid' : 'low';
+}
+
+function renderGrid() {
+  const fDom = document.getElementById('filter-dominion').value;
+  const fCat = document.getElementById('filter-category').value;
+  const fStatus = document.getElementById('filter-status').value;
+  const fSearch = document.getElementById('filter-search').value.toLowerCase();
+
+  let filtered = registry;
+  if (fDom) filtered = filtered.filter(r => r.dominion === fDom);
+  if (fCat) filtered = filtered.filter(r => r.category === fCat);
+  if (fStatus) filtered = filtered.filter(r => r.status === fStatus);
+  if (fSearch) filtered = filtered.filter(r =>
+    (r.id || '').toLowerCase().includes(fSearch) ||
+    (r.url || '').toLowerCase().includes(fSearch) ||
+    (r.title || '').toLowerCase().includes(fSearch) ||
+    (r.domain || '').toLowerCase().includes(fSearch)
+  );
+
+  document.getElementById('filter-count').textContent = filtered.length + ' of ' + registry.length + ' shown';
+
+  const grid = document.getElementById('evidence-grid');
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="icon">&#x1F50D;</div><div class="msg">NO MATCHING EVIDENCE</div><div style="font-size:10px;opacity:0.3;margin-top:4px">Adjust filters or log new URLs above</div></div>';
+    return;
+  }
+
+  const domNames = { 'DOM-001':'Foundation','DOM-002':'Knowledge','DOM-003':'Media','DOM-004':'Expansion','DOM-005':'Corporation' };
+
+  grid.innerHTML = filtered.map(r => {
+    const sc = scoreClass(r.compositeScore);
+    const scCol = scoreColor(r.compositeScore);
+    const statusClass = r.status === 'verified' ? 'verified' : r.status === 'flagged' ? 'flagged' : '';
+    const ts = r.capturedAt ? r.capturedAt.substring(0, 10) : '';
+    const shortUrl = r.url.length > 45 ? r.url.substring(0, 42) + '...' : r.url;
+    return '<div class="bento-item ' + sc + '" data-id="' + r.id + '">' +
+      '<div class="evidence-card ' + statusClass + '">' +
+        '<div class="card-domain">' + (domNames[r.dominion] || r.dominion || '') + '</div>' +
+        '<div class="card-id">' + r.id + '</div>' +
+        '<div class="card-title">' + (r.title || r.url) + '</div>' +
+        '<div class="card-url">' + shortUrl + '</div>' +
+        '<div class="card-footer">' +
+          '<span class="card-score ' + scCol + '">' + r.compositeScore + '</span>' +
+          '<div class="card-badges">' +
+            '<span class="badge category">' + r.category + '</span>' +
+            '<span class="badge source">' + (r.source || '').substring(0, 12) + '</span>' +
+            '<span class="badge ts">' + ts + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="card-actions">' +
+          '<button class="verify" title="Verify" onclick="event.stopPropagation();toggleStatus(\'' + r.id + '\',\'verified\')">&#x2713;</button>' +
+          '<button class="flag" title="Flag" onclick="event.stopPropagation();toggleStatus(\'' + r.id + '\',\'flagged\')">!</button>' +
+          '<button title="Open" onclick="event.stopPropagation();window.open(\'' + r.url + '\',\'_blank\')">&#x2197;</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  // Click card to open URL
+  grid.querySelectorAll('.evidence-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.card-actions')) return;
+      const item = grid.querySelector('[data-id="' + this.parentElement.dataset.id + '"]');
+      const r = registry.find(r => r.id === item?.dataset.id);
+      if (r) window.open(r.url, '_blank');
+    });
+  });
+}
+
+function toggleStatus(id, newStatus) {
+  const r = registry.find(r => r.id === id);
+  if (!r) return;
+  r.status = r.status === newStatus ? 'stored' : newStatus;
+  updateStats();
+  renderGrid();
+  showToast(id + ' ' + (r.status === 'stored' ? 'cleared' : 'marked ' + r.status), 'ok');
+}
+
+async function loadRegistry() {
+  try {
+    const resp = await fetch(API);
+    if (!resp.ok) throw new Error('api fail');
+    const data = await resp.json();
+    // Map stored data format to registry format
+    registry = data.map((item, i) => ({
+      id: item.linkId || item.id || ('VM-' + String(i + 1).padStart(4, '0')),
+      url: item.url || '',
+      domain: item.domain || extractDomain(item.url || ''),
+      title: item.title || parseTitle(item.url || ''),
+      category: item.category || '',
+      dominion: item.dominion || 'DOM-002',
+      qualityScore: item.qualityScore || 8,
+      relevanceScore: item.relevanceScore || 8,
+      authorityScore: item.authorityScore || 8,
+      compositeScore: item.compositeScore || 8,
+      source: item.source || '',
+      capturedAt: item.capturedAt || new Date().toISOString(),
+      status: item.status || 'stored',
+    }));
+  } catch (e) {
+    // Try static fallback
+    try {
+      const resp = await fetch('/crons/openclaw/research/inventory/links.json');
+      if (resp.ok) {
+        const data = await resp.json();
+        registry = data.map((item, i) => ({
+          id: item.linkId || ('VM-' + String(i + 1).padStart(4, '0')),
+          url: item.url || '',
+          domain: item.domain || extractDomain(item.url || ''),
+          title: item.title || parseTitle(item.url || ''),
+          category: item.category || '',
+          dominion: item.dominion || 'DOM-002',
+          qualityScore: item.qualityScore || 8,
+          relevanceScore: item.relevanceScore || 8,
+          authorityScore: item.authorityScore || 8,
+          compositeScore: item.compositeScore || 8,
+          source: item.source || '',
+          capturedAt: item.capturedAt || new Date().toISOString(),
+          status: item.status || 'stored',
+        }));
+      }
+    } catch (e2) { /* empty */ }
+  }
+
+  // Determine next VM-ID
+  let maxId = 0;
+  registry.forEach(r => {
+    const m = (r.id || '').match(/VM-(\d+)/);
+    if (m) maxId = Math.max(maxId, parseInt(m[1]));
+  });
+  nextId = maxId + 1;
+
+  updateStats();
+  renderGrid();
+  advanceWorkflow(1);
+}
+
+document.addEventListener('DOMContentLoaded', loadRegistry);
+</script>
+
+</body>
+</html>
