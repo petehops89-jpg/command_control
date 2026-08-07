@@ -42,7 +42,7 @@ Agent IDs follow the convention: `org AG### base-env`.
 |---|---|---|
 | **Stage 1** | Trinity — Docker/MCP/server infrastructure | 85% — stack healthy, container rebuild gap |
 | **Stage 2** | Crons + Media Interface — Evidence Registry, Monitor1, OpenClaw Gateway, scheduled publishing | ~70% — deployed, API broken (stale container), scheduler unregistered |
-| **Stage 3** | NOT YET SCOPED | Needs decision: content scale vs infrastructure/CI-CD vs both |
+| **Stage 3** | Command Control Rollout — 3.1 MODULES (controllers, dials, monitors, audio), 3.2 COMMUNITY/PERSONNEL (agent identities, simulation view, knowledge generator, Olivia funnel), 3.3 SECURITY (repo separation, SIM/BUSINESS/SYNCHRONICITY/AUTONOMY/INDEPENDENT LEARNING) | SCOPED — not yet started; sequencing: 3.1→3.2→3.3 |
 | **Stage 4** | NOT YET SCOPED | — |
 | **Stage 5** | NOT YET SCOPED | — |
 

@@ -18,7 +18,15 @@ Confirmed that OpenClaw Gateway runs as a single long-lived process (PID 14288, 
 
 **Rationale**: `npx` is designed for transient execution. Each invocation creates a new temp-directory installation and spawns a new process. For persistent MCP servers, `npm install -g` or build-from-source prevents duplication.
 
-## 2026-08-07T17:37 — Memory bank as persistent context solution
+## 2026-08-07T18:37 — Stage 3 formally scoped: Command Control Rollout (3 phases)
+
+**Decision**: Stage 3 confirmed by Pete as "Command Control Rollout" across three phases: 3.1 MODULES (controllers, dials, buttons, switches, monitoring — visual + NVDA audio), 3.2 COMMUNITY/PERSONNEL (agent formalization with visual identity, real-time simulation view, knowledge generator, Olivia delivery funnel), 3.3 SECURITY (repo separation, SIM/BUSINESS/SYNCHRONICITY/AUTONOMY/INDEPENDENT LEARNING systems).
+
+**Sequencing**: 3.1 FIRST (no hard dependency but dashboard surface should exist before agents render in it), 3.2 SECOND (depends on 3.1 for rendering surface, depends on Stage 2 closeout for knowledge generator input, unblocks 3.3's independent learning feed), 3.3 LAST (depends on Stage 2 cron stability AND 3.2 knowledge generator output — cannot start until both upstream sources are producing data).
+
+**Key reuse**: Evidence Registry CSS bento grid reused for 3.1 module layout. OpenClaw runtime pipeline reused as AUTONOMY core for 3.3. Agent roster from productContext.md formalized in 3.2.
+
+**Key open questions flagged for Pete**: (1) Does 3.1 replace index.html or coexist as new page? (2) What channel for Olivia→Pete delivery? (3) Is INDEPENDENT LEARNING actual model fine-tuning or rule-based scoring? (4) Are the 3.3 systems code modules or architectural docs? (5) Does Monitor1 get replaced by 3.1 dashboard or extended?
 
 Adopted a `.memory-bank/` directory in the repo root as the single shared context source for all agents. Files: `productContext.md`, `activeContext.md`, `decisionLog.md`, `systemPatterns.md`, `progress.md`. One bank per repo — not per agent. Build-from-source, not npx-based MCP.
 
