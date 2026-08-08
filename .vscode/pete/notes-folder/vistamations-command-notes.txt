@@ -27,6 +27,12 @@ ID - org-note-links
 
  links
 
+olivia 
+http://localhost/crons/openclaw/olivia/command-portal.html
+
+--------------------------------------------------------------
+
+
 The cron job output (HTML pages) is served through nginx. The publication reports for example are at crons/openclaw/publications/ but those are not web pages per se. The web-served pages are:
 
 http://localhost/crons/openclaw/olivia/command-portal.html
@@ -43,7 +49,7 @@ https://notegpt.io/text-to-speech
 
 https://webflow.com/dashboard?workspace=petes-workspace-cb9488
 
-
+https://stitch.withgoogle.com/projects/11796394977662057707
 https://aistudio.google.com/apps/594f023c-25a8-42e2-9aa6-04848e5cefd7?project=gen-lang-client-0110514845&showPreview=true&showAssistant=true
 
 https://vistamations-core-simulation-engine.ai.studio/
@@ -69,8 +75,16 @@ https://googleapis-python-genai-70.mintlify.app/installation
 
 https://lmstudio.ai/pricing
 
+https://tierorator-legacy-series-122019238035.us-west1.run.app/
 
 
+https://console.cloud.google.com/agent-platform/studio/build?project=gen-lang-client-0847771392
+
+https://chatgpt.com/
+
+https://notegpt.io/text-to-speech
+
+https://www.paper2audio.com/paper/from-my-local-host-what-is-the-data-rout-Full-Text-0e266b70-4967-4146-b455-e451a3db0675
 --------------------------------------------------------------------------------------------------------------
 
 ID - org-note-clarify

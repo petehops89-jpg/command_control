@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "lastUpdated": "2026-08-08T13:15:00+10:00",
+  "version": 2,
+  "lastUpdated": "2026-08-09T02:10:00+10:00",
   "projects": {
     "command-portal": {
       "expectedPort": 3000,
@@ -14,15 +14,79 @@
         "/api/olivia/agent-reply",
         "/api/olivia/notified",
         "/api/olivia/responded",
-        "/api/olivia/pending-replies"
+        "/api/olivia/pending-replies",
+        "/api/publications"
       ],
       "frontendBaseUrl": "http://localhost (nginx:80) — proxies /api/ to app:3000",
       "storageBackend": "JSON files on disk: crons/openclaw/olivia/responses.json, queue.json, no-responses.json",
-      "lastVerified": "2026-08-08T13:15:00+10:00",
+      "lastVerified": "2026-08-09T02:10:00+10:00",
       "status": "verified",
       "knownIssues": [
-        "2026-08-08: /api/olivia/respond returned 404 on port 3000 — caused by testing /api/ prefix directly on app:3000 without nginx proxy prefix stripping. Route exists at /olivia/respond on app:3000. Nginx maps /api/olivia/respond → app:3000/olivia/respond correctly. Root cause: testing methodology, not a code bug.",
-        "2026-08-08: sendMessage() function wrapper went missing after clearMessages() insertion — fixed, SyntaxError resolved."
+        "2026-08-08: /api/olivia/respond returned 404 on port 3000 — caused by testing /api/ prefix directly on app:3000 without nginx proxy prefix stripping. Route exists at /olivia/respond on app:3000. Nginx maps /api/olivia/respond → app:3000/olivia/respond correctly.",
+        "2026-08-08: sendMessage() function wrapper went missing after clearMessages() insertion — fixed, SyntaxError resolved.",
+        "2026-08-09 FIXED: /api/publications returned 404 — route was registered as /api/publications in server.js but nginx strips /api/ prefix. Renamed to /publications (matching all other routes). Container rebuilt and verified.",
+        "2026-08-09 FIXED: clear-messages archive wrote to container /app/.vscode/pete/... which is not host-mounted. Changed to /app/crons/openclaw/olivia/command-portal-messages/ which maps to C:vistamations-music\crons\openclaw\olivia\command-portal-messages\. Verified: archive file lands on host."
+      ]
+    },
+    "olivia-dispatch": {
+      "expectedProcess": "pwsh.exe -NoProfile -ExecutionPolicy Bypass -File olivia-dispatch.ps1",
+      "expectedPollInterval": "10s",
+      "scheduledTask": "Vistamations-OliviaDispatch",
+      "trigger": "Daily at 00:00, repeats every 5 min, MultipleInstances=IgnoreNew",
+      "watchdog": "Vistamations-OliviaWatchdog (every 5 min, process-existence check)",
+      "lastVerified": "2026-08-09T02:06:00+10:00",
+      "status": "verified",
+      "knownIssues": [
+        "2026-08-09 FIXED: Vistamations-OliviaDispatch used AtLogOn trigger which never fired (last run: 1999). Changed to Daily+Repetition every 5 min matching watchdog pattern. Unregistered and re-registered. Verified: dispatch process started (PID 41168).",
+        "2026-08-09 NOTE: Manual dispatch instance (PID 28252, started Aug 8 23:33) still running alongside scheduled instance (PID 41168). Both alive — IgnoreNew prevents scheduler from starting more. Old manual instance will exit on next reboot."
+      ]
+    },
+    "git-auto-commit": {
+      "scheduledTask": "Vistamations-GitCommit",
+      "lastRunTime": "2026-08-08T18:00:00 AEST",
+      "lastTaskResult": 64,
+      "lastVerified": "2026-08-09T02:08:00+10:00",
+      "status": "verified",
+      "knownIssues": [
+        "2026-08-09 FIXED: Return code 64 was a PowerShell parse error — Unicode em-dash in commit message string on line 26 of git-commit-schedule.ps1 caused Unexpected token 'routine'. Script never reached git add/commit. Fixed em-dash to ASCII hyphen. Line 96 closing quote also rewrote to single-quote to avoid encoding issues.",
+        "2026-08-09 VERIFIED: Manual commit+push succeeded — 83 files, 46fe1ef pushed to evidence-registry. Next scheduled run: Aug 10 18:00."
+      ]
+    },
+    "publications": {
+      "expectedRoute": "/api/publications",
+      "dataSource": "crons/openclaw/publications/ (auto-discovered .html files from OpenClaw publishing engine run IDs)",
+      "lastVerified": "2026-08-09T02:03:00+10:00",
+      "status": "verified",
+      "knownIssues": [
+        "2026-08-09 FIXED: /api/publications via nginx returned 404 — route registered as /api/publications in server.js:308, nginx strips /api/ prefix. Renamed to /publications. Verified: returns 11 publications through nginx:80."
+      ]
+    },
+    "gemini-auth": {
+      "expectedAuthMethod": "Vertex AI (ADC OAuth)",
+      "project": "vists-498322",
+      "fallbackProject": "gen-lang-client-0847771392",
+      "location": "global",
+      "apiKey": "Default Gemini Key (c8bccf1a-...) — Express Mode available",
+      "lastVerified": "2026-08-09T05:45:00+10:00",
+      "status": "verified",
+      "verifiedPaths": {
+        "geminiCliVertexAi": "verified — gemini CLI 0.54.4 + vists-498322",
+        "nodeSdkVertexAi": "verified — @google/genai v2.16.0",
+        "pythonSdkVertexAi": "verified — google-genai v2.17.0",
+        "expressMode": "available — API key exists, not yet tested"
+      },
+      "adcToken": {
+        "location": "%APPDATA%\\gcloud\\application_default_credentials.json",
+        "type": "authorized_user",
+        "account": "petehops89@gmail.com",
+        "created": "2026-08-09 via scripts/adc-login.py"
+      },
+      "configFiles": {
+        ".env": "project-level env vars",
+        "%USERPROFILE%\\.gemini\\settings.json": "Gemini CLI persistent settings"
+      },
+      "knownIssues": [
+        "2026-08-09 FIXED: No credentials on machine — gcloud not installed, no ADC file, no env vars. Created ADC via OAuth (scripts/adc-login.py). Discovered 7 Google Cloud projects. Enabled Agent Platform API on gen-lang-client-0847771392. Verified all 3 SDK paths working via vists-498322 project."
       ]
     }
   }

@@ -9,6 +9,8 @@ org AG005     Claw (Dee)      base-env    Legacy Series MCP Specialist
 org AG006     Big Brother     base-env    Senior Software Architect (DeepSeek V4 Pro)
 org AG007     Dee             base-env    Cron & Research Worker (DeepSeek V4 Flash)
 org AG008     Stefi           base-env    Graphics & Design Director
+org AG009     Terence         base-env    Think Tank Architect & Metacognition Specialist (OpenClaw Gateway)
+org AG010     gem             base-env    Music AI & Research Curator (Gemini 3.5 Flash)
 
 Reporting Structure:
   Player
@@ -20,3 +22,5 @@ Reporting Structure:
         Big Brother (Engineering)
         Dee (Cron & Research)
         Stefi (Graphics)
+        Terence (Think Tank / Metacognition / Cluster Mapping)
+        gem (Music Research & Curation)

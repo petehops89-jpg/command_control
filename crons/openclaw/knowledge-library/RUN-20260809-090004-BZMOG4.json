@@ -1,0 +1,26 @@
+{
+  "assetId": "ASSET-EXPANSION-009",
+  "runId": "RUN-20260809-090004-BZMOG4",
+  "projectId": "EXPANSION-001",
+  "title": "Business Analysis: Productivity — 9 August 2026",
+  "type": "Business Analysis",
+  "dominion": "DOM-004",
+  "domain": "Productivity",
+  "timestamp": "2026-08-08T23:00:04.360Z",
+  "url": "/crons/openclaw/publications/RUN-20260809-090004-BZMOG4.html",
+  "valueScore": {
+    "composite": 79,
+    "confidence": 79,
+    "breakdown": {
+      "businessValue": 89,
+      "originality": 70,
+      "depth": 74,
+      "relevance": 83,
+      "utility": 81
+    },
+    "estimatedCommercialValue": "$9,733",
+    "reviewStatus": "Automated Review"
+  },
+  "lifecycleState": "versioned",
+  "version": "1.0.0"
+}

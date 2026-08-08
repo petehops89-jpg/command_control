@@ -68,12 +68,12 @@
     "name": "Distribution Strategy",
     "dominion": "DOM-004",
     "stats": {
-      "totalRuns": 1,
-      "publications": 1,
-      "published": 1,
-      "valueScore": 81,
-      "accumulatedValue": 9411,
-      "lastRun": "2026-08-08T05:00:03.028Z"
+      "totalRuns": 2,
+      "publications": 2,
+      "published": 2,
+      "valueScore": 80,
+      "accumulatedValue": 19144,
+      "lastRun": "2026-08-08T23:00:04.360Z"
     }
   },
   {

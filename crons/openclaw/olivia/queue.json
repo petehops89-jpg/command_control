@@ -214,5 +214,77 @@
     "assignedAt": "2026-08-08T15:50:55.540Z",
     "status": "done",
     "responseId": "RESP-0009"
+  },
+  {
+    "taskId": "TASK-0025",
+    "agent": "olivia",
+    "message": "Terence, whats your cluster map looking like?",
+    "from": "Pete",
+    "assignedAt": "2026-08-08T18:36:20.062Z",
+    "status": "done",
+    "responseId": "RESP-0006"
+  },
+  {
+    "taskId": "TASK-0026",
+    "agent": "olivia",
+    "message": "Olivia, commanding officer. Status check - what are the agents doing and what needs my attention?",
+    "from": "Pete",
+    "assignedAt": "2026-08-09T07:14:00.5612910+10:00",
+    "status": "done",
+    "responseId": "RESP-0007"
+  },
+  {
+    "taskId": "TASK-0027",
+    "agent": "olivia",
+    "message": "give system infrastructure completion  /100",
+    "from": "Pete",
+    "assignedAt": "2026-08-08T21:22:49.733Z",
+    "status": "done",
+    "responseId": "RESP-0008"
+  },
+  {
+    "taskId": "TASK-0028",
+    "agent": "olivia",
+    "message": "Olivia, give system infrastructure completion /100. Tell me exactly what needs work.",
+    "from": "Pete",
+    "assignedAt": "2026-08-09T07:44:48.3047230+10:00",
+    "status": "done",
+    "responseId": "RESP-0009"
+  },
+  {
+    "taskId": "TASK-0029",
+    "agent": "olivia",
+    "message": "report",
+    "from": "Pete",
+    "assignedAt": "2026-08-08T21:45:09.532Z",
+    "status": "done",
+    "responseId": "RESP-0010"
+  },
+  {
+    "taskId": "TASK-0030",
+    "agent": "olivia",
+    "message": "how many actiuve agets?",
+    "from": "Pete",
+    "assignedAt": "2026-08-08T21:45:41.741Z",
+    "status": "done",
+    "responseId": "RESP-0011"
+  },
+  {
+    "taskId": "TASK-0031",
+    "agent": "olivia",
+    "message": "ok, start",
+    "from": "Pete",
+    "assignedAt": "2026-08-08T21:46:21.813Z",
+    "status": "done",
+    "responseId": "RESP-0012"
+  },
+  {
+    "taskId": "TASK-0032",
+    "agent": "olivia",
+    "message": "gemini and mistral api keys disengaging",
+    "from": "Pete",
+    "assignedAt": "2026-08-08T21:47:16.158Z",
+    "status": "done",
+    "responseId": "RESP-0013"
   }
 ]

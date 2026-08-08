@@ -43,7 +43,15 @@ while ($true) {
             $respondUrl = "$portalUrl" + "?resp=" + $reply.id
 
             $btn = New-BTButton -Content "View Reply" -Arguments $respondUrl
-            New-BurntToastNotification -Text $subject, $body -Button $btn
+
+            $id = "vistamations-olivia-" + $reply.id
+
+            New-BurntToastNotification `
+                -Text $subject, $body `
+                -Button $btn `
+                -UniqueIdentifier $id `
+                -AppId "Vistamations.CommandPortal" `
+                -Silent
 
             $lastSeen[$key] = $true
             Write-Host "$(Get-Date -Format 'HH:mm:ss') Notified: $subject"

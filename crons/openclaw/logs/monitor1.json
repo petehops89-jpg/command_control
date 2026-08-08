@@ -1,160 +1,160 @@
 {
-  "currentRunId": "RUN-20260808-180006-KY6F6L",
-  "totalExecutions": 8,
+  "currentRunId": "RUN-20260809-090004-BZMOG4",
+  "totalExecutions": 9,
   "totalPublications": 3,
-  "totalAssets": 8,
-  "successRate": "38%",
-  "knowledgeLibraryCount": 8,
+  "totalAssets": 9,
+  "successRate": "33%",
+  "knowledgeLibraryCount": 9,
   "recentLogs": [
     {
-      "timestamp": "15:00:03.140",
+      "timestamp": "18:00:07.790",
       "level": "info",
       "message": "Lifecycle: 4/9 — REVIEW"
     },
     {
-      "timestamp": "15:00:03.140",
+      "timestamp": "18:00:07.791",
       "level": "info",
       "message": "Performing editorial review..."
     },
     {
-      "timestamp": "15:00:03.140",
+      "timestamp": "18:00:07.791",
       "level": "info",
       "message": "Review: Consistency=PASS Grammar=PASS Technical=PASS Citations=PASS BusinessValue=PASS"
     },
     {
-      "timestamp": "15:00:03.141",
+      "timestamp": "18:00:07.791",
       "level": "info",
-      "message": "STAGE END: Editorial Review — complete (0ms)"
+      "message": "STAGE END: Editorial Review — complete (1ms)"
     },
     {
-      "timestamp": "15:00:03.141",
+      "timestamp": "18:00:07.791",
       "level": "info",
       "message": "STAGE START: Approval Queue"
     },
     {
-      "timestamp": "15:00:03.141",
+      "timestamp": "18:00:07.792",
       "level": "info",
       "message": "Lifecycle: 5/9 — APPROVED"
     },
     {
-      "timestamp": "15:00:03.141",
+      "timestamp": "18:00:07.792",
       "level": "info",
       "message": "Publication approved for deployment."
     },
     {
-      "timestamp": "15:00:03.141",
+      "timestamp": "18:00:07.792",
       "level": "info",
-      "message": "STAGE END: Approval Queue — complete (0ms)"
+      "message": "STAGE END: Approval Queue — complete (1ms)"
     },
     {
-      "timestamp": "15:00:03.141",
+      "timestamp": "18:00:07.792",
       "level": "info",
       "message": "STAGE START: Deployment"
     },
     {
-      "timestamp": "15:00:03.141",
+      "timestamp": "18:00:07.802",
       "level": "info",
       "message": "Lifecycle: 6/9 — PUBLISHED"
     },
     {
-      "timestamp": "15:00:03.145",
+      "timestamp": "18:00:07.834",
       "level": "info",
-      "message": "Publication written to C:\\vistamations-music\\crons\\openclaw\\publications\\RUN-20260808-150003-AOJ7UM.html"
+      "message": "Publication written to C:\\vistamations-music\\crons\\openclaw\\publications\\RUN-20260808-180006-KY6F6L.html"
     },
     {
-      "timestamp": "15:00:03.145",
+      "timestamp": "18:00:07.834",
       "level": "info",
-      "message": "Value Score: 81/100 (Business: 90, Originality: 72, Depth: 76, Relevance: 83, Utility: 83)"
+      "message": "Value Score: 77/100 (Business: 75, Originality: 70, Depth: 79, Relevance: 79, Utility: 81)"
     },
     {
-      "timestamp": "15:00:03.145",
+      "timestamp": "18:00:07.834",
       "level": "info",
-      "message": "Confidence: 74% | Estimated: $9,411"
+      "message": "Confidence: 69% | Estimated: $2,177"
     },
     {
-      "timestamp": "15:00:03.145",
+      "timestamp": "18:00:07.834",
       "level": "info",
-      "message": "STAGE END: Deployment — complete (4ms)"
+      "message": "STAGE END: Deployment — complete (42ms)"
     },
     {
-      "timestamp": "15:00:03.145",
+      "timestamp": "18:00:07.834",
       "level": "info",
       "message": "STAGE START: Asset Registration"
     },
     {
-      "timestamp": "15:00:03.146",
+      "timestamp": "18:00:07.835",
       "level": "info",
       "message": "Lifecycle: 7/9 — INDEXED"
     },
     {
-      "timestamp": "15:00:03.148",
+      "timestamp": "18:00:07.838",
       "level": "info",
-      "message": "Asset registered: ASSET-EXPANSION-007 (v1.0.0)"
+      "message": "Asset registered: ASSET-CORP-008 (v1.0.0)"
     },
     {
-      "timestamp": "15:00:03.148",
+      "timestamp": "18:00:07.838",
       "level": "info",
-      "message": "STAGE END: Asset Registration — complete (3ms)"
+      "message": "STAGE END: Asset Registration — complete (4ms)"
     },
     {
-      "timestamp": "15:00:03.148",
+      "timestamp": "18:00:07.839",
       "level": "info",
       "message": "STAGE START: Monitor1 Update"
     },
     {
-      "timestamp": "15:00:03.228",
+      "timestamp": "18:00:08.406",
       "level": "info",
-      "message": "STAGE END: Monitor1 Update — complete (80ms)"
+      "message": "STAGE END: Monitor1 Update — complete (568ms)"
     },
     {
-      "timestamp": "15:00:03.228",
+      "timestamp": "18:00:08.407",
       "level": "info",
       "message": "STAGE START: Knowledge Library Index"
     },
     {
-      "timestamp": "15:00:03.228",
+      "timestamp": "18:00:08.407",
       "level": "info",
       "message": "Lifecycle: 8/9 — VERSIONED"
     },
     {
-      "timestamp": "15:00:03.230",
+      "timestamp": "18:00:08.413",
       "level": "info",
-      "message": "Indexed to knowledge library: C:\\vistamations-music\\crons\\openclaw\\knowledge-library\\RUN-20260808-150003-AOJ7UM.json"
+      "message": "Indexed to knowledge library: C:\\vistamations-music\\crons\\openclaw\\knowledge-library\\RUN-20260808-180006-KY6F6L.json"
     },
     {
-      "timestamp": "15:00:03.230",
+      "timestamp": "18:00:08.413",
       "level": "info",
-      "message": "STAGE END: Knowledge Library Index — complete (2ms)"
+      "message": "STAGE END: Knowledge Library Index — complete (6ms)"
     },
     {
-      "timestamp": "15:00:03.230",
+      "timestamp": "18:00:08.414",
       "level": "info",
       "message": "STAGE START: Archive"
     },
     {
-      "timestamp": "15:00:03.230",
+      "timestamp": "18:00:08.414",
       "level": "info",
       "message": "Lifecycle: 9/9 — ARCHIVED"
     },
     {
-      "timestamp": "15:00:03.231",
+      "timestamp": "18:00:08.416",
       "level": "info",
-      "message": "Run archived to C:\\vistamations-music\\crons\\openclaw\\archive\\RUN-20260808-150003-AOJ7UM.json"
+      "message": "Run archived to C:\\vistamations-music\\crons\\openclaw\\archive\\RUN-20260808-180006-KY6F6L.json"
     },
     {
-      "timestamp": "15:00:03.231",
+      "timestamp": "18:00:08.416",
       "level": "info",
-      "message": "STAGE END: Archive — complete (1ms)"
+      "message": "STAGE END: Archive — complete (2ms)"
     },
     {
-      "timestamp": "15:00:03.232",
+      "timestamp": "18:00:08.416",
       "level": "info",
-      "message": "Execution complete. ASSET_ID: ASSET-EXPANSION-007 | PROJECT_ID: EXPANSION-001"
+      "message": "Execution complete. ASSET_ID: ASSET-CORP-008 | PROJECT_ID: CORP-001"
     },
     {
-      "timestamp": "15:00:03.232",
+      "timestamp": "18:00:08.417",
       "level": "info",
-      "message": "Value Score: 81/100 | Confidence: 74%"
+      "message": "Value Score: 77/100 | Confidence: 69%"
     }
   ],
   "publications": [
@@ -382,21 +382,75 @@
     },
     {
       "runId": "RUN-20260808-180006-KY6F6L",
-      "projectId": null,
-      "assetId": null,
+      "projectId": "CORP-001",
+      "assetId": "ASSET-CORP-008",
       "timestamp": "2026-08-08 08:00:06",
       "type": "Business Analysis",
       "title": "Business Analysis: AI Investment — 8 August 2026",
-      "dominion": null,
+      "dominion": "DOM-005",
       "url": "/crons/openclaw/publications/RUN-20260808-180006-KY6F6L.html",
+      "status": "running",
+      "lifecycleState": "archived",
+      "agent": "OpenClaw Publishing Agent AG-OPENCLAW-001",
+      "valueScore": {
+        "composite": 77,
+        "confidence": 69,
+        "breakdown": {
+          "businessValue": 75,
+          "originality": 70,
+          "depth": 79,
+          "relevance": 79,
+          "utility": 81
+        },
+        "estimatedCommercialValue": "$2,177",
+        "reviewStatus": "Automated Review"
+      },
+      "estimatedValue": "$2,177"
+    },
+    {
+      "runId": "RUN-20260809-090004-BZMOG4",
+      "projectId": null,
+      "assetId": null,
+      "timestamp": "2026-08-08 23:00:04",
+      "type": "Business Analysis",
+      "title": "Business Analysis: Productivity — 9 August 2026",
+      "dominion": null,
+      "url": "/crons/openclaw/publications/RUN-20260809-090004-BZMOG4.html",
       "status": "published",
       "lifecycleState": null,
       "agent": "OpenClaw Publishing Agent AG-OPENCLAW-001",
       "valueScore": null,
-      "estimatedValue": "$2,177"
+      "estimatedValue": "$9,733"
     }
   ],
   "assets": [
+    {
+      "assetId": "ASSET-EXPANSION-009",
+      "projectId": "EXPANSION-001",
+      "runId": "RUN-20260809-090004-BZMOG4",
+      "dominion": "DOM-004",
+      "type": "Business Analysis",
+      "title": "Business Analysis: Productivity — 9 August 2026",
+      "url": "/crons/openclaw/publications/RUN-20260809-090004-BZMOG4.html",
+      "version": "1.0.0",
+      "status": "published",
+      "lifecycleState": "indexed",
+      "valueScore": {
+        "composite": 79,
+        "confidence": 79,
+        "breakdown": {
+          "businessValue": 89,
+          "originality": 70,
+          "depth": 74,
+          "relevance": 83,
+          "utility": 81
+        },
+        "estimatedCommercialValue": "$9,733",
+        "reviewStatus": "Automated Review"
+      },
+      "timestamp": "2026-08-08T23:00:04.360Z",
+      "revisions": []
+    },
     {
       "assetId": "ASSET-CORP-008",
       "projectId": "CORP-001",
@@ -732,11 +786,12 @@
       "name": "Corporate Governance",
       "dominion": "DOM-005",
       "stats": {
-        "totalRuns": 0,
-        "publications": 0,
-        "published": 0,
-        "valueScore": 0,
-        "accumulatedValue": 0
+        "totalRuns": 1,
+        "publications": 2,
+        "published": 2,
+        "valueScore": 79,
+        "accumulatedValue": 8572,
+        "lastRun": "2026-08-08T08:00:06.820Z"
       }
     }
   ],
@@ -761,9 +816,9 @@
     },
     "DOM-004": {
       "name": "Expansion",
-      "totalAssets": 1,
-      "totalValue": 9411,
-      "avgScore": 81
+      "totalAssets": 2,
+      "totalValue": 19144,
+      "avgScore": 80
     },
     "DOM-005": {
       "name": "Corporation",
@@ -773,6 +828,6 @@
     }
   },
   "engineVersion": "2.0.0",
-  "lastUpdated": "2026-08-08 08:00:08 AEST",
+  "lastUpdated": "2026-08-08 23:00:05 AEST",
   "engineStatus": "running"
 }
