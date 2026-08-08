@@ -109,6 +109,6 @@ switch ($Action) {
         }
     }
     default {
-        Write-Host "Usage: .\olivia-status.ps1 -Action [send|register|unregister|status]"
+        Write-Host 'Usage: .\olivia-status.ps1 -Action [send|register|unregister|status]'
     }
 }

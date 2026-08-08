@@ -376,6 +376,6 @@ switch ($Action) {
         }
     }
     default {
-        Write-Host "Usage: .\sync-links.ps1 -Action [sync|register|unregister|status]"
+        Write-Host 'Usage: .\sync-links.ps1 -Action [sync|register|unregister|status]'
     }
 }
