@@ -1,0 +1,341 @@
+{
+  "runId": "RUN-20260808-180006-KY6F6L",
+  "projectId": "CORP-001",
+  "assetId": "ASSET-CORP-008",
+  "timestamp": "2026-08-08T08:00:06.820Z",
+  "status": "running",
+  "lifecycleState": "archived",
+  "assetVersion": "1.0.0",
+  "publication": {
+    "title": "Business Analysis: AI Investment — 8 August 2026",
+    "type": "Business Analysis",
+    "dominion": "DOM-005",
+    "url": "/crons/openclaw/publications/RUN-20260808-180006-KY6F6L.html",
+    "valueScore": {
+      "composite": 77,
+      "confidence": 69,
+      "breakdown": {
+        "businessValue": 75,
+        "originality": 70,
+        "depth": 79,
+        "relevance": 79,
+        "utility": 81
+      },
+      "estimatedCommercialValue": "$2,177",
+      "reviewStatus": "Automated Review"
+    }
+  },
+  "logs": [
+    {
+      "timestamp": "18:00:07.022",
+      "level": "info",
+      "message": "STAGE START: Idea Generation"
+    },
+    {
+      "timestamp": "18:00:07.022",
+      "level": "info",
+      "message": "Lifecycle: 1/9 — IDEA"
+    },
+    {
+      "timestamp": "18:00:07.023",
+      "level": "info",
+      "message": "Selected topic: Business Analysis — AI Investment [DOM-005]"
+    },
+    {
+      "timestamp": "18:00:07.036",
+      "level": "info",
+      "message": "Assigned PROJECT_ID: CORP-001"
+    },
+    {
+      "timestamp": "18:00:07.037",
+      "level": "info",
+      "message": "STAGE END: Idea Generation — complete (15ms)"
+    },
+    {
+      "timestamp": "18:00:07.037",
+      "level": "info",
+      "message": "STAGE START: Research Acquisition"
+    },
+    {
+      "timestamp": "18:00:07.038",
+      "level": "info",
+      "message": "Lifecycle: 2/9 — RESEARCH"
+    },
+    {
+      "timestamp": "18:00:07.038",
+      "level": "info",
+      "message": "Research acquired from 4 authoritative sources."
+    },
+    {
+      "timestamp": "18:00:07.039",
+      "level": "info",
+      "message": "  Source 1: Google Cloud — State of AI Infrastructure Report 2026"
+    },
+    {
+      "timestamp": "18:00:07.039",
+      "level": "info",
+      "message": "  Source 2: IBM IBV — 2026 Tech Leader Study"
+    },
+    {
+      "timestamp": "18:00:07.039",
+      "level": "info",
+      "message": "  Source 3: Microsoft Research — Orchard: Open Framework for Scalable Agentic AI"
+    },
+    {
+      "timestamp": "18:00:07.039",
+      "level": "info",
+      "message": "  Source 4: Capgemini — Top Tech Trends of 2026"
+    },
+    {
+      "timestamp": "18:00:07.039",
+      "level": "info",
+      "message": "STAGE END: Research Acquisition — complete (2ms)"
+    },
+    {
+      "timestamp": "18:00:07.040",
+      "level": "info",
+      "message": "STAGE START: Knowledge Processing"
+    },
+    {
+      "timestamp": "18:00:07.040",
+      "level": "info",
+      "message": "Lifecycle: 3/9 — DRAFT"
+    },
+    {
+      "timestamp": "18:00:07.041",
+      "level": "info",
+      "message": "Processing research into structured knowledge."
+    },
+    {
+      "timestamp": "18:00:07.041",
+      "level": "info",
+      "message": "Extracted 8 key themes from research."
+    },
+    {
+      "timestamp": "18:00:07.041",
+      "level": "info",
+      "message": "STAGE END: Knowledge Processing — complete (1ms)"
+    },
+    {
+      "timestamp": "18:00:07.041",
+      "level": "info",
+      "message": "STAGE START: Fact Verification"
+    },
+    {
+      "timestamp": "18:00:07.042",
+      "level": "info",
+      "message": "Fact verification complete. 4 claims cross-referenced against source data."
+    },
+    {
+      "timestamp": "18:00:07.042",
+      "level": "info",
+      "message": "STAGE END: Fact Verification — complete (1ms)"
+    },
+    {
+      "timestamp": "18:00:07.042",
+      "level": "info",
+      "message": "STAGE START: Publication Builder"
+    },
+    {
+      "timestamp": "18:00:07.789",
+      "level": "info",
+      "message": "STAGE END: Publication Builder — complete (747ms)"
+    },
+    {
+      "timestamp": "18:00:07.790",
+      "level": "info",
+      "message": "STAGE START: Editorial Review"
+    },
+    {
+      "timestamp": "18:00:07.790",
+      "level": "info",
+      "message": "Lifecycle: 4/9 — REVIEW"
+    },
+    {
+      "timestamp": "18:00:07.791",
+      "level": "info",
+      "message": "Performing editorial review..."
+    },
+    {
+      "timestamp": "18:00:07.791",
+      "level": "info",
+      "message": "Review: Consistency=PASS Grammar=PASS Technical=PASS Citations=PASS BusinessValue=PASS"
+    },
+    {
+      "timestamp": "18:00:07.791",
+      "level": "info",
+      "message": "STAGE END: Editorial Review — complete (1ms)"
+    },
+    {
+      "timestamp": "18:00:07.791",
+      "level": "info",
+      "message": "STAGE START: Approval Queue"
+    },
+    {
+      "timestamp": "18:00:07.792",
+      "level": "info",
+      "message": "Lifecycle: 5/9 — APPROVED"
+    },
+    {
+      "timestamp": "18:00:07.792",
+      "level": "info",
+      "message": "Publication approved for deployment."
+    },
+    {
+      "timestamp": "18:00:07.792",
+      "level": "info",
+      "message": "STAGE END: Approval Queue — complete (1ms)"
+    },
+    {
+      "timestamp": "18:00:07.792",
+      "level": "info",
+      "message": "STAGE START: Deployment"
+    },
+    {
+      "timestamp": "18:00:07.802",
+      "level": "info",
+      "message": "Lifecycle: 6/9 — PUBLISHED"
+    },
+    {
+      "timestamp": "18:00:07.834",
+      "level": "info",
+      "message": "Publication written to C:\\vistamations-music\\crons\\openclaw\\publications\\RUN-20260808-180006-KY6F6L.html"
+    },
+    {
+      "timestamp": "18:00:07.834",
+      "level": "info",
+      "message": "Value Score: 77/100 (Business: 75, Originality: 70, Depth: 79, Relevance: 79, Utility: 81)"
+    },
+    {
+      "timestamp": "18:00:07.834",
+      "level": "info",
+      "message": "Confidence: 69% | Estimated: $2,177"
+    },
+    {
+      "timestamp": "18:00:07.834",
+      "level": "info",
+      "message": "STAGE END: Deployment — complete (42ms)"
+    },
+    {
+      "timestamp": "18:00:07.834",
+      "level": "info",
+      "message": "STAGE START: Asset Registration"
+    },
+    {
+      "timestamp": "18:00:07.835",
+      "level": "info",
+      "message": "Lifecycle: 7/9 — INDEXED"
+    },
+    {
+      "timestamp": "18:00:07.838",
+      "level": "info",
+      "message": "Asset registered: ASSET-CORP-008 (v1.0.0)"
+    },
+    {
+      "timestamp": "18:00:07.838",
+      "level": "info",
+      "message": "STAGE END: Asset Registration — complete (4ms)"
+    },
+    {
+      "timestamp": "18:00:07.839",
+      "level": "info",
+      "message": "STAGE START: Monitor1 Update"
+    },
+    {
+      "timestamp": "18:00:08.406",
+      "level": "info",
+      "message": "STAGE END: Monitor1 Update — complete (568ms)"
+    },
+    {
+      "timestamp": "18:00:08.407",
+      "level": "info",
+      "message": "STAGE START: Knowledge Library Index"
+    },
+    {
+      "timestamp": "18:00:08.407",
+      "level": "info",
+      "message": "Lifecycle: 8/9 — VERSIONED"
+    },
+    {
+      "timestamp": "18:00:08.413",
+      "level": "info",
+      "message": "Indexed to knowledge library: C:\\vistamations-music\\crons\\openclaw\\knowledge-library\\RUN-20260808-180006-KY6F6L.json"
+    },
+    {
+      "timestamp": "18:00:08.413",
+      "level": "info",
+      "message": "STAGE END: Knowledge Library Index — complete (6ms)"
+    },
+    {
+      "timestamp": "18:00:08.414",
+      "level": "info",
+      "message": "STAGE START: Archive"
+    },
+    {
+      "timestamp": "18:00:08.414",
+      "level": "info",
+      "message": "Lifecycle: 9/9 — ARCHIVED"
+    }
+  ],
+  "stages": {
+    "Idea Generation": {
+      "start": 1786176007022,
+      "status": "complete",
+      "elapsedMs": 15
+    },
+    "Research Acquisition": {
+      "start": 1786176007037,
+      "status": "complete",
+      "elapsedMs": 2
+    },
+    "Knowledge Processing": {
+      "start": 1786176007040,
+      "status": "complete",
+      "elapsedMs": 1
+    },
+    "Fact Verification": {
+      "start": 1786176007041,
+      "status": "complete",
+      "elapsedMs": 1
+    },
+    "Publication Builder": {
+      "start": 1786176007042,
+      "status": "complete",
+      "elapsedMs": 747
+    },
+    "Editorial Review": {
+      "start": 1786176007790,
+      "status": "complete",
+      "elapsedMs": 1
+    },
+    "Approval Queue": {
+      "start": 1786176007791,
+      "status": "complete",
+      "elapsedMs": 1
+    },
+    "Deployment": {
+      "start": 1786176007792,
+      "status": "complete",
+      "elapsedMs": 42
+    },
+    "Asset Registration": {
+      "start": 1786176007834,
+      "status": "complete",
+      "elapsedMs": 4
+    },
+    "Monitor1 Update": {
+      "start": 1786176007838,
+      "status": "complete",
+      "elapsedMs": 568
+    },
+    "Knowledge Library Index": {
+      "start": 1786176008407,
+      "status": "complete",
+      "elapsedMs": 6
+    },
+    "Archive": {
+      "start": 1786176008414,
+      "status": "running"
+    }
+  }
+}

@@ -1,5 +1,22 @@
-vistamations agents
+Vistamations Agent Roster — Dominion I
 
-# ID          agent        cluster
-org AG001     Trinity      base-env
-org AG007     -            base-env
+# ID          agent           cluster     domain
+org AG001     Gordon          base-env    Chief Hub Agent
+org AG002     Trinity         base-env    Apprentice Systems Engineer
+org AG003     Merlin V.II     base-env    Wizard Guide
+org AG004     Olivia          base-env    Executive Secretary / Operations Coordinator
+org AG005     Claw (Dee)      base-env    Legacy Series MCP Specialist
+org AG006     Big Brother     base-env    Senior Software Architect (DeepSeek V4 Pro)
+org AG007     Dee             base-env    Cron & Research Worker (DeepSeek V4 Flash)
+org AG008     Stefi           base-env    Graphics & Design Director
+
+Reporting Structure:
+  Player
+    Merlin V.II (Guide)
+      Olivia (Executive Secretary / Operations)
+        Gordon (Chief Hub Agent)
+          Trinity (Infrastructure)
+            Claw (Legacy MCP / Tool Acquisition)
+        Big Brother (Engineering)
+        Dee (Cron & Research)
+        Stefi (Graphics)

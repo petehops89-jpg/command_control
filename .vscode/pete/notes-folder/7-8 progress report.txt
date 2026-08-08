@@ -1,0 +1,173 @@
+Written 660 words across three sections:
+
+- **Environment** (~130 words) — Windows 11, Docker Desktop 4.84 / WSL2, Node.js 20 Alpine, VS Code toolchain, Figma prototypes, network topology, CDN dependencies
+- **Infrastructure** (~180 words) — Trinity (docker/mcp/localhost), 4-container stack (nginx/app/redis/prometheus all healthy), application layer (clock, media player, bento grid), monitoring/healthchecks, git state
+- **Mission Statement** (~350 words) — Sovereignty principle, 4-layer architecture (Simulation → Digital Twin → Infrastructure → Sovereignty), AI governance via policy-driven agents, distributed compute model, Infrastructure Genome concept, Thomas Bresche narrative campaign, immediate goal (SVG interactive command control dashboard)
+
+We were at the SVG interactive dashboard architecture discussion. Let me pick up from where we left off.
+
+## SVG Dashboard — Architecture Deep Dive
+
+### Rendering Strategy: Why SVG over Canvas/WebGL
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **SVG** | CSS-animatable, DOM-accessible, clickable nodes, scales infinitely, text selectable, small file size | Many elements can lag >1000 nodes |
+| Canvas 2D | Fast for many elements, pixel control | No DOM access, text blurry on zoom, manual hit detection |
+| WebGL | 60fps at massive scale | Overkill for dashboards, steep dev cost |
+
+**Decision**: SVG. Our dashboard has ~200 elements maximum — well within SVG's comfort zone. Every component stays clickable and styleable via CSS.
+
+### Component Tree
+
+```
+command-control.html
+├── Header bar (time, user, system health dot)
+├── Bento Grid Container (CSS grid 12-col)
+│   ├── [#1] Boot Sequence Panel (span 6, row 2)
+│   │   ├── SVG viewBox="0 0 400 200"
+│   │   ├── 4 LED bars × 10 circles each (40 total)
+│   │   ├── CSS @keyframes fill-led-bar staggered 0.5s per bar
+│   │   └── Status labels: "Kernel Scan", "Integrity Check", "Network Clear", "Boot OK"
+│   │
+│   ├── [#2] Trinity Status (span 3, row 2)
+│   │   ├── 3 status cards: docker ● / mcp ● / localhost ●
+│   │   ├── Live health from docker compose ps
+│   │   └── Click to expand service details
+│   │
+│   ├── [#3] Agents Panel (span 3, row 2)
+│   │   ├── AG001 Trinity — status, role, last heartbeat
+│   │   ├── AG007 [vacant] — provision button
+│   │   └── SVG pulse rings around active agents
+│   │
+│   ├── [#4] Resource Gauges (span 6, row 1)
+│   │   ├── SVG arc gauges: CPU, Memory, Redis conns, HTTP req/s
+│   │   ├── stroke-dasharray reveals vs total
+│   │   └── Color thresholds: green <60%, amber <85%, red >85%
+│   │
+│   ├── [#5] Network Topology (span 6, row 3)
+│   │   ├── SVG graph: nginx→app→redis, nginx→prometheus
+│   │   ├── Animated dash lines (data flow)
+│   │   ├── Node color = live health (green/red)
+│   │   └── Click node → navigate to service
+│   │
+│   └── [#6] Event Log (span 12, row 2)
+│       ├── Scrollable log with monospace text
+│       ├── Color-coded: green=info, amber=warn, red=error
+│       └── Auto-scrolls to latest, max 200 lines buffer
+```
+
+### Data Flow
+
+```
+┌─────────────────────────────────────────────────────┐
+│                   Polling Loop (JS)                 │
+│                                                     │
+│  setInterval 5s ──→ docker compose ps --format json │
+│                 ──→ GET /health (app)               │
+│                 ──→ GET /api/v1/query?query=up      │
+│                                                     │
+│  setInterval 10s ─→ docker stats --no-stream        │
+│                                                     │
+│  setInterval 15min → Open-Meteo API (weather)       │
+│                                                     │
+│              ↓ Updates ↓                            │
+│                                                     │
+│  SVG attribute: setAttribute('fill', color)         │
+│  SVG attribute: setAttribute('opacity', val)        │
+│  textContent: .textContent = newValue               │
+│  classList: .classList.toggle('online/offline')     │
+│  Log prepend: .insertBefore(newRow, firstChild)     │
+└─────────────────────────────────────────────────────┘
+```
+
+### SVG Techniques Used
+
+**1. LED Boot Bar Animation**
+```svg
+<circle cx="20" cy="20" r="4" class="led" style="animation-delay: 0.1s"/>
+<circle cx="36" cy="20" r="4" class="led" style="animation-delay: 0.2s"/>
+<!-- 10 circles per bar, each delayed 0.1s → 1s bar fill -->
+```
+```css
+.led { fill: #1a1a2e; }
+.led.boot { animation: light-up 0.3s forwards; }
+@keyframes light-up { to { fill: #00e5ff; filter: drop-shadow(0 0 4px #00e5ff); } }
+```
+
+**2. Arc Gauge (CPU/Memory)**
+```svg
+<circle cx="60" cy="60" r="50" fill="none" 
+        stroke="#1a1a28" stroke-width="8"/>
+<circle cx="60" cy="60" r="50" fill="none" 
+        stroke="var(--accent)" stroke-width="8"
+        stroke-dasharray="314" stroke-dashoffset="94"
+        stroke-linecap="round" transform="rotate(-90 60 60)"/>
+```
+`dashoffset = circumference × (1 - percentage/100)`
+
+**3. Network Graph — Animated Data Flow**
+```svg
+<line x1="100" y1="80" x2="220" y2="80" 
+      stroke="var(--accent)" stroke-width="2"
+      stroke-dasharray="6 4" class="flow-line"/>
+```
+```css
+.flow-line { animation: flow 1s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -20; } }
+```
+
+**4. Agent Pulse Ring**
+```svg
+<circle cx="50" cy="50" r="16" fill="none" 
+        stroke="var(--accent2)" stroke-width="1.5" 
+        class="pulse-ring" opacity="0"/>
+```
+```css
+.pulse-ring {
+  animation: ping 2s ease-out infinite;
+  transform-origin: 50px 50px;
+}
+@keyframes ping {
+  0% { r: 12; opacity: 0.8; }
+  100% { r: 30; opacity: 0; }
+}
+```
+
+### Event Log — Message Format
+
+```
+[HH:MM:SS.mmm] [LEVEL] source.component: message
+[04:30:13.421] [INFO] system.health: app container healthy (uptime 5,618s)
+[04:30:12.108] [INFO] agent.trinity: heartbeat acknowledged
+[04:30:00.000] [INFO] weather.wagga: 6.3°C, partly cloudy, wind 0.7km/h N
+[04:29:45.332] [WARN] resource.cpu: 72% utilization — above threshold
+[04:29:15.001] [INFO] network.nginx: 200 GET /clock.html (1.2ms)
+```
+
+### Interactions Per Panel
+
+| Panel | Click | Result |
+|-------|-------|--------|
+| Boot Sequence | Replay button | Restarts LED animation |  
+| Trinity docker card | Click | Opens `docker compose ps` output inline |
+| Trinity localhost card | Click | Navigates to `http://localhost/` |
+| AG001 Trinity agent | Click | Opens agent detail: role, permissions, config |
+| AG007 vacant | Click | Opens agent provisioning form |
+| nginx node (topology) | Click | Opens `http://localhost/` in new tab |
+| app node (topology) | Click | Opens `http://localhost:3000/health` |
+| redis node (topology) | Click | Opens redis CLI stats |
+| Resource gauge | Hover | Tooltip with exact value + history sparkline |
+| Event log row | Click | Expands row with full detail |
+
+### Single File, Zero Dependencies
+
+No npm, no frameworks, no CDN imports. Single `command-control.html` with:
+- `<style>` block (~200 lines CSS)
+- `<svg>` blocks embedded inline per panel
+- `<script>` block (~300 lines JS) for polling + DOM updates
+- Served directly by nginx on `http://localhost/command-control.html`
+
+---
+
+This is the complete architecture. Ready to build — shall I proceed with implementation?

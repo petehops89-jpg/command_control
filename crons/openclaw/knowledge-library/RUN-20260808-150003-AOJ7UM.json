@@ -1,0 +1,26 @@
+{
+  "assetId": "ASSET-EXPANSION-007",
+  "runId": "RUN-20260808-150003-AOJ7UM",
+  "projectId": "EXPANSION-001",
+  "title": "Expansion Proposal: Distribution — 8 August 2026",
+  "type": "Expansion Proposal",
+  "dominion": "DOM-004",
+  "domain": "Distribution",
+  "timestamp": "2026-08-08T05:00:03.028Z",
+  "url": "/crons/openclaw/publications/RUN-20260808-150003-AOJ7UM.html",
+  "valueScore": {
+    "composite": 81,
+    "confidence": 74,
+    "breakdown": {
+      "businessValue": 90,
+      "originality": 72,
+      "depth": 76,
+      "relevance": 83,
+      "utility": 83
+    },
+    "estimatedCommercialValue": "$9,411",
+    "reviewStatus": "Automated Review"
+  },
+  "lifecycleState": "versioned",
+  "version": "1.0.0"
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "NR-0001",
+    "subject": "Command Portal - operational",
+    "message": "Two-way protocol active. Click Respond to open the Command Portal. Olivia will notify you when agents reply.",
+    "notifiedAt": "2026-08-07T19:11:46.0717334+10:00",
+    "responded": false,
+    "responseId": null,
+    "expiredAt": "2026-08-07T15:45:39.987Z",
+    "status": "expired"
+  }
+]

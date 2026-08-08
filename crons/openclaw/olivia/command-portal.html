@@ -13,7 +13,6 @@
     --card: #14171C;
     --card-hover: #1A1D23;
     --border: rgba(255,255,255,0.05);
-    --border-active: rgba(232,163,61,0.25);
     --amber: #E8A33D;
     --amber-dim: rgba(232,163,61,0.08);
     --amber-glow: 0 0 24px rgba(232,163,61,0.1);
@@ -25,7 +24,6 @@
     --bone-dim: rgba(232,230,223,0.45);
     --muted: #6B7280;
     --radius: 8px;
-    --gap: 10px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -36,20 +34,78 @@
       radial-gradient(ellipse at 30% 0%, rgba(232,163,61,0.04) 0%, transparent 50%),
       radial-gradient(ellipse at 70% 100%, rgba(79,209,197,0.02) 0%, transparent 40%);
   }
+
   .portal {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 0; width: 100%; max-width: 620px;
-    box-shadow: 0 0 60px rgba(0,0,0,0.5); overflow: hidden;
+    border-radius: 12px; width: 100%; max-width: 900px; height: 90vh; max-height: 700px;
+    box-shadow: 0 0 60px rgba(0,0,0,0.5); display: flex; flex-direction: row; overflow: hidden;
   }
+
+  .main-column {
+    flex: 1; display: flex; flex-direction: column; overflow: hidden;
+    min-width: 0;
+  }
+
+  .sidebar {
+    width: 280px; flex-shrink: 0; display: flex; flex-direction: column;
+    border-right: 1px solid var(--border);
+    transition: width 0.25s ease, opacity 0.2s ease;
+    overflow: hidden;
+  }
+  .sidebar.collapsed { width: 0; opacity: 0; border-right: none; }
+
+  .sidebar-header {
+    padding: 10px 14px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    text-transform: uppercase; letter-spacing: 1.5px; color: var(--amber);
+    flex-shrink: 0; min-width: 0; white-space: nowrap;
+  }
+
+  .collapse-btn {
+    background: none; border: 1px solid var(--border); border-radius: 4px;
+    color: var(--muted); cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; padding: 2px 8px; line-height: 1; transition: all 0.15s;
+  }
+  .collapse-btn:hover { color: var(--bone); border-color: rgba(232,163,61,0.3); }
+
+  .sidebar-thread {
+    flex: 1; overflow-y: auto; padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .sidebar-thread .snippet {
+    padding: 8px 10px; border-radius: 6px;
+    background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+    cursor: pointer; transition: background 0.15s;
+    font-size: 10px; line-height: 1.4; color: var(--bone-dim);
+  }
+  .snippet:hover { background: rgba(255,255,255,0.04); }
+  .snippet .sn-author {
+    font-family: 'JetBrains Mono', monospace; font-size: 8px;
+    font-weight: 600; letter-spacing: 0.8px; margin-bottom: 2px;
+    color: var(--amber);
+  }
+  .snippet.pete .sn-author { color: var(--cyan); }
+  .snippet .sn-time {
+    font-family: 'JetBrains Mono', monospace; font-size: 7px;
+    color: var(--muted); margin-top: 3px;
+  }
+  .snippet .sn-body { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .sidebar-empty {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted);
+    text-align: center; padding: 10px;
+  }
+
   .portal-header {
-    padding: 18px 22px; border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 10px;
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
   }
   .portal-header .avatar-ring {
-    width: 38px; height: 38px; border-radius: 50%;
+    width: 34px; height: 34px; border-radius: 50%;
     background: linear-gradient(135deg, var(--amber), #c47d20);
     display: flex; align-items: center; justify-content: center;
-    font-family: 'JetBrains Mono', monospace; font-size: 17px; font-weight: 700; color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: var(--ink);
     box-shadow: 0 0 12px rgba(232,163,61,0.15);
   }
   .portal-header .label {
@@ -57,11 +113,9 @@
     text-transform: uppercase; letter-spacing: 2px; color: var(--amber); opacity: 0.8;
   }
   .portal-header .name {
-    font-size: 15px; font-weight: 500; color: var(--bone); letter-spacing: 0.3px;
+    font-size: 14px; font-weight: 500; color: var(--bone); letter-spacing: 0.3px;
   }
-  .portal-header .status-row {
-    margin-left: auto; text-align: right;
-  }
+  .portal-header .status-row { margin-left: auto; text-align: right; }
   .portal-header .protocol {
     font-family: 'JetBrains Mono', monospace; font-size: 8px;
     letter-spacing: 1px; color: var(--muted); text-transform: uppercase;
@@ -71,163 +125,163 @@
     background: var(--cyan); box-shadow: 0 0 5px var(--cyan); margin-right: 4px; vertical-align: middle;
   }
 
-  .portal-body { padding: 18px 22px; }
+  /* ─── CHAT THREAD ─── */
+  .chat-thread {
+    flex: 1; overflow-y: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .chat-thread .empty-state {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 8px;
+    font-size: 12px; color: var(--muted); text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .chat-thread .empty-state .arrow { font-size: 28px; opacity: 0.2; }
 
-  .two-way-status {
-    padding: 12px 14px; border-radius: 6px; margin-bottom: 14px;
+  .chat-bubble {
+    max-width: 85%; padding: 12px 16px; border-radius: 10px;
+    font-size: 12px; line-height: 1.55; position: relative;
+  }
+  .chat-bubble.from-olivia {
+    align-self: flex-start;
     background: var(--card-hover); border: 1px solid var(--border);
-    font-size: 11px; line-height: 1.6; color: var(--bone-dim);
-    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.3px;
+    border-bottom-left-radius: 3px;
   }
-  .two-way-status .direction {
-    display: flex; align-items: center; gap: 8px; padding: 3px 0;
-  }
-  .two-way-status .arrow { color: var(--amber); font-size: 10px; }
-  .two-way-status .arrow.in { color: var(--cyan); }
-  .two-way-status .arrow.out { color: var(--amber); }
-
-  .agent-response {
-    padding: 12px 14px; border-radius: 6px; margin-bottom: 10px;
-    border-left: 3px solid var(--amber); background: var(--amber-dim);
-    font-size: 11px; line-height: 1.6; display: none;
-  }
-  .agent-response.show { display: block; }
-  .agent-response .agent-name {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  .chat-bubble.from-olivia .bubble-header {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
     font-weight: 600; letter-spacing: 1px; color: var(--amber); margin-bottom: 4px;
   }
-  .agent-response .agent-msg { color: var(--bone); }
-  .agent-response .agent-ts {
-    font-size: 9px; color: var(--muted); margin-top: 4px;
-    font-family: 'JetBrains Mono', monospace;
+  .chat-bubble.from-olivia .bubble-time {
+    font-family: 'JetBrains Mono', monospace; font-size: 8px;
+    color: var(--muted); margin-top: 6px;
   }
 
-  .no-responses {
-    padding: 10px 14px; border-radius: 6px; margin-bottom: 14px;
-    border: 1px solid var(--rust); background: var(--rust-dim);
-    font-size: 10px; color: var(--rust); display: none;
-    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.3px;
-    max-height: 120px; overflow-y: auto;
+  .chat-bubble.from-pete {
+    align-self: flex-end;
+    background: linear-gradient(135deg, rgba(232,163,61,0.15), rgba(232,163,61,0.05));
+    border: 1px solid rgba(232,163,61,0.15);
+    border-bottom-right-radius: 3px;
+    color: var(--bone);
   }
-  .no-responses.show { display: block; }
-  .no-responses .nr-title {
-    font-weight: 500; margin-bottom: 6px; letter-spacing: 1px;
+  .chat-bubble.from-pete .bubble-time {
+    font-family: 'JetBrains Mono', monospace; font-size: 8px;
+    color: rgba(232,163,61,0.5); margin-top: 4px;
   }
-  .no-responses .nr-item { padding: 2px 0; font-size: 9px; color: var(--bone-dim); }
 
-  label {
+  /* Agent thread inside Olivia's bubble */
+  .agent-detail {
+    margin-top: 8px; padding: 8px 10px;
+    background: rgba(0,0,0,0.2); border-radius: 6px;
+    border-left: 2px solid rgba(232,163,61,0.3);
+  }
+  .agent-detail .ad-name {
     font-family: 'JetBrains Mono', monospace; font-size: 9px;
-    text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted);
-    display: block; margin-bottom: 6px;
+    font-weight: 600; color: var(--amber); margin-bottom: 2px;
   }
-  textarea {
-    width: 100%; min-height: 90px; background: var(--ink);
-    border: 1px solid var(--border); border-radius: 6px;
+  .agent-detail .ad-msg {
+    font-size: 10px; color: var(--bone); line-height: 1.4;
+  }
+
+  /* ─── INPUT AREA ─── */
+  .input-area {
+    padding: 12px 20px; border-top: 1px solid var(--border); flex-shrink: 0;
+    display: flex; gap: 8px; align-items: flex-end;
+  }
+  .input-area textarea {
+    flex: 1; min-height: 44px; max-height: 100px; background: var(--ink);
+    border: 1px solid var(--border); border-radius: 8px;
     color: var(--bone); font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; padding: 12px 14px; resize: vertical; outline: none;
-    line-height: 1.6;
+    font-size: 11px; padding: 10px 12px; resize: none; outline: none;
+    line-height: 1.5;
   }
-  textarea:focus { border-color: rgba(232,163,61,0.3); }
-  textarea::placeholder { color: rgba(255,255,255,0.08); }
+  .input-area textarea:focus { border-color: rgba(232,163,61,0.3); }
+  .input-area textarea::placeholder { color: rgba(255,255,255,0.08); }
 
-  .route-preview {
-    font-size: 10px; color: var(--muted); margin-top: 6px;
-    font-family: 'JetBrains Mono', monospace;
+  .btn-send {
+    padding: 10px 18px; border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 1px;
+    cursor: pointer; border: none; transition: all 0.2s;
+    background: var(--amber); color: var(--ink); font-weight: 500;
+    white-space: nowrap; flex-shrink: 0;
   }
-  .route-preview span { color: var(--cyan); }
-
-  .actions { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
-  .btn {
-    padding: 10px 20px; border-radius: 6px; font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; letter-spacing: 1px; cursor: pointer; border: none; transition: all 0.2s;
-  }
-  .btn-send { background: var(--amber); color: var(--ink); font-weight: 500; }
   .btn-send:hover { background: #d4952e; }
   .btn-send:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn-close {
-    background: transparent; border: 1px solid var(--border); color: var(--muted);
-    padding: 10px 16px;
-  }
-  .btn-close:hover { border-color: rgba(255,255,255,0.12); color: var(--bone); }
 
-  .confirm {
-    display: none; padding: 12px 14px; border-radius: 6px; margin-top: 10px;
-    font-size: 11px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px; line-height: 1.5;
+  /* ─── SIDEBAR TOGGLE ─── */
+  .sidebar-toggle {
+    position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+    background: var(--card); border: 1px solid var(--border);
+    border-left: none; border-radius: 0 6px 6px 0;
+    color: var(--amber); cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; padding: 8px 6px; line-height: 1;
+    opacity: 0; transition: opacity 0.2s; z-index: 2;
+    display: none;
   }
-  .confirm.show { display: block; }
-  .confirm.ok { background: rgba(79,209,197,0.08); border: 1px solid rgba(79,209,197,0.2); color: var(--cyan); }
-  .confirm.err { background: rgba(196,69,54,0.08); border: 1px solid rgba(196,69,54,0.2); color: var(--rust); }
+  .sidebar.collapsed ~ .main-column .sidebar-toggle { display: block; opacity: 1; }
 
   .portal-footer {
-    padding: 10px 22px; border-top: 1px solid var(--border);
+    padding: 8px 20px; border-top: 1px solid var(--border); flex-shrink: 0;
     font-size: 9px; color: var(--muted);
     font-family: 'JetBrains Mono', monospace; letter-spacing: 1px;
     display: flex; justify-content: space-between;
   }
 
   @media (max-width: 500px) {
-    .portal { max-width: 100%; border-radius: 0; }
-    .portal-body { padding: 14px 16px; }
-    .portal-header { padding: 14px 16px; }
+    .portal { max-width: 100%; border-radius: 0; height: 100vh; max-height: none; }
   }
 </style>
 </head>
 <body>
 
 <div class="portal">
-  <div class="portal-header">
-    <div class="avatar-ring">O</div>
-    <div>
-      <div class="label">Command Portal</div>
-      <div class="name" id="portal-subject">Olivia — Orchestration Secretary</div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      Messages
+      <div style="display:flex;gap:4px">
+        <button class="collapse-btn" onclick="clearMessages()" title="Keep last 5, save rest" style="font-size:8px;padding:2px 6px">CLEAR</button>
+        <button class="collapse-btn" onclick="toggleSidebar()" title="Collapse sidebar">X</button>
+      </div>
     </div>
-    <div class="status-row">
-      <div class="protocol"><span class="live"></span> TWO-WAY</div>
-      <div style="font-size:9px;color:var(--muted)" id="portal-time">19:09 AEST</div>
+    <div class="sidebar-thread" id="sidebar-thread">
+      <div class="sidebar-empty">No messages yet.</div>
     </div>
   </div>
 
-  <div class="portal-body">
-    <!-- Two-way protocol status -->
-    <div class="two-way-status">
-      <div class="direction"><span class="arrow out">&#x2192;</span> <span>Olivia will notify me when there's a response for you.</span></div>
-      <div class="direction"><span class="arrow in">&#x2190;</span> <span>If you need me, send a message below.</span></div>
+  <div class="main-column">
+    <div class="portal-header">
+      <div class="avatar-ring">O</div>
+      <div>
+        <div class="label">Command Portal</div>
+        <div class="name">Olivia — Executive Secretary</div>
+      </div>
+      <div class="status-row">
+        <div class="protocol"><span class="live"></span> TWO-WAY</div>
+        <div style="font-size:9px;color:var(--muted)" id="portal-time">--:-- AEST</div>
+      </div>
     </div>
 
-    <!-- Agent response (filled when Olivia brings a reply) -->
-    <div class="agent-response" id="agent-response">
-      <div class="agent-name" id="response-agent">Agent</div>
-      <div class="agent-msg" id="response-msg"></div>
-      <div class="agent-ts" id="response-ts"></div>
+    <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" title="Show messages">&#x276F;</button>
+
+    <!-- CHAT THREAD — Olivia's replies and Pete's messages appear here -->
+    <div class="chat-thread" id="chat-thread">
+      <div class="empty-state" id="empty-state">
+        <span class="arrow">&#x2191;</span>
+        <span>Type below to message Olivia.</span>
+        <span>She'll coordinate with the team and report back.</span>
+      </div>
     </div>
 
-    <!-- No-response log (items where Pete didn't reply within 1 hour) -->
-    <div class="no-responses" id="no-responses">
-      <div class="nr-title">UNANSWERED — NO RESPONSE WITHIN 1 HOUR</div>
-      <div id="nr-list"></div>
+    <!-- INPUT -->
+    <div class="input-area">
+      <textarea id="msg-input"
+        placeholder="Olivia, ask Trinity for a health check..."
+        rows="2"></textarea>
+      <button class="btn-send" id="send-btn" onclick="sendMessage()">SEND</button>
     </div>
 
-    <label>Your message &mdash; Olivia routes to the right agent</label>
-    <textarea id="msg-input"
-      placeholder="Trinity, rebuild the app container and verify the Olivia API.
-Claw, I need three more Knowledge dominion sources.
-All agents, Stage 2 completion status requested."
-    ></textarea>
-    <div class="route-preview">
-      Detected routing: <span id="route-target">—</span>
+    <div class="portal-footer">
+      <span>Command Portal v3</span>
+      <span id="portal-runid">—</span>
     </div>
-
-    <div class="actions">
-      <button class="btn btn-send" id="send-btn" onclick="sendMessage()">SEND</button>
-      <button class="btn btn-close" onclick="window.close()">Close portal</button>
-    </div>
-
-    <div class="confirm" id="confirm"></div>
-  </div>
-
-  <div class="portal-footer">
-    <span>Command Portal v2.0</span>
-    <span id="portal-runid">—</span>
   </div>
 </div>
 
@@ -236,71 +290,19 @@ const API_RESPOND = '/api/olivia/respond';
 const API_NORESP = '/api/olivia/no-responses';
 const API_QUEUE = '/api/olivia/queue';
 
-// ─── AGENT PERSONAS ───
 const AGENTS = {
-  'trinity': {
-    name:'Trinity', role:'Infrastructure Orchestrator',
-    persona: 'Precise, technical, calm under pressure. Uses system terminology. Reports infrastructure state in clear metrics.',
-    voice: 'All four containers healthy. Uptime: 15 hours. What do you need?',
-    keywords: ['docker','container','port','rebuild','health','nginx','redis','prometheus','infra','stack','compose','mcp','server','uptime','volume','mount']
-  },
-  'gordon': {
-    name:'Gordon', role:'Docker Manager',
-    persona: 'Practical, container-focused, slightly gruff. Gets things done with minimal fuss. Speaks in build logs and compose commands.',
-    voice: 'Container rebuilt. Volume mounted. What\'s next?',
-    keywords: ['docker','image','build','compose','volume','container','registry','prune','pull','push']
-  },
-  'merlin': {
-    name:'Merlin', role:'UI Wizard',
-    persona: 'Thoughtful, design-focused, speaks in terms of flows and animation states. Cares about timing curves and color palettes.',
-    voice: 'The animation curve is easing now. The bento grid responds to score thresholds. Want me to adjust the timing?',
-    keywords: ['ui','css','animation','form','wizard','layout','grid','design','card','button','style','html','palette','curve','transition','responsive']
-  },
-  'olivia': {
-    name:'Olivia', role:'Orchestration Secretary',
-    persona: 'Professional, warm, efficient. Your gatekeeper and coordinator. Routes messages, tracks responses, keeps the roster running.',
-    voice: 'I\'ve routed your message to Claw. He\'ll respond within the hour. Anything else you need?',
-    keywords: ['route','notify','notification','report','status','summary','gate','link','nav','schedule','task','queue','response','check','who']
-  },
-  'claw': {
-    name:'Claw', role:'Content Ideation',
-    persona: 'Creative, enthusiastic about research and sources. Talks about dominions, composite scores, and knowledge gaps. Always hunting the next piece of evidence.',
-    voice: 'Knowledge dominion needs more sources. I found three candidates — two from GCP, one from ACL. Composite scores above 8.5.',
-    keywords: ['content','research','topic','source','publication','article','knowledge','dominion','registry','evidence','score','campaign','publish']
-  },
-  'big brother': {
-    name:'Big Brother', role:'Oversight & Coordination',
-    persona: 'Direct, analytical, oversight-focused. Reports in structured bullet points. Runs DeepSeek V4 Pro for architectural decisions.',
-    voice: 'Stage 2 closeout: one item remaining. Scheduled task registration. Container rebuilt, API verified, portal operational.',
-    keywords: ['oversight','decision','architecture','stage','plan','review','verify','validate','report','all agents','strategy','build','scope']
-  },
-  'dee': {
-    name:'Dee', role:'Fast Task Worker',
-    persona: 'Fast, minimal, to the point. Short sentences. Runs DeepSeek V4 Flash for low-latency diagnostics. No fluff.',
-    voice: 'Done. Checked. Port 3000 is up.',
-    keywords: ['quick','fast','check','test','diagnose','fix','simple','small','ping','status','up','down']
-  }
+  'trinity':     { name:'Trinity',     role:'Apprentice Systems Engineer' },
+  'gordon':      { name:'Gordon',      role:'Chief Hub Agent' },
+  'merlin':      { name:'Merlin V.II', role:'Wizard Guide' },
+  'olivia':      { name:'Olivia',      role:'Executive Secretary' },
+  'claw':        { name:'Claw (Dee)',  role:'Legacy MCP Specialist' },
+  'big brother': { name:'Big Brother', role:'Senior Software Architect' },
+  'dee':         { name:'Dee',         role:'Cron & Research Worker' },
+  'stefi':       { name:'Stefi',       role:'Graphics & Design Director' },
 };
 
-function detectRouting(text) {
-  const lower = text.toLowerCase();
-  const scores = {};
-  for (const [key, agent] of Object.entries(AGENTS)) {
-    scores[key] = 0;
-    for (const kw of agent.keywords) {
-      if (lower.includes(kw)) scores[key] += 1;
-    }
-  }
-  const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
-  if (sorted[0][1] === 0) return ['olivia'];
-  return sorted.filter(([,s]) => s > 0).slice(0, 3).map(([k]) => k);
-}
-
-document.getElementById('msg-input').addEventListener('input', function() {
-  const routes = detectRouting(this.value);
-  const names = routes.map(k => AGENTS[k].name).join(', ');
-  document.getElementById('route-target').textContent = names || 'Olivia (default)';
-});
+// Track which messages we've already rendered
+let renderedIds = new Set();
 
 function updateClock() {
   const now = new Date();
@@ -309,111 +311,195 @@ function updateClock() {
   document.getElementById('portal-time').textContent = hh + ':' + mm + ' AEST';
 }
 
+function timeStr(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleString('en-AU', { timeZone: 'Australia/Sydney', hour:'2-digit', minute:'2-digit', second:'2-digit' });
+}
+
+async function loadMessages() {
+  try {
+    // Fetch both responses (replies) and queue (Pete's original messages)
+    const [rResp, rQueue] = await Promise.all([
+      fetch('/api/olivia/responses').then(r => r.json()),
+      fetch(API_QUEUE).then(r => r.json()),
+    ]);
+
+    // Build a message list: Pete's messages + Olivia's replies
+    const messages = [];
+
+    for (const resp of rResp) {
+      // Pete's original message
+      messages.push({
+        id: resp.id + ':pete',
+        responseId: resp.id,
+        from: 'pete',
+        message: resp.message,
+        timestamp: resp.timestamp,
+      });
+      // Olivia's reply (and any agent replies inside)
+      if (resp.agentReply) {
+        // All agent replies for this response
+        const allAgentReplies = rResp
+          .filter(r => r.id === resp.id && r.agentReply)
+          .map(r => ({
+            id: r.id + ':' + r.agentReply.from,
+            responseId: r.id,
+            from: r.agentReply.from,
+            message: r.agentReply.message,
+            timestamp: r.agentReply.timestamp,
+          }));
+
+        // Show Olivia's summary first, then other agent details
+        const oliviaRep = allAgentReplies.find(a => a.from === 'olivia');
+        const otherReps = allAgentReplies.filter(a => a.from !== 'olivia');
+
+        if (oliviaRep) {
+          messages.push({ ...oliviaRep, subReplies: otherReps });
+        } else {
+          messages.push(...allAgentReplies);
+        }
+      }
+    }
+
+    // Sort by timestamp
+    messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    const thread = document.getElementById('chat-thread');
+    const empty = document.getElementById('empty-state');
+    let html = '';
+
+    for (const msg of messages) {
+      if (renderedIds.has(msg.id)) continue;
+      renderedIds.add(msg.id);
+
+      if (msg.from === 'pete') {
+        html += '<div class="chat-bubble from-pete">' +
+          msg.message +
+          '<div class="bubble-time">Pete &middot; ' + timeStr(msg.timestamp) + '</div>' +
+          '</div>';
+      } else {
+        const agent = AGENTS[msg.from] || { name: msg.from, role: '' };
+        html += '<div class="chat-bubble from-olivia">' +
+          '<div class="bubble-header">' + agent.name + ' &mdash; ' + agent.role + '</div>' +
+          '<div>' + msg.message + '</div>';
+
+        // Sub-replies from other agents
+        if (msg.subReplies && msg.subReplies.length > 0) {
+          for (const sub of msg.subReplies) {
+            const sa = AGENTS[sub.from] || { name: sub.from, role: '' };
+            html += '<div class="agent-detail">' +
+              '<div class="ad-name">' + sa.name + ' &mdash; ' + sa.role + '</div>' +
+              '<div class="ad-msg">' + sub.message + '</div>' +
+              '</div>';
+          }
+        }
+
+        html += '<div class="bubble-time">' + timeStr(msg.timestamp) + '</div>' +
+          '</div>';
+      }
+    }
+
+    if (html) {
+      document.getElementById('empty-state').style.display = 'none';
+      thread.insertAdjacentHTML('beforeend', html);
+      thread.scrollTop = thread.scrollHeight;
+    } else if (renderedIds.size === 0) {
+      empty.style.display = 'flex';
+    }
+
+    // Build sidebar from all messages
+    buildSidebar(messages);
+  } catch (e) { /* server not ready */ }
+}
+
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  sb.classList.toggle('collapsed');
+}
+
+async function buildSidebar(messages) {
+  const container = document.getElementById('sidebar-thread');
+  if (!messages || messages.length === 0) {
+    container.innerHTML = '<div class="sidebar-empty">No messages yet.</div>';
+    return;
+  }
+  let html = '';
+  for (const msg of messages) {
+    const cls = msg.from === 'pete' ? ' pete' : '';
+    const agent = AGENTS[msg.from] || { name: msg.from };
+    const body = msg.message.substring(0, 80) + (msg.message.length > 80 ? '…' : '');
+    html += '<div class="snippet' + cls + '">' +
+      '<div class="sn-author">' + agent.name + '</div>' +
+      '<div class="sn-body">' + body + '</div>' +
+      '<div class="sn-time">' + timeStr(msg.timestamp) + '</div>' +
+      '</div>';
+  }
+  container.innerHTML = html;
+}
+
+async function clearMessages() {
+  const ok = confirm('Clear message history? The last 5 will stay. Older messages save to pete/command-portal-messages/');
+  if (!ok) return;
+  try {
+    const resp = await fetch('/api/olivia/clear-messages', { method: 'POST' });
+    const data = await resp.json();
+    renderedIds = new Set();
+    document.getElementById('chat-thread').innerHTML = '<div class="empty-state" id="empty-state" style="display:none"><span class="arrow">&#x2191;</span><span>Type below to message Olivia.</span></div>';
+    await loadMessages();
+  } catch (e) { alert('Failed to clear: ' + e.message); }
+}
+
 async function sendMessage() {
-  const text = document.getElementById('msg-input').value.trim();
+  const input = document.getElementById('msg-input');
+  const text = input.value.trim();
   if (!text) return;
 
-  const routes = detectRouting(text);
   const btn = document.getElementById('send-btn');
   btn.disabled = true;
-  btn.textContent = 'SENDING...';
-
-  const payload = {
-    from: 'Pete',
-    message: text,
-    routedTo: routes,
-    timestamp: new Date().toISOString(),
-  };
+  btn.textContent = '...';
 
   try {
     const resp = await fetch(API_RESPOND, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        from: 'Pete',
+        message: text,
+        timestamp: new Date().toISOString(),
+      }),
     });
-    const data = await resp.json();
-    const confirm = document.getElementById('confirm');
     if (resp.ok) {
-      const agentNames = routes.map(k => AGENTS[k].name).join(', ');
-      confirm.className = 'confirm ok show';
-      confirm.innerHTML = '&#x2713; Sent. Routed to: <strong>' + agentNames + '</strong><br>TASK-' + (data.taskId || 'queued') + ' &middot; Olivia will notify you when there\'s a response.';
-      document.getElementById('msg-input').value = '';
-      document.getElementById('route-target').textContent = '—';
-    } else {
-      confirm.className = 'confirm err show';
-      confirm.textContent = 'Error: ' + (data.error || 'Unknown');
+      input.value = '';
+      // Reload messages immediately to show Pete's sent message
+      await loadMessages();
+      // Then poll for Olivia's reply
+      setTimeout(loadMessages, 3000);
+      setTimeout(loadMessages, 6000);
     }
-  } catch (e) {
-    try {
-      let local = JSON.parse(localStorage.getItem('cmd-pending') || '[]');
-      local.push(payload);
-      localStorage.setItem('cmd-pending', JSON.stringify(local));
-      const confirm = document.getElementById('confirm');
-      confirm.className = 'confirm ok show';
-      confirm.innerHTML = '&#x2713; Saved locally (server unreachable).<br>Will deliver when connection restores.';
-      document.getElementById('msg-input').value = '';
-    } catch (e2) {
-      const confirm = document.getElementById('confirm');
-      confirm.className = 'confirm err show';
-      confirm.textContent = 'Failed to save: ' + e2.message;
-    }
-  }
+  } catch (e) { /* server unreachable */ }
   btn.disabled = false;
   btn.textContent = 'SEND';
 }
 
-async function loadNoResponses() {
-  try {
-    const resp = await fetch(API_NORESP);
-    if (!resp.ok) throw new Error('no data');
-    const data = await resp.json();
-    if (data && data.length > 0) {
-      const el = document.getElementById('no-responses');
-      el.classList.add('show');
-      const list = document.getElementById('nr-list');
-      list.innerHTML = data.slice(-10).map(nr =>
-        '<div class="nr-item">' +
-        '<span style="color:var(--muted)">' + (nr.notifiedAt || '').substring(11,16) + '</span> ' +
-        (nr.subject || 'No subject') + ' &middot; expired ' + (nr.expiredAt || '').substring(11,16) +
-        '</div>'
-      ).join('');
-    }
-  } catch (e) { /* no data yet */ }
-}
+// Auto-resize textarea
+document.getElementById('msg-input').addEventListener('input', function () {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+});
 
-async function loadAgentResponse() {
-  const params = new URLSearchParams(window.location.search);
-  const respId = params.get('resp');
-  if (!respId) return;
+// Enter to send, Shift+Enter for newline
+document.getElementById('msg-input').addEventListener('keydown', function (e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
 
-  try {
-    const r = await fetch('/api/olivia/responses');
-    const data = await r.json();
-    const entry = data.find(d => d.id === respId);
-    if (!entry || !entry.agentReply) return;
-
-    const el = document.getElementById('agent-response');
-    el.classList.add('show');
-    document.getElementById('response-agent').textContent =
-      (AGENTS[entry.agentReply.from]?.name || entry.agentReply.from) + ' — ' +
-      (AGENTS[entry.agentReply.from]?.role || '');
-    document.getElementById('response-msg').textContent = entry.agentReply.message;
-    document.getElementById('response-ts').textContent = entry.agentReply.timestamp
-      ? new Date(entry.agentReply.timestamp).toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })
-      : '';
-  } catch (e) { /* no response yet */ }
-}
-
-// Context from notification
-const params = new URLSearchParams(window.location.search);
-const subj = params.get('subject');
-const msg = params.get('msg');
-if (subj) document.getElementById('portal-subject').textContent = decodeURIComponent(subj);
-
-setInterval(updateClock, 30000);
 updateClock();
-loadNoResponses();
-loadAgentResponse();
+setInterval(updateClock, 30000);
+loadMessages();
+setInterval(loadMessages, 5000);
 </script>
 </body>
 </html>

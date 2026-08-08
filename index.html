@@ -16,10 +16,12 @@
     --accent2: #7c4dff;
     --accent3: #ff4081;
     --accent4: #00e676;
+    --amber: #E8A33D;
+    --rust: #C44536;
     --glow-cyan: 0 0 40px rgba(0, 229, 255, 0.08);
     --glow-purple: 0 0 40px rgba(124, 77, 255, 0.08);
     --radius: 16px;
-    --gap: 12px;
+    --gap: 8px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,14 +30,15 @@
     font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', monospace;
     background: var(--bg);
     color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
+    height: 100vh;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 186px 1fr 186px;
+    grid-template-rows: 1fr;
   }
 
   .bg-layer {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
+    position: fixed; inset: 0; z-index: 0;
     background:
       url('images/command-control.png') center/cover no-repeat,
       radial-gradient(ellipse at 30% 0%, rgba(0, 229, 255, 0.06) 0%, transparent 50%),
@@ -45,212 +48,312 @@
   }
 
   .bg-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
+    position: fixed; inset: 0; z-index: 1;
     background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(6, 6, 13, 0.6) 100%);
     pointer-events: none;
   }
 
-  .app {
-    position: relative;
-    z-index: 2;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 16px 20px 40px;
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap);
-  }
-
-  /* ─── HEADER ─── */
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 16px;
-  }
-  .header .brand {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    color: var(--accent2);
-    opacity: 0.7;
-  }
-  .header .status-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 10px;
-    opacity: 0.5;
-  }
-  .status-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--accent4);
-    box-shadow: 0 0 8px var(--accent4);
-    animation: pulse-dot 2s ease-in-out infinite;
-  }
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  /* ─── BENTO GRID ─── */
-  .bento {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: minmax(100px, auto);
-    gap: var(--gap);
-  }
-
+  /* ─── SHARED CARD BASE ─── */
   .card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    display: flex; flex-direction: column; justify-content: space-between;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     transition: all 0.25s ease;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-    position: relative;
-    overflow: hidden;
+    cursor: pointer; text-decoration: none; color: inherit;
+    position: relative; overflow: hidden;
   }
   .card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: var(--radius);
-    opacity: 0;
-    transition: opacity 0.25s;
-    pointer-events: none;
+    content: ''; position: absolute; inset: 0; border-radius: var(--radius);
+    opacity: 0; transition: opacity 0.25s; pointer-events: none;
   }
-  .card:hover {
-    transform: translateY(-2px);
-    border-color: var(--card-hover-border);
-    box-shadow: var(--glow-cyan);
-  }
-  .card:hover::after {
-    opacity: 1;
-    background: radial-gradient(ellipse at 50% 0%, rgba(0, 229, 255, 0.04), transparent 70%);
-  }
+  .card:hover { transform: translateY(-2px); border-color: var(--card-hover-border); }
+  .card:hover::after { opacity: 1; background: radial-gradient(ellipse at 50% 0%, rgba(0,229,255,0.04), transparent 70%); }
 
-  .card .icon {
-    font-size: 28px;
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-  .card .label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-    margin-bottom: 2px;
-  }
-  .card .title {
-    font-size: 15px;
-    font-weight: 500;
-    color: #fff;
-    letter-spacing: 0.3px;
-    line-height: 1.3;
-  }
-  .card .sub {
-    font-size: 10px;
-    color: var(--text-dim);
-    margin-top: 4px;
-    line-height: 1.4;
-  }
+  .card .icon { font-size: 28px; line-height: 1; margin-bottom: 6px; }
+  .card .label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 2px; }
+  .card .title { font-size: 15px; font-weight: 500; color: #fff; letter-spacing: 0.3px; line-height: 1.3; }
+  .card .sub { font-size: 10px; color: var(--text-dim); margin-top: 4px; line-height: 1.4; }
 
-  /* ─── CARD VARIANTS ─── */
-  .card.hero {
-    grid-column: span 7;
-    grid-row: span 3;
-    justify-content: center;
-    background: linear-gradient(135deg, rgba(15, 15, 28, 0.9), rgba(25, 20, 45, 0.85));
-    border-color: rgba(124, 77, 255, 0.2);
-  }
-  .card.hero .title {
-    font-size: 36px;
-    font-weight: 200;
-    letter-spacing: 2px;
-    line-height: 1.1;
-  }
-  .card.hero .title em {
-    font-style: normal;
-    color: var(--accent);
-  }
-  .card.hero .sub {
-    font-size: 13px;
-    margin-top: 12px;
-    max-width: 360px;
-  }
-
-  .card.span2 { grid-column: span 4; grid-row: span 2; }
-  .card.span1s { grid-column: span 3; grid-row: span 1; }
-  .card.span1m { grid-column: span 2; grid-row: span 1; }
-  .card.span1l { grid-column: span 3; grid-row: span 2; }
-  .card.span2w { grid-column: span 6; grid-row: span 2; }
-  .card.span3w { grid-column: span 5; grid-row: span 2; }
-
-  /* ─── ACCENT BORDERS ─── */
+  /* accent borders */
   .card.accent-cyan { border-left: 2px solid var(--accent); }
   .card.accent-purple { border-left: 2px solid var(--accent2); }
   .card.accent-pink { border-left: 2px solid var(--accent3); }
   .card.accent-green { border-left: 2px solid var(--accent4); }
+  .card.accent-amber { border-left: 2px solid var(--amber); }
+  .card.accent-rust { border-left: 2px solid var(--rust); }
+  .card.accent-cyan:hover { box-shadow: 0 0 24px rgba(0,229,255,0.1); }
+  .card.accent-purple:hover { box-shadow: 0 0 24px rgba(124,77,255,0.1); }
+  .card.accent-pink:hover { box-shadow: 0 0 24px rgba(255,64,129,0.1); }
+  .card.accent-green:hover { box-shadow: 0 0 24px rgba(0,230,118,0.1); }
+  .card.accent-amber:hover { box-shadow: 0 0 24px rgba(232,163,61,0.1); }
+  .card.accent-rust:hover { box-shadow: 0 0 24px rgba(196,69,54,0.1); }
 
-  .card.accent-cyan:hover { box-shadow: 0 0 24px rgba(0, 229, 255, 0.1); }
-  .card.accent-purple:hover { box-shadow: 0 0 24px rgba(124, 77, 255, 0.1); }
-  .card.accent-pink:hover { box-shadow: 0 0 24px rgba(255, 64, 129, 0.1); }
-  .card.accent-green:hover { box-shadow: 0 0 24px rgba(0, 230, 118, 0.1); }
-
-  /* ─── STATUS DOTS IN CARDS ─── */
-  .card .live-dot {
-    display: inline-block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    margin-right: 4px;
-    vertical-align: middle;
-  }
+  .card .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
   .live-dot.online { background: var(--accent4); box-shadow: 0 0 6px var(--accent4); }
   .live-dot.offline { background: #555; }
+  .live-dot.warn { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
 
-  /* ─── TAG ─── */
   .tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 9px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.06);
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
     margin-bottom: 8px;
   }
 
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 900px) {
-    .bento { grid-template-columns: repeat(6, 1fr); }
-    .card.hero { grid-column: span 6; grid-row: span 2; }
-    .card.hero .title { font-size: 26px; }
-    .card.span2 { grid-column: span 3; grid-row: span 2; }
-    .card.span1s { grid-column: span 3; }
-    .card.span1m { grid-column: span 2; }
-    .card.span1l { grid-column: span 3; grid-row: span 2; }
-    .card.span2w { grid-column: span 6; }
-    .card.span3w { grid-column: span 3; grid-row: span 2; }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent4); box-shadow: 0 0 8px var(--accent4);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+  /* ─── LEFT SIDEBAR ─── */
+  .sidebar-left {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column;
+    padding: 6px; gap: 6px; overflow: hidden;
   }
 
-  @media (max-width: 560px) {
-    .bento { grid-template-columns: repeat(2, 1fr); }
-    .card.hero { grid-column: span 2; grid-row: span 1; }
-    .card.span2, .card.span1s, .card.span1m, .card.span1l, .card.span2w, .card.span3w { grid-column: span 2; grid-row: span 1; }
-    .card.hero .title { font-size: 22px; }
-    .app { padding: 10px; }
+  /* STEP 1: JOURNEY PATH */
+  .journey-path {
+    flex-shrink: 0;
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 12px 10px;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-left: 2px solid var(--accent2);
+  }
+  .journey-path .jp-title {
+    font-size: 9px; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--accent2); margin-bottom: 8px; opacity: 0.8;
+  }
+  .journey-step {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 8px; border-radius: 6px; margin-bottom: 3px;
+    font-size: 10px; transition: all 0.2s;
+    border: 1px solid transparent;
+  }
+  .journey-step .js-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .journey-step .js-dot.done { background: var(--accent4); box-shadow: 0 0 4px var(--accent4); }
+  .journey-step .js-dot.active { background: var(--accent); box-shadow: 0 0 6px var(--accent); animation: pulse-dot 2s ease-in-out infinite; }
+  .journey-step .js-dot.pending { background: #333; }
+  .journey-step .js-label { color: var(--text); line-height: 1.2; }
+  .journey-step.done .js-label { opacity: 0.5; }
+  .journey-step.active { background: rgba(0,229,255,0.04); border-color: rgba(0,229,255,0.12); }
+  .journey-step.active .js-label { color: #fff; }
+
+  /* STEP 2: CORE AGENTS */
+  .core-agents {
+    flex: 1; display: flex; flex-direction: column; gap: 4px;
+    overflow-y: auto; min-height: 0;
+  }
+  .core-agents .ca-title {
+    font-size: 8px; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--text-dim); margin-bottom: 2px; padding: 0 4px;
+  }
+  .agent-card {
+    background: rgba(15,15,28,0.65); border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 6px; padding: 6px 8px;
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.2s; cursor: pointer;
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  }
+  .agent-card:hover { border-color: rgba(255,255,255,0.1); background: rgba(15,15,28,0.85); }
+  .agent-card .ac-avatar {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+  }
+  .agent-card .ac-info { min-width: 0; flex: 1; }
+  .agent-card .ac-name { font-size: 10px; font-weight: 500; color: #fff; letter-spacing: 0.3px; }
+  .agent-card .ac-role { font-size: 8px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+  .agent-card .ac-status { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .agent-card .ac-status.online { background: var(--accent4); box-shadow: 0 0 4px var(--accent4); }
+  .agent-card .ac-status.idle { background: var(--amber); box-shadow: 0 0 4px var(--amber); }
+  .agent-card .ac-status.offline { background: #444; }
+  .agent-card.trinity .ac-avatar { background: linear-gradient(135deg, var(--accent), #009faf); color: #000; }
+  .agent-card.gordon .ac-avatar { background: linear-gradient(135deg, var(--accent2), #4a2fb5); color: #fff; }
+  .agent-card.merlin .ac-avatar { background: linear-gradient(135deg, var(--amber), #c47d20); color: #000; }
+  .agent-card.olivia .ac-avatar { background: linear-gradient(135deg, #ff69b4, #c44569); color: #000; }
+  .agent-card.claw .ac-avatar { background: linear-gradient(135deg, var(--accent4), #009f5f); color: #000; }
+  .agent-card.bigbrother .ac-avatar { background: linear-gradient(135deg, var(--rust), #8b1a1a); color: #fff; }
+  .agent-card.dee .ac-avatar { background: linear-gradient(135deg, var(--accent3), #b80040); color: #fff; }
+  .agent-card.stefi .ac-avatar { background: linear-gradient(135deg, #e040fb, #7b1fa2); color: #fff; }
+
+  /* ─── CENTER ─── */
+  .center-col {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column;
+    padding: 6px 8px; gap: 6px; min-width: 0;
+  }
+
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 12px; flex-shrink: 0;
+  }
+  .header .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 4px; color: var(--accent2); opacity: 0.7; }
+  .header .status-row { display: flex; align-items: center; gap: 12px; font-size: 10px; opacity: 0.5; }
+
+  /* STEP 3: GORDON HUB VISUAL + BENTO */
+  .hub-area {
+    flex: 1; display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: minmax(60px, 1fr);
+    gap: var(--gap); min-height: 0; overflow-y: auto;
+  }
+
+  .card.hub {
+    grid-column: span 7; grid-row: span 5;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(15,15,28,0.9), rgba(25,20,45,0.85));
+    border-color: rgba(124,77,255,0.2);
+  }
+  .card.hub .title { font-size: 32px; font-weight: 200; letter-spacing: 2px; line-height: 1.1; }
+  .card.hub .title em { font-style: normal; color: var(--accent); }
+  .card.hub .sub { font-size: 12px; margin-top: 10px; max-width: 360px; }
+  .card.hub .hub-visual {
+    margin-top: 12px; display: flex; gap: 20px; flex-wrap: wrap;
+  }
+  .card.hub .hub-ring {
+    width: 70px; height: 70px; border-radius: 50%;
+    border: 2px solid rgba(124,77,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    box-shadow: 0 0 30px rgba(124,77,255,0.15);
+    background: radial-gradient(circle, rgba(124,77,255,0.08), transparent);
+  }
+  .card.hub .hub-ring::after {
+    content: ''; position: absolute; inset: -4px; border-radius: 50%;
+    border: 1px dashed rgba(0,229,255,0.2);
+    animation: spin 20s linear infinite;
+  }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  .card.hub .hub-ring .hub-label {
+    font-size: 18px; font-weight: 300; color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .card.hub .hub-stat {
+    text-align: center; min-width: 50px;
+  }
+  .card.hub .hub-stat .val {
+    font-size: 20px; font-weight: 300; color: #fff;
+  }
+  .card.hub .hub-stat .lbl {
+    font-size: 8px; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-dim); margin-top: 2px;
+  }
+
+  /* side cards in hub grid */
+  .card.sm { grid-column: span 2; grid-row: span 2; padding: 12px 14px; }
+  .card.sm .title { font-size: 12px; }
+  .card.sm .sub { font-size: 9px; }
+  .card.sm .icon { font-size: 20px; }
+
+  .card.md { grid-column: span 3; grid-row: span 2; padding: 14px 16px; }
+  .card.md .title { font-size: 13px; }
+  .card.md .sub { font-size: 9px; }
+  .card.md .icon { font-size: 22px; }
+
+  .card.lg { grid-column: span 3; grid-row: span 3; padding: 16px; }
+  .card.lg .title { font-size: 14px; }
+  .card.lg .icon { font-size: 26px; }
+
+  .card.mw { grid-column: span 5; grid-row: span 2; }
+
+  /* STEP 5: SERVER GRID / ALERTS */
+  .bottom-strip {
+    flex-shrink: 0; display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--gap);
+  }
+  .server-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+  }
+  .server-cell {
+    background: rgba(15,15,28,0.65); border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 6px; padding: 6px 10px; display: flex; align-items: center; gap: 8px;
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    font-size: 9px;
+  }
+  .server-cell .sc-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .server-cell .sc-dot.green { background: var(--accent4); box-shadow: 0 0 4px var(--accent4); }
+  .server-cell .sc-dot.cyan { background: var(--accent); box-shadow: 0 0 4px var(--accent); }
+  .server-cell .sc-name { color: #fff; letter-spacing: 0.3px; }
+  .server-cell .sc-stat { color: var(--text-dim); margin-left: auto; }
+
+  .alerts-panel {
+    background: rgba(15,15,28,0.65); border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 6px; padding: 6px 12px;
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    display: flex; flex-direction: column; gap: 2px; min-width: 160px;
+    border-left: 2px solid var(--rust);
+  }
+  .alerts-panel .al-title {
+    font-size: 8px; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--rust); margin-bottom: 2px;
+  }
+  .alerts-panel .al-item {
+    font-size: 8px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .alerts-panel .al-item .al-sev { color: var(--rust); margin-right: 3px; }
+  .alerts-panel .al-item .al-warn { color: var(--amber); margin-right: 3px; }
+
+  /* ─── RIGHT SIDEBAR: DATA OVERVIEW ─── */
+  .sidebar-right {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column;
+    padding: 6px; gap: 6px; overflow: hidden;
+  }
+  .data-overview {
+    flex: 1; display: flex; flex-direction: column; gap: 5px; overflow-y: auto; min-height: 0;
+  }
+  .data-card {
+    background: rgba(15,15,28,0.65); border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 6px; padding: 8px 10px;
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    transition: all 0.2s;
+  }
+  .data-card:hover { border-color: rgba(255,255,255,0.1); }
+  .data-card .dc-label {
+    font-size: 7px; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--text-dim); margin-bottom: 3px;
+  }
+  .data-card .dc-value {
+    font-size: 18px; font-weight: 300; color: #fff; letter-spacing: 0.5px;
+  }
+  .data-card .dc-sub {
+    font-size: 8px; color: var(--text-dim); margin-top: 1px;
+  }
+  .data-card .dc-bar {
+    height: 3px; border-radius: 2px; margin-top: 4px; background: rgba(255,255,255,0.06);
+  }
+  .data-card .dc-bar-fill {
+    height: 100%; border-radius: 2px; transition: width 0.5s;
+  }
+  .data-card .dc-bar-fill.cyan { background: var(--accent); }
+  .data-card .dc-bar-fill.purple { background: var(--accent2); }
+  .data-card .dc-bar-fill.green { background: var(--accent4); }
+  .data-card .dc-bar-fill.amber { background: var(--amber); }
+
+  .data-card.accent-cyan { border-left: 2px solid var(--accent); }
+  .data-card.accent-purple { border-left: 2px solid var(--accent2); }
+  .data-card.accent-green { border-left: 2px solid var(--accent4); }
+  .data-card.accent-amber { border-left: 2px solid var(--amber); }
+  .data-card.accent-pink { border-left: 2px solid var(--accent3); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1100px) {
+    body { grid-template-columns: 150px 1fr 150px; }
+    .card.hub .title { font-size: 24px; }
+    .card.hub .hub-ring { width: 50px; height: 50px; }
+  }
+  @media (max-width: 860px) {
+    body { grid-template-columns: 1fr; grid-template-rows: auto 1fr; overflow-y: auto; }
+    .sidebar-left, .sidebar-right { display: none; }
+    .bottom-strip { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -259,169 +362,304 @@
 <div class="bg-layer"></div>
 <div class="bg-overlay"></div>
 
-<div class="app">
+<!-- ═══ LEFT SIDEBAR ═══ -->
+<div class="sidebar-left">
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="brand">Vistamations Command Control</div>
-    <div class="status-row">
-      <span class="status-dot"></span> System Online
-    </div>
+  <!-- STEP 1: JOURNEY PATH -->
+  <div class="journey-path">
+    <div class="jp-title">Journey Path</div>
+    <div class="journey-step done"><span class="js-dot done"></span><span class="js-label">Stage 1: Trinity</span></div>
+    <div class="journey-step done"><span class="js-dot done"></span><span class="js-label">Stage 2: Crons</span></div>
+    <div class="journey-step active"><span class="js-dot active"></span><span class="js-label">Stage 3: Cmd Ctrl</span></div>
+    <div class="journey-step"><span class="js-dot pending"></span><span class="js-label">Phase 3.1: Modules</span></div>
+    <div class="journey-step"><span class="js-dot pending"></span><span class="js-label">Phase 3.2: Personnel</span></div>
+    <div class="journey-step"><span class="js-dot pending"></span><span class="js-label">Phase 3.3: Security</span></div>
   </div>
 
-  <!-- BENTO GRID -->
-  <div class="bento">
+  <!-- PUBLICATIONS QUICK LINK -->
+  <a href="publications.html" style="display:block;text-decoration:none;color:inherit">
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:6px;padding:10px 12px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-left:2px solid var(--amber);transition:all 0.2s;cursor:pointer;margin-bottom:6px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:16px">&#x1F4C4;</span>
+        <div>
+          <div style="font-size:10px;font-weight:500;color:#fff">Publications</div>
+          <div style="font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px">OpenClaw Reports</div>
+        </div>
+      </div>
+    </div>
+  </a>
 
-    <!-- HERO -->
-    <div class="card hero">
+  <!-- LINKS QUICK LINK -->
+  <a href="links.html" style="display:block;text-decoration:none;color:inherit">
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:6px;padding:10px 12px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-left:2px solid var(--accent);transition:all 0.2s;cursor:pointer;margin-bottom:6px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:16px">&#x1F517;</span>
+        <div>
+          <div style="font-size:10px;font-weight:500;color:#fff">Links</div>
+          <div style="font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px">Notes Scraped URLs</div>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <!-- STEP 2: CORE AGENTS -->
+  <div class="core-agents">
+    <div class="ca-title">Core Agents</div>
+
+    <div class="agent-card gordon">
+      <div class="ac-avatar">G</div>
+      <div class="ac-info"><div class="ac-name">Gordon</div><div class="ac-role">Chief Hub Agent</div></div>
+      <span class="ac-status online"></span>
+    </div>
+
+    <div class="agent-card trinity">
+      <div class="ac-avatar">T</div>
+      <div class="ac-info"><div class="ac-name">Trinity</div><div class="ac-role">Apprentice Sys. Eng</div></div>
+      <span class="ac-status online"></span>
+    </div>
+
+    <div class="agent-card merlin">
+      <div class="ac-avatar">M</div>
+      <div class="ac-info"><div class="ac-name">Merlin V.II</div><div class="ac-role">Wizard Guide</div></div>
+      <span class="ac-status idle"></span>
+    </div>
+
+    <div class="agent-card olivia">
+      <div class="ac-avatar">O</div>
+      <div class="ac-info"><div class="ac-name">Olivia</div><div class="ac-role">Exec. Secretary</div></div>
+      <span class="ac-status online"></span>
+    </div>
+
+    <div class="agent-card bigbrother">
+      <div class="ac-avatar">B</div>
+      <div class="ac-info"><div class="ac-name">Big Brother</div><div class="ac-role">Sr. Software Arch.</div></div>
+      <span class="ac-status online"></span>
+    </div>
+
+    <div class="agent-card dee">
+      <div class="ac-avatar">D</div>
+      <div class="ac-info"><div class="ac-name">Dee</div><div class="ac-role">Cron &amp; Research</div></div>
+      <span class="ac-status idle"></span>
+    </div>
+
+    <div class="agent-card stefi">
+      <div class="ac-avatar">S</div>
+      <div class="ac-info"><div class="ac-name">Stefi</div><div class="ac-role">Graphics &amp; Design</div></div>
+      <span class="ac-status idle"></span>
+    </div>
+
+    <div class="agent-card claw">
+      <div class="ac-avatar">C</div>
+      <div class="ac-info"><div class="ac-name">Claw (Dee)</div><div class="ac-role">Legacy MCP Specialist</div></div>
+      <span class="ac-status idle"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CENTER ═══ -->
+<div class="center-col">
+
+  <div class="header">
+    <div class="brand">Vistamations Command Control</div>
+    <div class="status-row"><span class="status-dot"></span> System Online</div>
+  </div>
+
+  <!-- STEP 3: GORDON HUB VISUAL + BENTO -->
+  <div class="hub-area">
+
+    <!-- Gordon Hub -->
+    <div class="card hub">
       <div class="title">Vistamations<br><em>Command Control</em></div>
-      <div class="sub">Real-time runtime simulator. Docker &middot; Redis &middot; Prometheus &middot; MCP. Base environment orchestration via Trinity agent.</div>
-      <div style="margin-top:16px;display:flex;gap:6px;flex-wrap:wrap">
+      <div class="sub">Real-time runtime simulator. Docker &middot; Redis &middot; Prometheus &middot; MCP. Base environment orchestration via Trinity.</div>
+      <div class="hub-visual">
+        <div class="hub-ring"><span class="hub-label">G</span></div>
+        <div class="hub-stat"><div class="val">4</div><div class="lbl">Containers</div></div>
+        <div class="hub-stat"><div class="val">8</div><div class="lbl">Agents</div></div>
+        <div class="hub-stat"><div class="val">85%</div><div class="lbl">Stage 1</div></div>
+        <div class="hub-stat"><div class="val">~70%</div><div class="lbl">Stage 2</div></div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap">
         <span class="tag">docker</span><span class="tag">mcp</span><span class="tag">localhost</span>
+        <span class="tag" style="opacity:0.5">scheduled</span>
       </div>
     </div>
 
-    <!-- CLOCK -->
-    <a href="clock.html" class="card span3w accent-cyan">
+    <!-- Clock -->
+    <a href="clock-module.html" class="card mw accent-cyan">
       <div>
         <span class="tag" style="color:var(--accent)">Live</span>
         <div class="icon">&#x1F570;</div>
         <div class="title">Clock</div>
         <div class="sub">Wagga Wagga, NSW — weather, world clock, 24hr toggle</div>
       </div>
-      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; clock.html</div>
+      <div style="font-size:10px;opacity:0.5;margin-top:auto">clock-module.html</div>
     </a>
 
-    <!-- AUDIO PLAYER -->
-    <a href="media-player/index.html#audio" class="card span1l accent-purple">
+    <!-- Media Centre (consolidated) -->
+    <a href="media-player/index.html" class="card lg accent-purple">
       <div>
         <div class="icon">&#x1F3B5;</div>
-        <div class="title">Audio Player</div>
-        <div class="sub">Web Audio API equalizer, 10-band, 8 presets, visualizer, playlist</div>
+        <div class="title">Media Centre</div>
+        <div class="sub">Audio player &middot; video &middot; torrent &middot; downloads &middot; settings</div>
       </div>
-      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; media-player/#audio</div>
+      <div style="font-size:9px;opacity:0.5;margin-top:auto">media-player/</div>
     </a>
 
-    <!-- VIDEO PLAYER -->
-    <a href="media-player/index.html#video" class="card span2 accent-pink">
+    <!-- Olivia Command Portal -->
+    <a href="crons/openclaw/olivia/command-portal.html" class="card md accent-amber">
       <div>
-        <div class="icon">&#x1F3AC;</div>
-        <div class="title">Video Player</div>
-        <div class="sub">HLS/IPTV streaming, 5 default channels, M3U playlist, CSS filter controls, ffmpeg.wasm transcoder</div>
+        <span class="tag" style="color:var(--amber);font-size:7px">Two-Way</span>
+        <div class="icon">&#x1F4E8;</div>
+        <div class="title">Command Portal</div>
+        <div class="sub">Olivia &mdash; direct comms line</div>
       </div>
-      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; media-player/#video</div>
+      <div style="font-size:9px;opacity:0.5;margin-top:auto">olivia/command-portal.html</div>
     </a>
 
-    <!-- VISTA MOONLIGHT -->
-    <a href="vista-moonlight" class="card span2 accent-green">
+    <!-- Vista Moonlight -->
+    <a href="vista-moonlight" class="card sm accent-green">
+      <div><span class="tag" style="color:var(--accent4);font-size:7px">Legacy</span><div class="icon">&#x1F319;</div><div class="title">Moonlight</div><div class="sub">Video.js player</div></div>
+    </a>
+
+    <!-- Monitor1 -->
+    <a href="crons/openclaw/monitor1.html" class="card md accent-cyan">
       <div>
-        <span class="tag" style="color:var(--accent4)">Legacy</span>
-        <div class="icon">&#x1F319;</div>
-        <div class="title">Vista Moonlight</div>
-        <div class="sub">Video.js-based media player, playlist, URL loading, local files</div>
+        <span class="tag" style="color:var(--accent);font-size:7px">Scheduled</span>
+        <div class="icon">&#x1F4CA;</div>
+        <div class="title">Monitor1</div>
+        <div class="sub">Publishing engine &middot; 09/12/15/18 AEST</div>
       </div>
-      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; vista-moonlight</div>
     </a>
 
-    <!-- TORRENT -->
-    <a href="media-player/index.html#torrent" class="card span1s accent-cyan">
-      <div>
-        <div class="icon">&#x2B07;</div>
-        <div class="title">Torrent</div>
-        <div class="sub">WebTorrent streaming, magnet links, .torrent files, live progress</div>
-      </div>
-      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; media-player/#torrent</div>
-    </a>
-
-    <!-- DOWNLOADS -->
-    <a href="media-player/index.html#download" class="card span1m accent-purple">
-      <div>
-        <div class="icon">&#x1F4E5;</div>
-        <div class="title">Downloads</div>
-        <div class="sub">Fetch streaming, progress, save</div>
-      </div>
-      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; media-player/#download</div>
-    </a>
-
-    <!-- SETTINGS -->
-    <a href="media-player/index.html#settings" class="card span1m accent-pink">
-      <div>
-        <div class="icon">&#x2699;</div>
-        <div class="title">Settings</div>
-        <div class="sub">Volume, speed, buffer, crossfade, persistence</div>
-      </div>
-      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; media-player/#settings</div>
-    </a>
-
-    <!-- INFRASTRUCTURE -->
-    <div class="card span2w" style="cursor:default">
+    <!-- Infrastructure links -->
+    <div class="card md" style="cursor:default">
       <div class="label">Infrastructure</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-        <a href="docker-compose.yml" style="color:var(--accent);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">docker-compose.yml</a>
-        <a href="Dockerfile" style="color:var(--accent);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">Dockerfile</a>
-        <a href="nginx.conf" style="color:var(--accent2);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">nginx.conf</a>
-        <a href="redis.conf" style="color:var(--accent3);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">redis.conf</a>
-        <a href="prometheus.yml" style="color:var(--accent4);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">prometheus.yml</a>
-        <a href="server.js" style="color:var(--accent);text-decoration:none;font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px">server.js</a>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+        <a href="docker-compose.yml" style="color:var(--accent);text-decoration:none;font-size:9px;padding:2px 6px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">compose</a>
+        <a href="Dockerfile" style="color:var(--accent);text-decoration:none;font-size:9px;padding:2px 6px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">docker</a>
+        <a href="nginx.conf" style="color:var(--accent2);text-decoration:none;font-size:9px;padding:2px 6px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">nginx</a>
+        <a href="redis.conf" style="color:var(--accent3);text-decoration:none;font-size:9px;padding:2px 6px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">redis</a>
+        <a href="prometheus.yml" style="color:var(--accent4);text-decoration:none;font-size:9px;padding:2px 6px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">prom</a>
+        <a href="server.js" style="color:var(--accent);text-decoration:none;font-size:9px;padding:2px 6px;border:1px solid rgba(255,255,255,0.06);border-radius:4px">server</a>
       </div>
-      <div style="margin-top:10px;font-size:10px;opacity:0.4">
-        <span class="live-dot online"></span> docker <span style="margin:0 8px">|</span>
-        <span class="live-dot online"></span> redis:6379 <span style="margin:0 8px">|</span>
-        <span class="live-dot online"></span> prometheus:9090 <span style="margin:0 8px">|</span>
-        <span class="live-dot online"></span> nginx:80/5501
+      <div style="margin-top:6px;font-size:9px;opacity:0.4;display:flex;gap:4px;flex-wrap:wrap">
+        <span class="live-dot online"></span> docker
+        <span class="live-dot online"></span> redis:6379
+        <span class="live-dot online"></span> prom:9090
+        <span class="live-dot online"></span> nginx:80
       </div>
     </div>
 
-    <!-- AGENTS -->
-    <a href="agents" class="card span1s accent-purple">
-      <div>
-        <div class="icon">&#x1F916;</div>
-        <div class="title">Agents</div>
-        <div class="sub">Trinity &#8226; org AG001 base-env &#8226; AG007</div>
-      </div>
-      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; agents</div>
+    <!-- Agents -->
+    <a href="agents" class="card sm accent-purple">
+      <div><div class="icon">&#x1F916;</div><div class="title">Agents</div><div class="sub">Gordon &bull; AG001 &bull; AG008</div></div>
     </a>
 
-    <!-- BASE-ENV -->
-    <a href="base-env" class="card span1m accent-cyan">
-      <div>
-        <div class="icon">&#x1F4E6;</div>
-        <div class="title">Base Env</div>
-        <div class="sub">Trinity config — docker | mcp | localhost</div>
-      </div>
-      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; base-env</div>
+    <!-- Base Env -->
+    <a href="base-env" class="card sm accent-cyan">
+      <div><div class="icon">&#x1F4E6;</div><div class="title">Base Env</div><div class="sub">docker|mcp|localhost</div></div>
     </a>
 
-    <!-- NOTES -->
-    <a href=".vscode/pete/notes-folder/notes" class="card span1m accent-green">
-      <div>
-        <div class="icon">&#x1F4DD;</div>
-        <div class="title">Notes</div>
-        <div class="sub">Project notes & references</div>
-      </div>
-      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; notes</div>
+    <!-- Notes -->
+    <a href=".vscode/pete/notes-folder/notes" class="card sm accent-green">
+      <div><div class="icon">&#x1F4DD;</div><div class="title">Notes</div></div>
     </a>
 
-    <!-- MONITOR1 — PUBLISHING ENGINE -->
-    <a href="crons/openclaw/monitor1.html" class="card span1l accent-cyan">
-      <div>
-        <span class="tag" style="color:var(--accent)">Scheduled</span>
-        <div class="icon">&#x1F4CA;</div>
-        <div class="title">Monitor1</div>
-        <div class="sub">OpenClaw Publishing Engine &mdash; runtime dashboard, publications archive, knowledge library</div>
-      </div>
-      <div style="display:flex;gap:6px;margin-top:8px">
-        <span style="font-size:9px;opacity:0.4">09:00</span>
-        <span style="font-size:9px;opacity:0.4">12:00</span>
-        <span style="font-size:9px;opacity:0.4">15:00</span>
-        <span style="font-size:9px;opacity:0.4">18:00</span>
-      </div>
-      <div style="font-size:10px;opacity:0.5;margin-top:auto">&#8599; cron/openclaw/monitor1</div>
-    </a>
+  </div><!-- /hub-area -->
 
-  </div><!-- /bento -->
+  <!-- STEP 5: SERVER GRID + ALERTS -->
+  <div class="bottom-strip">
+    <div class="server-grid">
+      <div class="server-cell"><span class="sc-dot green"></span><span class="sc-name">nginx</span><span class="sc-stat">:80 OK</span></div>
+      <div class="server-cell"><span class="sc-dot green"></span><span class="sc-name">app</span><span class="sc-stat">:3000 OK</span></div>
+      <div class="server-cell"><span class="sc-dot green"></span><span class="sc-name">redis</span><span class="sc-stat">:6379 OK</span></div>
+      <div class="server-cell"><span class="sc-dot green"></span><span class="sc-name">prometheus</span><span class="sc-stat">:9090 OK</span></div>
+      <div class="server-cell"><span class="sc-dot cyan"></span><span class="sc-name">openclaw</span><span class="sc-stat">:18789</span></div>
+      <div class="server-cell"><span class="sc-dot green"></span><span class="sc-name">publishing</span><span class="sc-stat">09:00 AEST</span></div>
+      <div class="server-cell"><span class="sc-dot green"></span><span class="sc-name">evidence</span><span class="sc-stat">16 links</span></div>
+      <div class="server-cell"><span class="sc-dot green"></span><span class="sc-name">olivia-queue</span><span class="sc-stat">7 pending</span></div>
+    </div>
+    <div class="alerts-panel">
+      <div class="al-title">Alerts</div>
+      <div class="al-item"><span class="al-warn">WARN</span> 7 queue tasks unprocessed</div>
+      <div class="al-item"><span class="al-sev">INFO</span> Publishing engine ready</div>
+      <div class="al-item"><span class="al-sev">INFO</span> Next run: 09:00 tomorrow</div>
+    </div>
+  </div>
 
-</div><!-- /app -->
+</div><!-- /center-col -->
+
+<!-- ═══ RIGHT SIDEBAR: DATA OVERVIEW ═══ -->
+<div class="sidebar-right">
+  <div class="data-overview">
+
+    <div class="data-card accent-cyan">
+      <div class="dc-label">Publications</div>
+      <div class="dc-value">4</div>
+      <div class="dc-sub">Today &#8226; 75% success</div>
+      <div class="dc-bar"><div class="dc-bar-fill cyan" style="width:75%"></div></div>
+    </div>
+
+    <div class="data-card accent-purple">
+      <div class="dc-label">Active Agents</div>
+      <div class="dc-value">8 / 8</div>
+      <div class="dc-sub">All online or idle</div>
+      <div class="dc-bar"><div class="dc-bar-fill purple" style="width:100%"></div></div>
+    </div>
+
+    <div class="data-card accent-green">
+      <div class="dc-label">Docker Uptime</div>
+      <div class="dc-value" id="docker-uptime">15h</div>
+      <div class="dc-sub">4 containers healthy</div>
+      <div class="dc-bar"><div class="dc-bar-fill green" style="width:100%"></div></div>
+    </div>
+
+    <div class="data-card accent-amber">
+      <div class="dc-label">Queue Depth</div>
+      <div class="dc-value">7</div>
+      <div class="dc-sub">Olivia tasks waiting</div>
+      <div class="dc-bar"><div class="dc-bar-fill amber" style="width:70%"></div></div>
+    </div>
+
+    <div class="data-card accent-cyan">
+      <div class="dc-label">Evidence Registry</div>
+      <div class="dc-value">16</div>
+      <div class="dc-sub">Research links indexed</div>
+      <div class="dc-bar"><div class="dc-bar-fill cyan" style="width:40%"></div></div>
+    </div>
+
+    <div class="data-card accent-purple">
+      <div class="dc-label">Knowledge Library</div>
+      <div class="dc-value">4</div>
+      <div class="dc-sub">Assets in library</div>
+      <div class="dc-bar"><div class="dc-bar-fill purple" style="width:25%"></div></div>
+    </div>
+
+    <div class="data-card accent-green">
+      <div class="dc-label">Next Scheduled</div>
+      <div class="dc-value">09:00</div>
+      <div class="dc-sub">Tomorrow AEST</div>
+    </div>
+
+    <div class="data-card accent-amber">
+      <div class="dc-label">No-Response</div>
+      <div class="dc-value">1</div>
+      <div class="dc-sub">Unanswered 1hr window</div>
+      <div class="dc-bar"><div class="dc-bar-fill amber" style="width:10%"></div></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  const uptimeEl = document.getElementById('docker-uptime');
+  if (uptimeEl) {
+    let h = 15;
+    setInterval(function () { h++; uptimeEl.textContent = h + 'h'; }, 3600000);
+  }
+})();
+</script>
 
 </body>
 </html>

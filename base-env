@@ -1,4 +1,4 @@
-title: trinity
+title: base-env
 
 [a] base infrastructure
 
@@ -6,10 +6,17 @@ title: trinity
   2. mcp
   3. localhost
 
-  trinity = docker | mcp | localhost
+  base-env = docker | mcp | localhost
 
-[b] agent role
+[b] agent cluster — Dominion I
 
-  agent: Trinity
-  scope: base-env
-  function: base infrastructure orchestration and environment management
+  org AG001  Gordon         Chief Hub Agent
+  org AG002  Trinity        Apprentice Systems Engineer
+  org AG003  Merlin V.II    Wizard Guide
+  org AG004  Olivia         Executive Secretary / Operations Coordinator
+  org AG005  Claw (Dee)     Legacy Series MCP Specialist
+  org AG006  Big Brother    Senior Software Architect (DeepSeek V4 Pro)
+  org AG007  Dee            Cron & Research Worker (DeepSeek V4 Flash)
+  org AG008  Stefi          Graphics & Design Director
+
+  Reporting: Player → Merlin V.II → Olivia → { Gordon → Trinity → Claw, Big Brother, Dee, Stefi }

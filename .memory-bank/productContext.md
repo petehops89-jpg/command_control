@@ -6,19 +6,22 @@
 - **Domain**: `localhost` (nginx via Docker compose)
 - **Purpose**: Autonomous knowledge production operating system — governed research acquisition, publication, deployment, monitoring, and archival via the OpenClaw publishing engine.
 
-## Agent Roster
+## Agent Roster — Dominion I
 
-| Agent | ID | Role | Runtime |
-|---|---|---|---|
-| Trinity | org AG001 | Infrastructure orchestration — Docker, MCP, localhost, healthchecks, port binding | base-env |
-| Gordon | — | Docker container management, image builds, compose lifecycle, port registry | base-env |
-| Merlin | — | Step-by-step wizard engine, form flows, UI/UX state machines, animation logic | Evidence Registry UI |
-| Olivia | — | Orchestration secretary — navigation verification, end-to-end flow testing, link integrity | Monitor1 |
-| Claw | — | Content ideation, research scope selection, source diversity auditing, topic generation | OpenClaw runtime |
-| Big Brother | — | Oversight and coordination — runs DeepSeek V4 Pro, stage completion reports, architectural decisions | This session |
-| Dee | — | Fast task worker — runs DeepSeek V4 Flash, low-latency diagnostics, quick fixes | Subagent pool |
+| Agent | ID | Role | Reports To | Runtime |
+|---|---|---|---|---|
+| Gordon | org AG001 | Chief Hub Agent — Docker ops, runtime monitoring, agent deployment, ticket routing, pipeline coordination, Monitor1 integration | Player | base-env |
+| Trinity | org AG002 | Apprentice Systems Engineer — local server, gateway management, MCP routing, local cache/storage, deployment, recovery procedures | Gordon | base-env |
+| Merlin V.II | org AG003 | Wizard Guide — tutorials, campaign guidance, world explanation, architecture reasoning, system philosophy, strategy advice | Player | Evidence Registry UI |
+| Olivia | org AG004 | Executive Secretary / Operations Coordinator — calendars, schedules, reminders, task queues, project tracking, documentation, command history, backlog management, archive lifecycle, workflow orchestration | Merlin V.II | Monitor1 |
+| Claw ("Dee") | org AG005 | Legacy Series MCP Specialist — MCP discovery, connector installation, skills, plugins, legacy systems, tool compatibility, workflow automation, external integrations | Trinity | OpenClaw runtime |
+| Big Brother | org AG006 | Senior Software Architect (DeepSeek V4 Pro) — software architecture, code reviews, debugging, algorithms, optimisation, infrastructure, distributed systems, deployment strategy, engineering governance | Olivia | This session |
+| Dee | org AG007 | Cron & Research Worker (DeepSeek V4 Flash) — cron jobs, scheduled publishing, posting, monitoring, scraping, research gathering, webhook automation, report generation, publication preparation, lightweight coding | Olivia | Subagent pool |
+| Stefi | org AG008 | Graphics & Design Director — UI design, bento layouts, dashboard design, branding, icons, illustrations, cinematic presentation, animation planning, visual consistency, Stitch preparation, Google AI Studio assets | Olivia | base-env |
 
 Agent IDs follow the convention: `org AG### base-env`.
+
+**Reporting Chain**: Player → Merlin V.II (Guide) → Olivia (Operations) → { Gordon → Trinity → Claw, Big Brother, Dee, Stefi }
 
 ## Stack
 

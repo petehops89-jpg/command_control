@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-08-08T03:15:00+10:00",
+  "criteriaCategories": {
+    "portAndProcess": {
+      "description": "Verify what is actually listening where",
+      "checks": [
+        "expectedPort responds and matches the project this checklist is for",
+        "process name/path at that port matches expected binary/entrypoint",
+        "no port collision with unrelated services (e.g. two projects both claiming 3000)"
+      ]
+    },
+    "routeRegistration": {
+      "description": "Verify API routes actually exist on the running server",
+      "checks": [
+        "each documented route returns non-404 on a basic request",
+        "route file on disk matches route path claimed in frontend fetch calls",
+        "base path / prefix (e.g. /api/v1) matches what frontend expects"
+      ]
+    },
+    "requestResponseIntegrity": {
+      "description": "Verify write and read paths agree",
+      "checks": [
+        "POST/write endpoint persists to a store",
+        "GET/read endpoint used by polling reads from the same store",
+        "no divergence between multiple routes writing to different backends for the same data"
+      ]
+    },
+    "frontendBackendSync": {
+      "description": "Catch mismatches between UI code and server code",
+      "checks": [
+        "no orphaned JS (missing function wrappers, syntax errors) — validate before deploy",
+        "API base URLs in frontend match actual server host/port",
+        "CORS config allows frontend origin if different from API origin"
+      ]
+    },
+    "reviewCadence": {
+      "description": "How often and when this checklist gets re-verified",
+      "checks": [
+        "re-scan ports/routes after any deploy or restart",
+        "periodic passive scan on an interval (default: every 30 min during active work sessions)",
+        "always re-verify immediately after a reported bug like 'X isn't working'"
+      ]
+    },
+    "logicVerification": {
+      "description": "Review and verify Pete's proposed logic/structure before implementing, confirm status, and report back",
+      "checks": [
+        "restate the proposed structure/logic in plain terms before building anything",
+        "confirm whether it's sound as-is, or flag gaps/risks",
+        "explicitly mark each review as RESOLVED (logic confirmed correct, proceeding as specified) or UNRESOLVED (logic has a gap — do not proceed until clarified)",
+        "report resolved/unresolved status back to Pete before or alongside implementation, not buried in unrelated output"
+      ]
+    }
+  }
+}

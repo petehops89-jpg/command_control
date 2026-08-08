@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Links — Vistamations Command Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0A0C0F;
+    --card: #14171C;
+    --card-hover: #1A1D23;
+    --border: rgba(255,255,255,0.05);
+    --amber: #E8A33D;
+    --cyan: #4FD1C5;
+    --rust: #C44536;
+    --bone: #E8E6DF;
+    --bone-dim: rgba(232,230,223,0.45);
+    --muted: #6B7280;
+    --radius: 10px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--ink); color: var(--bone);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 30% 0%, rgba(232,163,61,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 100%, rgba(79,209,197,0.02) 0%, transparent 40%);
+  }
+
+  .container {
+    max-width: 880px; margin: 0 auto; padding: 32px 24px 60px;
+  }
+
+  .header-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .header-row h1 {
+    font-family: 'JetBrains Mono', monospace; font-size: 16px;
+    font-weight: 500; letter-spacing: 1px; color: var(--bone);
+  }
+  .header-row h1 .accent { color: var(--cyan); }
+  .header-row .back-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--amber); text-decoration: none; letter-spacing: 1px;
+    padding: 6px 14px; border: 1px solid var(--border); border-radius: 6px;
+    transition: border-color 0.15s;
+  }
+  .header-row .back-btn:hover { border-color: rgba(232,163,61,0.3); }
+
+  .tab-bar {
+    display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .tab {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);
+    background: transparent; color: var(--muted); cursor: pointer;
+    text-transform: uppercase; letter-spacing: 1px; transition: all 0.15s;
+  }
+  .tab:hover { color: var(--bone); border-color: rgba(255,255,255,0.1); }
+  .tab.active { color: var(--cyan); border-color: rgba(79,209,197,0.25); background: var(--cyan-dim); }
+  .tab .count { color: var(--muted); margin-left: 4px; }
+
+  .count-bar {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px;
+    margin-bottom: 16px;
+  }
+
+  .link-list { display: flex; flex-direction: column; gap: 6px; }
+
+  .link-card {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 12px 16px;
+    text-decoration: none; color: inherit; transition: all 0.15s;
+  }
+  .link-card:hover {
+    background: var(--card-hover);
+    border-color: rgba(79,209,197,0.12);
+  }
+
+  .link-domain {
+    font-family: 'JetBrains Mono', monospace; font-size: 8px;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    background: rgba(255,255,255,0.03); padding: 4px 8px;
+    border-radius: 4px; color: var(--muted); flex-shrink: 0;
+    min-width: 52px; text-align: center; white-space: nowrap;
+  }
+
+  .link-info { flex: 1; min-width: 0; }
+  .link-info .link-url {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--bone); letter-spacing: 0.3px; word-break: break-all;
+    line-height: 1.4;
+  }
+  .link-info .link-source {
+    font-family: 'JetBrains Mono', monospace; font-size: 7px;
+    color: var(--muted); margin-top: 3px;
+  }
+
+  .link-arrow {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--muted); flex-shrink: 0;
+  }
+
+  .category.hidden { display: none; }
+
+  .empty-state {
+    text-align: center; padding: 60px 20px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 500px) {
+    .container { padding: 20px 16px 40px; }
+    .link-card { padding: 10px 12px; gap: 8px; }
+    .link-domain { font-size: 7px; padding: 3px 6px; min-width: 44px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header-row">
+    <h1>Command Control <span class="accent">Links</span></h1>
+    <a href="index.html" class="back-btn">&larr; Dashboard</a>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="filterCategory('all')" data-cat="all">All<span class="count" id="count-all"></span></button>
+    <button class="tab" onclick="filterCategory('localhost')" data-cat="localhost">Localhost<span class="count" id="count-localhost"></span></button>
+    <button class="tab" onclick="filterCategory('google')" data-cat="google">Google Cloud<span class="count" id="count-google"></span></button>
+    <button class="tab" onclick="filterCategory('ai-studio')" data-cat="ai-studio">AI Studio<span class="count" id="count-ai-studio"></span></button>
+    <button class="tab" onclick="filterCategory('figma')" data-cat="figma">Figma<span class="count" id="count-figma"></span></button>
+    <button class="tab" onclick="filterCategory('tools')" data-cat="tools">Tools<span class="count" id="count-tools"></span></button>
+    <button class="tab" onclick="filterCategory('vistamations')" data-cat="vistamations">Vistamations<span class="count" id="count-vistamations"></span></button>
+    <button class="tab" onclick="filterCategory('reference')" data-cat="reference">Reference<span class="count" id="count-reference"></span></button>
+  </div>
+
+  <div class="count-bar" id="count-bar"></div>
+
+  <div class="link-list" id="link-list"></div>
+</div>
+
+<script>
+const LINKS = [
+  { url: "http://localhost/crons/openclaw/olivia/command-portal.html", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "localhost", domain: "localhost" },
+  { url: "http://localhost/crons/openclaw/olivia/olivia-gate.html", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "localhost", domain: "localhost" },
+  { url: "http://localhost/crons/openclaw/monitor1.html", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "localhost", domain: "localhost" },
+  { url: "http://localhost/crons/openclaw/research/research-inventory.html", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "localhost", domain: "localhost" },
+  { url: "http://localhost/crons/openclaw/research/evidence-registry.html", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "localhost", domain: "localhost" },
+  { url: "http://127.0.0.1:56762/", source: "notes", cat: "localhost", domain: "localhost" },
+  { url: "http://localhost/", source: "7-8 progress report.txt", cat: "localhost", domain: "localhost" },
+  { url: "http://localhost/command-control.html", source: "7-8 progress report.txt", cat: "localhost", domain: "localhost" },
+  { url: "http://localhost:3000/health", source: "7-8 progress report.txt", cat: "localhost", domain: "localhost" },
+  { url: "https://notegpt.io/text-to-speech", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "tools", domain: "notegpt.io" },
+  { url: "https://webflow.com/dashboard?workspace=petes-workspace-cb9488", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "tools", domain: "webflow.com" },
+  { url: "https://lmstudio.ai/pricing", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "tools", domain: "lmstudio.ai" },
+  { url: "https://type-alone-65724265.figma.site/", source: "ilinks", cat: "figma", domain: "figma.com" },
+  { url: "https://www.figma.com/design/5cISctYT0vjylPwMf0NlnM/Web-Desktop-App--Community-?node-id=0-1&p=f&t=W9hSqvg5pqyICkgH-0", source: "ilinks", cat: "figma", domain: "figma.com" },
+  { url: "https://www.figma.com/proto/MRIfXixX18nVyurdlmbl8q/Untitled?node-id=1-2&p=f&t=BpemAYyaLeUUXBZ8-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1", source: "ilinks", cat: "figma", domain: "figma.com" },
+  { url: "https://aistudio.google.com/apps/594f023c-25a8-42e2-9aa6-04848e5cefd7?project=gen-lang-client-0110514845&showPreview=true&showAssistant=true", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "ai-studio", domain: "ai.studio" },
+  { url: "https://vistamations-core-simulation-engine.ai.studio/", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "ai-studio", domain: "ai.studio" },
+  { url: "https://aistudio.google.com/apps/b33ffa0b-4540-4c54-b729-205643c37dbc?project=gen-lang-client-0110514845&showPreview=true&showAssistant=true", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "ai-studio", domain: "ai.studio" },
+  { url: "https://stitch.withgoogle.com/projects/3655799949837798393?lfhs=2", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "ai-studio", domain: "stitch.withgoogle.com" },
+  { url: "https://vistamationsroot-authority.ai.studio/", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "ai-studio", domain: "ai.studio" },
+  { url: "https://vista-merlin-webcraft-engine.ai.studio/", source: "ilinks", cat: "ai-studio", domain: "ai.studio" },
+  { url: "https://console.cloud.google.com/run/detail/us-west1/vistamations-core-simulation-engine/observability/metrics?project=gen-lang-client-0110514845&supportedpurview=project", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "google", domain: "console.cloud.google.com" },
+  { url: "https://console.cloud.google.com/run/detail/us-west1/screencraft/observability/metrics?project=gen-lang-client-0110514845&supportedpurview=project", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "google", domain: "console.cloud.google.com" },
+  { url: "https://console.cloud.google.com/run/detail/us-west1/vistamations-open-world-simulation-engine/observability/metrics?project=gen-lang-client-0110514845&supportedpurview=project", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "google", domain: "console.cloud.google.com" },
+  { url: "https://console.cloud.google.com/run/detail/us-west1/vistamations-root-authority/observability/metrics?project=gen-lang-client-0110514845&supportedpurview=project", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "google", domain: "console.cloud.google.com" },
+  { url: "https://console.cloud.google.com/run/overview?project=gen-lang-client-0110514845&supportedpurview=project,folder", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "google", domain: "console.cloud.google.com" },
+  { url: "https://www.vistamations.com/register", source: "notes", cat: "vistamations", domain: "vistamations.com" },
+  { url: "https://www.vistamations.com/world-domination-game", source: "notes", cat: "vistamations", domain: "vistamations.com" },
+  { url: "https://www.vistamations.com/prices", source: "notes", cat: "vistamations", domain: "vistamations.com" },
+  { url: "https://www.vistamations.com/", source: "notes", cat: "vistamations", domain: "vistamations.com" },
+  { url: "https://www.vistamations.com/contribute", source: "notes", cat: "vistamations", domain: "vistamations.com" },
+  { url: "https://www.vistamations.com/container", source: "notes", cat: "vistamations", domain: "vistamations.com" },
+  { url: "https://www.vistamations.com/wizard", source: "notes", cat: "vistamations", domain: "vistamations.com" },
+  { url: "https://www.vistamations.com/kingdom", source: "notes", cat: "vistamations", domain: "vistamations.com" },
+  { url: "https://vistamations-core-simulation-engine.ai.studio/", source: "making money commad controls vistmatios notes 7-8-2026.txt", cat: "ai-studio", domain: "ai.studio", dedupe: true },
+  { url: "https://vista-merlin-webcraft-engine.ai.studio/", source: "ilinks", cat: "ai-studio", domain: "ai.studio", dedupe: true },
+];
+
+const seen = new Set();
+const UNIQUE = LINKS.filter(l => {
+  if (seen.has(l.url)) return false;
+  seen.add(l.url);
+  return true;
+});
+
+function domainTag(url) {
+  try { return (new URL(url)).hostname.replace(/^www\./, ''); }
+  catch (e) { return url.substring(0, 30); }
+}
+
+function sourceShort(src) {
+  const map = {
+    "making money commad controls vistmatios notes 7-8-2026.txt": "money/command notes",
+    "7-8 progress report.txt": "progress report",
+    "ilinks": "ilinks",
+    "notes": "notes",
+  };
+  return map[src] || src;
+}
+
+function renderLinks(filter) {
+  const filtered = filter === 'all' ? UNIQUE : UNIQUE.filter(l => l.cat === filter);
+  const list = document.getElementById('link-list');
+  const count = document.getElementById('count-bar');
+
+  count.textContent = filtered.length + ' link' + (filtered.length !== 1 ? 's' : '') + ' &mdash; scraped from notes folder';
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state">No links in this category.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const link of filtered) {
+    const host = domainTag(link.url);
+    html += '<a href="' + link.url + '" class="link-card" target="_blank" rel="noopener">' +
+      '<span class="link-domain">' + host + '</span>' +
+      '<div class="link-info">' +
+        '<div class="link-url">' + link.url + '</div>' +
+        '<div class="link-source">' + sourceShort(link.source) + '</div>' +
+      '</div>' +
+      '<span class="link-arrow">&rarr;</span>' +
+    '</a>';
+  }
+  list.innerHTML = html;
+}
+
+function filterCategory(cat) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.tab[data-cat="' + cat + '"]').classList.add('active');
+  renderLinks(cat);
+}
+
+function updateCounts() {
+  const counts = {};
+  UNIQUE.forEach(l => { counts[l.cat] = (counts[l.cat] || 0) + 1; });
+  counts.all = UNIQUE.length;
+  for (const [cat, n] of Object.entries(counts)) {
+    const el = document.getElementById('count-' + cat);
+    if (el) el.textContent = n;
+  }
+}
+
+updateCounts();
+renderLinks('all');
+</script>
+</body>
+</html>

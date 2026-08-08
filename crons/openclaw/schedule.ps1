@@ -39,7 +39,7 @@ function Register-Schedule {
             -Trigger $Trigger, $Trigger2, $Trigger3, $Trigger4 `
             -Principal $Principal `
             -Settings $Settings `
-            -Description "Vistamations OpenClaw LLM Scheduled Publishing Engine — 4 daily executions" `
+            -Description "Vistamations OpenClaw LLM Scheduled Publishing Engine - 4 daily executions" `
             -Force
         Write-Host "[OK] Task '$TaskName' registered successfully."
         Write-Host "     Schedule: Daily at 09:00, 12:00, 15:00, 18:00 AEST"
@@ -73,10 +73,15 @@ switch ($Action) {
             Write-Host "State: $($task.State)"
             Write-Host "Next Run: $($task.NextRunTime)"
             $task.Triggers | ForEach-Object {
-                Write-Host "  Trigger: Daily at $($_.StartBoundary.Substring(11,5))"
+                $time = $_.StartBoundary
+                if ($time) {
+                    Write-Host "  Trigger: Daily at $($time.Substring(11,5))"
+                } else {
+                    Write-Host "  Trigger: (no start boundary)"
+                }
             }
         } catch {
-            Write-Host "[INFO] Task '$TaskName' is not registered."
+            Write-Host "Task not currently registered."
         }
     }
     default {

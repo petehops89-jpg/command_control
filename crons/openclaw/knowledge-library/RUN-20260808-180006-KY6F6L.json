@@ -1,0 +1,26 @@
+{
+  "assetId": "ASSET-CORP-008",
+  "runId": "RUN-20260808-180006-KY6F6L",
+  "projectId": "CORP-001",
+  "title": "Business Analysis: AI Investment — 8 August 2026",
+  "type": "Business Analysis",
+  "dominion": "DOM-005",
+  "domain": "AI Investment",
+  "timestamp": "2026-08-08T08:00:06.820Z",
+  "url": "/crons/openclaw/publications/RUN-20260808-180006-KY6F6L.html",
+  "valueScore": {
+    "composite": 77,
+    "confidence": 69,
+    "breakdown": {
+      "businessValue": 75,
+      "originality": 70,
+      "depth": 79,
+      "relevance": 79,
+      "utility": 81
+    },
+    "estimatedCommercialValue": "$2,177",
+    "reviewStatus": "Automated Review"
+  },
+  "lifecycleState": "versioned",
+  "version": "1.0.0"
+}

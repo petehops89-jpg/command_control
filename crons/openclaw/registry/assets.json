@@ -106,5 +106,113 @@
     },
     "timestamp": "2026-08-07T00:12:39.397Z",
     "revisions": []
+  },
+  {
+    "assetId": "ASSET-RESEARCH-005",
+    "projectId": "RESEARCH-002",
+    "runId": "RUN-20260808-090002-0M7P9J",
+    "dominion": "DOM-002",
+    "type": "Research Article",
+    "title": "Research Article: Cloud Platforms — 8 August 2026",
+    "url": "/crons/openclaw/publications/RUN-20260808-090002-0M7P9J.html",
+    "version": "1.0.0",
+    "status": "published",
+    "lifecycleState": "indexed",
+    "valueScore": {
+      "composite": 80,
+      "confidence": 69,
+      "breakdown": {
+        "businessValue": 85,
+        "originality": 77,
+        "depth": 74,
+        "relevance": 84,
+        "utility": 80
+      },
+      "estimatedCommercialValue": "$10,613",
+      "reviewStatus": "Automated Review"
+    },
+    "timestamp": "2026-08-07T23:00:02.829Z",
+    "revisions": []
+  },
+  {
+    "assetId": "ASSET-MUSIC-006",
+    "projectId": "MUSIC-001",
+    "runId": "RUN-20260808-120005-Y799DW",
+    "dominion": "DOM-003",
+    "type": "Infrastructure Guide",
+    "title": "Infrastructure Guide: Media Production — 8 August 2026",
+    "url": "/crons/openclaw/publications/RUN-20260808-120005-Y799DW.html",
+    "version": "1.0.0",
+    "status": "published",
+    "lifecycleState": "indexed",
+    "valueScore": {
+      "composite": 81,
+      "confidence": 77,
+      "breakdown": {
+        "businessValue": 83,
+        "originality": 84,
+        "depth": 78,
+        "relevance": 83,
+        "utility": 75
+      },
+      "estimatedCommercialValue": "$3,817",
+      "reviewStatus": "Automated Review"
+    },
+    "timestamp": "2026-08-08T02:00:05.244Z",
+    "revisions": []
+  },
+  {
+    "assetId": "ASSET-EXPANSION-007",
+    "projectId": "EXPANSION-001",
+    "runId": "RUN-20260808-150003-AOJ7UM",
+    "dominion": "DOM-004",
+    "type": "Expansion Proposal",
+    "title": "Expansion Proposal: Distribution — 8 August 2026",
+    "url": "/crons/openclaw/publications/RUN-20260808-150003-AOJ7UM.html",
+    "version": "1.0.0",
+    "status": "published",
+    "lifecycleState": "indexed",
+    "valueScore": {
+      "composite": 81,
+      "confidence": 74,
+      "breakdown": {
+        "businessValue": 90,
+        "originality": 72,
+        "depth": 76,
+        "relevance": 83,
+        "utility": 83
+      },
+      "estimatedCommercialValue": "$9,411",
+      "reviewStatus": "Automated Review"
+    },
+    "timestamp": "2026-08-08T05:00:03.028Z",
+    "revisions": []
+  },
+  {
+    "assetId": "ASSET-CORP-008",
+    "projectId": "CORP-001",
+    "runId": "RUN-20260808-180006-KY6F6L",
+    "dominion": "DOM-005",
+    "type": "Business Analysis",
+    "title": "Business Analysis: AI Investment — 8 August 2026",
+    "url": "/crons/openclaw/publications/RUN-20260808-180006-KY6F6L.html",
+    "version": "1.0.0",
+    "status": "published",
+    "lifecycleState": "indexed",
+    "valueScore": {
+      "composite": 77,
+      "confidence": 69,
+      "breakdown": {
+        "businessValue": 75,
+        "originality": 70,
+        "depth": 79,
+        "relevance": 79,
+        "utility": 81
+      },
+      "estimatedCommercialValue": "$2,177",
+      "reviewStatus": "Automated Review"
+    },
+    "timestamp": "2026-08-08T08:00:06.820Z",
+    "revisions": []
   }
 ]
