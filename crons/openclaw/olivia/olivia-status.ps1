@@ -1,4 +1,4 @@
-# Olivia Daily Status — sends a system status message to Olivia every day at 18:30 AEST
+﻿# Olivia Daily Status — sends a system status message to Olivia every day at 18:30 AEST
 # Olivia processes it and posts a reply to the command portal
 
 param(

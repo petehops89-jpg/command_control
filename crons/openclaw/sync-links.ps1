@@ -1,4 +1,4 @@
-# Links page sync — re-scrapes notes folder and updates links.html
+﻿# Links page sync — re-scrapes notes folder and updates links.html
 # Schedule: every 4 days at 12:00 AEST
 # Reads all .txt files in notes-folder, extracts URLs, writes links.html
 
