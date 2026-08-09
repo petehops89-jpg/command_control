@@ -1,0 +1,27 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: Dominion I — Personnel Onboarding
+    - heading "Agent Registration Wizard" [level=1] [ref=e5]
+    - generic [ref=e6]: Step 1 of 4 — Identity
+  - generic [ref=e12]:
+    - generic [ref=e13]: Identity
+    - generic [ref=e14]: Domain
+    - generic [ref=e15]: Capabilities
+    - generic [ref=e16]: Confirm
+  - generic [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]: // Step 1 — Agent Identity
+      - generic [ref=e20]: Every agent in Dominion I receives a unique identifier and persona. This is how the system — and Pete — will know you.
+      - generic [ref=e21]:
+        - generic [ref=e22]: Agent Name *
+        - textbox "e.g. Trinity, Gordon, Big Brother..." [ref=e23]
+        - generic [ref=e24]: Your canonical name. Use proper capitalization. This cannot be changed later.
+      - generic [ref=e25]:
+        - generic [ref=e26]: Display Alias
+        - textbox "e.g. Trin, G, BB..." [ref=e27]
+        - generic [ref=e28]: Optional short form used in chat and logs.
+    - text: "* * *"
+  - generic [ref=e29]:
+    - button "← Back" [disabled] [ref=e30] [cursor=pointer]
+    - generic [ref=e31]: 1 / 4
+    - button "Next →" [ref=e32] [cursor=pointer]

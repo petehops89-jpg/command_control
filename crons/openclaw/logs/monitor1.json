@@ -1,160 +1,160 @@
 {
-  "currentRunId": "RUN-20260809-090004-BZMOG4",
-  "totalExecutions": 9,
+  "currentRunId": "RUN-20260809-120002-0NT8XX",
+  "totalExecutions": 10,
   "totalPublications": 3,
-  "totalAssets": 9,
-  "successRate": "33%",
-  "knowledgeLibraryCount": 9,
+  "totalAssets": 10,
+  "successRate": "30%",
+  "knowledgeLibraryCount": 10,
   "recentLogs": [
     {
-      "timestamp": "18:00:07.790",
+      "timestamp": "09:00:05.171",
       "level": "info",
       "message": "Lifecycle: 4/9 — REVIEW"
     },
     {
-      "timestamp": "18:00:07.791",
+      "timestamp": "09:00:05.171",
       "level": "info",
       "message": "Performing editorial review..."
     },
     {
-      "timestamp": "18:00:07.791",
+      "timestamp": "09:00:05.171",
       "level": "info",
       "message": "Review: Consistency=PASS Grammar=PASS Technical=PASS Citations=PASS BusinessValue=PASS"
     },
     {
-      "timestamp": "18:00:07.791",
+      "timestamp": "09:00:05.172",
       "level": "info",
-      "message": "STAGE END: Editorial Review — complete (1ms)"
+      "message": "STAGE END: Editorial Review — complete (2ms)"
     },
     {
-      "timestamp": "18:00:07.791",
+      "timestamp": "09:00:05.172",
       "level": "info",
       "message": "STAGE START: Approval Queue"
     },
     {
-      "timestamp": "18:00:07.792",
+      "timestamp": "09:00:05.172",
       "level": "info",
       "message": "Lifecycle: 5/9 — APPROVED"
     },
     {
-      "timestamp": "18:00:07.792",
+      "timestamp": "09:00:05.172",
       "level": "info",
       "message": "Publication approved for deployment."
     },
     {
-      "timestamp": "18:00:07.792",
+      "timestamp": "09:00:05.172",
       "level": "info",
-      "message": "STAGE END: Approval Queue — complete (1ms)"
+      "message": "STAGE END: Approval Queue — complete (0ms)"
     },
     {
-      "timestamp": "18:00:07.792",
+      "timestamp": "09:00:05.172",
       "level": "info",
       "message": "STAGE START: Deployment"
     },
     {
-      "timestamp": "18:00:07.802",
+      "timestamp": "09:00:05.173",
       "level": "info",
       "message": "Lifecycle: 6/9 — PUBLISHED"
     },
     {
-      "timestamp": "18:00:07.834",
+      "timestamp": "09:00:05.185",
       "level": "info",
-      "message": "Publication written to C:\\vistamations-music\\crons\\openclaw\\publications\\RUN-20260808-180006-KY6F6L.html"
+      "message": "Publication written to C:\\vistamations-music\\crons\\openclaw\\publications\\RUN-20260809-090004-BZMOG4.html"
     },
     {
-      "timestamp": "18:00:07.834",
+      "timestamp": "09:00:05.186",
       "level": "info",
-      "message": "Value Score: 77/100 (Business: 75, Originality: 70, Depth: 79, Relevance: 79, Utility: 81)"
+      "message": "Value Score: 79/100 (Business: 89, Originality: 70, Depth: 74, Relevance: 83, Utility: 81)"
     },
     {
-      "timestamp": "18:00:07.834",
+      "timestamp": "09:00:05.190",
       "level": "info",
-      "message": "Confidence: 69% | Estimated: $2,177"
+      "message": "Confidence: 79% | Estimated: $9,733"
     },
     {
-      "timestamp": "18:00:07.834",
+      "timestamp": "09:00:05.191",
       "level": "info",
-      "message": "STAGE END: Deployment — complete (42ms)"
+      "message": "STAGE END: Deployment — complete (18ms)"
     },
     {
-      "timestamp": "18:00:07.834",
+      "timestamp": "09:00:05.191",
       "level": "info",
       "message": "STAGE START: Asset Registration"
     },
     {
-      "timestamp": "18:00:07.835",
+      "timestamp": "09:00:05.191",
       "level": "info",
       "message": "Lifecycle: 7/9 — INDEXED"
     },
     {
-      "timestamp": "18:00:07.838",
+      "timestamp": "09:00:05.201",
       "level": "info",
-      "message": "Asset registered: ASSET-CORP-008 (v1.0.0)"
+      "message": "Asset registered: ASSET-EXPANSION-009 (v1.0.0)"
     },
     {
-      "timestamp": "18:00:07.838",
+      "timestamp": "09:00:05.202",
       "level": "info",
-      "message": "STAGE END: Asset Registration — complete (4ms)"
+      "message": "STAGE END: Asset Registration — complete (11ms)"
     },
     {
-      "timestamp": "18:00:07.839",
+      "timestamp": "09:00:05.202",
       "level": "info",
       "message": "STAGE START: Monitor1 Update"
     },
     {
-      "timestamp": "18:00:08.406",
+      "timestamp": "09:00:05.693",
       "level": "info",
-      "message": "STAGE END: Monitor1 Update — complete (568ms)"
+      "message": "STAGE END: Monitor1 Update — complete (491ms)"
     },
     {
-      "timestamp": "18:00:08.407",
+      "timestamp": "09:00:05.697",
       "level": "info",
       "message": "STAGE START: Knowledge Library Index"
     },
     {
-      "timestamp": "18:00:08.407",
+      "timestamp": "09:00:05.698",
       "level": "info",
       "message": "Lifecycle: 8/9 — VERSIONED"
     },
     {
-      "timestamp": "18:00:08.413",
+      "timestamp": "09:00:05.700",
       "level": "info",
-      "message": "Indexed to knowledge library: C:\\vistamations-music\\crons\\openclaw\\knowledge-library\\RUN-20260808-180006-KY6F6L.json"
+      "message": "Indexed to knowledge library: C:\\vistamations-music\\crons\\openclaw\\knowledge-library\\RUN-20260809-090004-BZMOG4.json"
     },
     {
-      "timestamp": "18:00:08.413",
+      "timestamp": "09:00:05.701",
       "level": "info",
-      "message": "STAGE END: Knowledge Library Index — complete (6ms)"
+      "message": "STAGE END: Knowledge Library Index — complete (4ms)"
     },
     {
-      "timestamp": "18:00:08.414",
+      "timestamp": "09:00:05.701",
       "level": "info",
       "message": "STAGE START: Archive"
     },
     {
-      "timestamp": "18:00:08.414",
+      "timestamp": "09:00:05.705",
       "level": "info",
       "message": "Lifecycle: 9/9 — ARCHIVED"
     },
     {
-      "timestamp": "18:00:08.416",
+      "timestamp": "09:00:05.707",
       "level": "info",
-      "message": "Run archived to C:\\vistamations-music\\crons\\openclaw\\archive\\RUN-20260808-180006-KY6F6L.json"
+      "message": "Run archived to C:\\vistamations-music\\crons\\openclaw\\archive\\RUN-20260809-090004-BZMOG4.json"
     },
     {
-      "timestamp": "18:00:08.416",
+      "timestamp": "09:00:05.708",
       "level": "info",
-      "message": "STAGE END: Archive — complete (2ms)"
+      "message": "STAGE END: Archive — complete (7ms)"
     },
     {
-      "timestamp": "18:00:08.416",
+      "timestamp": "09:00:05.708",
       "level": "info",
-      "message": "Execution complete. ASSET_ID: ASSET-CORP-008 | PROJECT_ID: CORP-001"
+      "message": "Execution complete. ASSET_ID: ASSET-EXPANSION-009 | PROJECT_ID: EXPANSION-001"
     },
     {
-      "timestamp": "18:00:08.417",
+      "timestamp": "09:00:05.708",
       "level": "info",
-      "message": "Value Score: 77/100 | Confidence: 69%"
+      "message": "Value Score: 79/100 | Confidence: 79%"
     }
   ],
   "publications": [
@@ -409,21 +409,75 @@
     },
     {
       "runId": "RUN-20260809-090004-BZMOG4",
-      "projectId": null,
-      "assetId": null,
+      "projectId": "EXPANSION-001",
+      "assetId": "ASSET-EXPANSION-009",
       "timestamp": "2026-08-08 23:00:04",
       "type": "Business Analysis",
       "title": "Business Analysis: Productivity — 9 August 2026",
-      "dominion": null,
+      "dominion": "DOM-004",
       "url": "/crons/openclaw/publications/RUN-20260809-090004-BZMOG4.html",
+      "status": "running",
+      "lifecycleState": "archived",
+      "agent": "OpenClaw Publishing Agent AG-OPENCLAW-001",
+      "valueScore": {
+        "composite": 79,
+        "confidence": 79,
+        "breakdown": {
+          "businessValue": 89,
+          "originality": 70,
+          "depth": 74,
+          "relevance": 83,
+          "utility": 81
+        },
+        "estimatedCommercialValue": "$9,733",
+        "reviewStatus": "Automated Review"
+      },
+      "estimatedValue": "$9,733"
+    },
+    {
+      "runId": "RUN-20260809-120002-0NT8XX",
+      "projectId": null,
+      "assetId": null,
+      "timestamp": "2026-08-09 02:00:02",
+      "type": "Technology Review",
+      "title": "Technology Review: Developer Tools — 9 August 2026",
+      "dominion": null,
+      "url": "/crons/openclaw/publications/RUN-20260809-120002-0NT8XX.html",
       "status": "published",
       "lifecycleState": null,
       "agent": "OpenClaw Publishing Agent AG-OPENCLAW-001",
       "valueScore": null,
-      "estimatedValue": "$9,733"
+      "estimatedValue": "$10,352"
     }
   ],
   "assets": [
+    {
+      "assetId": "ASSET-FOUNDATION-010",
+      "projectId": "FOUNDATION-001",
+      "runId": "RUN-20260809-120002-0NT8XX",
+      "dominion": "DOM-001",
+      "type": "Technology Review",
+      "title": "Technology Review: Developer Tools — 9 August 2026",
+      "url": "/crons/openclaw/publications/RUN-20260809-120002-0NT8XX.html",
+      "version": "1.0.0",
+      "status": "published",
+      "lifecycleState": "indexed",
+      "valueScore": {
+        "composite": 76,
+        "confidence": 81,
+        "breakdown": {
+          "businessValue": 73,
+          "originality": 70,
+          "depth": 78,
+          "relevance": 82,
+          "utility": 77
+        },
+        "estimatedCommercialValue": "$10,352",
+        "reviewStatus": "Automated Review"
+      },
+      "timestamp": "2026-08-09T02:00:02.575Z",
+      "revisions": []
+    },
     {
       "assetId": "ASSET-EXPANSION-009",
       "projectId": "EXPANSION-001",
@@ -773,12 +827,12 @@
       "name": "Distribution Strategy",
       "dominion": "DOM-004",
       "stats": {
-        "totalRuns": 1,
-        "publications": 1,
-        "published": 1,
-        "valueScore": 81,
-        "accumulatedValue": 9411,
-        "lastRun": "2026-08-08T05:00:03.028Z"
+        "totalRuns": 2,
+        "publications": 2,
+        "published": 2,
+        "valueScore": 80,
+        "accumulatedValue": 19144,
+        "lastRun": "2026-08-08T23:00:04.360Z"
       }
     },
     {
@@ -798,9 +852,9 @@
   "dominionStats": {
     "DOM-001": {
       "name": "Foundation",
-      "totalAssets": 2,
-      "totalValue": 17039,
-      "avgScore": 80
+      "totalAssets": 3,
+      "totalValue": 27391,
+      "avgScore": 78
     },
     "DOM-002": {
       "name": "Knowledge",
@@ -828,6 +882,6 @@
     }
   },
   "engineVersion": "2.0.0",
-  "lastUpdated": "2026-08-08 23:00:05 AEST",
+  "lastUpdated": "2026-08-09 02:00:03 AEST",
   "engineStatus": "running"
 }

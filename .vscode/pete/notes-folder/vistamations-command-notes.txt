@@ -41,7 +41,11 @@ http://localhost/crons/openclaw/monitor1.html
 http://localhost/crons/openclaw/research/research-inventory.html
 http://localhost/crons/openclaw/research/evidence-registry.html
 These are all under the crons/openclaw/ tree. The publications/ and logs/ subdirectories contain report artifacts (HTML and JSON/LOG) but those are data, not live pages.
+https://marketplace.visualstudio.com/
 
+https://stackoverflow.com/questions/34490218/how-to-make-a-windows-notification-in-java
+
+https://code.visualstudio.com/api
 
 windows task manager - cron
 

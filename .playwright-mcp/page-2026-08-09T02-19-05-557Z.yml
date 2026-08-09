@@ -1,0 +1,48 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]: 🦙
+    - heading "Mya's World" [level=1] [ref=e4]
+    - generic [ref=e5]: // Fortnite Edition // Powered by Vistamations
+    - generic [ref=e6]:
+      - generic [ref=e7]: 👑 Mya
+      - text: "&"
+      - generic [ref=e8]: 👑 Dad (Pete)
+  - generic [ref=e9]: 🎮 VICTORY ROYALE INCOMING ✦ LLAMA SPOTTED ✦ BATTLE BUS DEPARTING ✦ STORM CLOSING IN ✦ CHUG JUG READY ✦ NEW EMOTE UNLOCKED ✦ 🎮 VICTORY ROYALE INCOMING ✦ LLAMA SPOTTED ✦ BATTLE BUS DEPARTING ✦ STORM CLOSING IN ✦ CHUG JUG READY ✦ NEW EMOTE UNLOCKED ✦
+  - generic [ref=e12]:
+    - generic [ref=e13]: Battle Pass Progress
+    - generic [ref=e14]: Level 1
+  - generic [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]: Fortnite
+      - heading "🦙 Supply Llama Spotted!" [level=2] [ref=e20]
+      - paragraph [ref=e21]: Mya and Dad's favorite Fortnite moments. Drop in, grab the loot, and build something amazing together. This is our Victory Royale headquarters.
+    - generic [ref=e22]:
+      - generic [ref=e23]: Mya's Picks
+      - heading "🎨 Favorite Skins" [level=2] [ref=e24]
+      - paragraph [ref=e25]: Loading Mya's favorite Fortnite skins and cosmetics from the Item Shop...
+    - generic [ref=e26]:
+      - generic [ref=e27]: Dad's Builds
+      - heading "🏗️ Creative Mode" [level=2] [ref=e28]
+      - paragraph [ref=e29]: Pete's Fortnite Creative builds and island codes. Engineering meets gaming — structured chaos.
+    - generic [ref=e30]:
+      - generic [ref=e31]: Live
+      - heading "🎯 Drop Spot" [level=2] [ref=e32]
+      - paragraph [ref=e33]: Today's featured landing zone. Where we're dropping next match.
+      - generic [ref=e34]:
+        - generic [ref=e35]: 🗺️
+        - generic [ref=e36]: TILTED TOWERS
+    - generic [ref=e37]:
+      - generic [ref=e38]: Art
+      - heading "🎨 Fan Art Wall" [level=2] [ref=e39]
+      - paragraph [ref=e40]: Mya's Fortnite drawings and creations. Powered by Stefi's design magic and Adobe Firefly image generation.
+    - generic [ref=e41]:
+      - generic [ref=e42]: Stats
+      - heading "📊 Victory Stats" [level=2] [ref=e43]
+      - paragraph [ref=e44]: "Wins: Loading... | K/D: Loading... | Favorite Weapon: Loading..."
+  - generic [ref=e45]: Loading more awesome stuff...
+  - generic [ref=e46]:
+    - paragraph [ref=e47]: Mya's World is a Vistamations production © 2026
+    - paragraph [ref=e48]: Built with ❤️ by Dad (Big Brother) & Design by Stefi
+    - paragraph [ref=e49]:
+      - link "info@vistamations.com" [ref=e50] [cursor=pointer]:
+        - /url: mailto:info@vistamations.com

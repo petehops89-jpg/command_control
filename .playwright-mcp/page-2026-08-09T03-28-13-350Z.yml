@@ -1,0 +1,58 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: Vistamations SOAP Pipeline
+    - heading "Handy Mail" [level=1] [ref=e5]
+    - generic [ref=e6]: Secure Document Delivery — QR Encrypted, Digitally Signed, Steganographically Watermarked
+    - generic [ref=e7]: SOAP / XML-RPC Protocol
+  - generic [ref=e8]:
+    - generic [ref=e10]: ✅ Packet Unlock
+    - generic [ref=e11]: "Session: 579a4057"
+  - generic [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]: "1"
+      - generic [ref=e15]:
+        - generic [ref=e16]: Bento UI
+        - generic [ref=e17]: Customer Information, Website Link, QR Code, Logo
+      - generic [ref=e18]: done
+    - generic [ref=e19]:
+      - generic [ref=e20]: "2"
+      - generic [ref=e21]:
+        - generic [ref=e22]: Signature
+        - generic [ref=e23]: Handwritten Digital Signature Capture
+      - generic [ref=e60]: done
+    - generic [ref=e24]:
+      - generic [ref=e25]: "3"
+      - generic [ref=e26]:
+        - generic [ref=e27]: Encryption
+        - generic [ref=e28]: Scrambled Payload — Legible text becomes cipher text
+      - generic [ref=e61]: done
+    - generic [ref=e29]:
+      - generic [ref=e30]: "4"
+      - generic [ref=e31]:
+        - generic [ref=e32]: Watermark
+        - generic [ref=e33]: 30×30px transparent 'vistamations' hidden under Logo Layer
+      - generic [ref=e62]: done
+  - generic [ref=e63]:
+    - heading "// Authentication & Decoding Workflow" [level=3] [ref=e64]
+    - generic [ref=e65]:
+      - generic [ref=e66]:
+        - generic [ref=e67]: 📱
+        - text: 1. QR Scan
+      - generic [ref=e68]:
+        - generic [ref=e69]: 📡
+        - text: 2. C2 Signal
+      - generic [ref=e70]:
+        - generic [ref=e71]: 🔓
+        - text: 3. Lift Restrictions
+      - generic [ref=e72]:
+        - generic [ref=e73]: 🔑
+        - text: 4. Passkey Verify
+      - generic [ref=e74]:
+        - generic [ref=e75]: 📦
+        - text: 5. Packet Unlock
+    - generic [ref=e76]:
+      - paragraph [ref=e77]: ✅ DECODE COMPLETE
+      - paragraph [ref=e78]: "Document restored: HM-DOC-0001Customer: Sarah ChenWatermark: Stripped and verifiedSession: 579a4057 — memory wiped in Confidential Space"
+    - generic [ref=e79]:
+      - button "🔄 Simulate Decode Pipeline" [ref=e80] [cursor=pointer]
+      - button "Reset" [ref=e81] [cursor=pointer]

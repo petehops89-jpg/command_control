@@ -1,0 +1,39 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: Vistamations SOAP Pipeline
+    - heading "Handy Mail" [level=1] [ref=e5]
+    - generic [ref=e6]: Secure Document Delivery — QR Encrypted, Digitally Signed, Steganographically Watermarked
+    - generic [ref=e7]: SOAP / XML-RPC Protocol
+  - generic [ref=e8]:
+    - generic [ref=e10]: ✓ Layer 1 complete — proceed to signature
+    - generic [ref=e11]: "Session: 57ddcf6e"
+  - generic [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]: "1"
+      - generic [ref=e15]:
+        - generic [ref=e16]: Bento UI
+        - generic [ref=e17]: Customer Information, Website Link, QR Code, Logo
+      - generic [ref=e18]: done
+    - generic [ref=e19]:
+      - generic [ref=e20]: "2"
+      - generic [ref=e21]:
+        - generic [ref=e22]: Signature
+        - generic [ref=e23]: Handwritten Digital Signature Capture
+    - generic [ref=e24]:
+      - generic [ref=e25]: "3"
+      - generic [ref=e26]:
+        - generic [ref=e27]: Encryption
+        - generic [ref=e28]: Scrambled Payload — Legible text becomes cipher text
+    - generic [ref=e29]:
+      - generic [ref=e30]: "4"
+      - generic [ref=e31]:
+        - generic [ref=e32]: Watermark
+        - generic [ref=e33]: 30×30px transparent 'vistamations' hidden under Logo Layer
+  - generic [ref=e60]:
+    - 'heading "// Layer 2: Digital Signature Capture" [level=3] [ref=e61]'
+    - generic [ref=e62]:
+      - generic [ref=e64]:
+        - button "Clear" [ref=e65] [cursor=pointer]
+        - button "Undo" [ref=e66] [cursor=pointer]
+        - button "✍️ Capture & Hash Signature" [ref=e67] [cursor=pointer]
+      - generic [ref=e68]: SHA-256 hash will appear on capture

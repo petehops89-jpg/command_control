@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistamations Handy Mail — SOAP Secure Document Pipeline</title>
+<style>
+:root {
+  --bg:#0A0C0F; --card:#111418; --border:#1E2229;
+  --accent:#4FD1C5; --accent2:#A78BFA; --accent3:#F472B6;
+  --amber:#E8A33D; --rust:#C44536; --text:#C8CCD0; --dim:#6B7280;
+  --mono:'JetBrains Mono','Consolas',monospace;
+  --body:'Inter','Segoe UI',system-ui,sans-serif;
+  --radius:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh}
+
+/* ─── LAYER STACK ─── */
+.page{
+  max-width:900px;margin:2rem auto;padding:1.5rem;
+}
+
+/* Header */
+.header{
+  text-align:center;padding:2rem 0 1.5rem;
+  border-bottom:1px solid var(--border);margin-bottom:1.5rem;
+}
+.header .brand{font-family:var(--mono);font-size:0.65rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.2em}
+.header h1{font-family:var(--mono);font-size:1.6rem;color:#fff;font-weight:600;margin:0.5rem 0}
+.header .subtitle{font-size:0.75rem;color:var(--dim)}
+.header .soap-tag{
+  display:inline-block;margin-top:0.5rem;padding:0.2rem 0.6rem;
+  background:rgba(167,139,250,0.1);border:1px solid var(--accent2);
+  border-radius:4px;font-family:var(--mono);font-size:0.55rem;color:var(--accent2);
+  text-transform:uppercase;letter-spacing:0.1em;
+}
+
+/* Layer Visualizer */
+.layers{
+  display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem;
+}
+.layer{
+  display:flex;align-items:center;gap:1rem;
+  padding:0.75rem 1rem;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);transition:all 0.3s;
+}
+.layer.active{border-color:var(--accent);box-shadow:0 0 16px rgba(79,209,197,0.08)}
+.layer.done{border-color:var(--accent);opacity:0.7}
+.layer .l-num{
+  width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:0.65rem;font-weight:600;
+  background:var(--border);color:var(--dim);flex-shrink:0;
+}
+.layer.active .l-num{background:var(--accent);color:var(--bg)}
+.layer.done .l-num{background:var(--accent);color:var(--bg);opacity:0.6}
+.layer .l-info{flex:1}
+.layer .l-name{font-family:var(--mono);font-size:0.75rem;color:#fff}
+.layer .l-desc{font-size:0.65rem;color:var(--dim);margin-top:0.15rem}
+.layer .l-status{font-family:var(--mono);font-size:0.6rem;color:var(--accent)}
+
+/* ─── FORM ─── */
+.form-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;
+}
+.form-group{display:flex;flex-direction:column;gap:0.35rem}
+.form-group.full{grid-column:span 2}
+.form-group label{
+  font-family:var(--mono);font-size:0.6rem;color:var(--amber);text-transform:uppercase;letter-spacing:0.08em;
+}
+.form-group input, .form-group textarea{
+  background:var(--bg);border:1px solid var(--border);color:var(--text);
+  padding:0.6rem 0.75rem;font-family:var(--mono);font-size:0.75rem;
+  border-radius:var(--radius);outline:none;transition:border-color 0.2s;
+}
+.form-group input:focus, .form-group textarea:focus{border-color:var(--accent)}
+.form-group textarea{min-height:80px;resize:vertical}
+
+/* ─── QR Canvas ─── */
+.qr-area{
+  display:flex;align-items:center;gap:2rem;padding:1.5rem;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  margin-bottom:1rem;
+}
+.qr-area canvas{border:8px solid #fff;border-radius:4px;background:#fff}
+.qr-area .qr-info{flex:1}
+.qr-area .qr-info .hash{
+  font-family:var(--mono);font-size:0.55rem;color:var(--dim);word-break:break-all;
+  margin-top:0.5rem;background:var(--bg);padding:0.5rem;border-radius:4px;
+}
+
+/* ─── SIGNATURE ─── */
+.sig-section{padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
+.sig-section canvas{border:2px solid var(--border);border-radius:var(--radius);background:#fff;cursor:crosshair;display:block;margin:0 auto}
+.sig-tools{display:flex;gap:0.5rem;justify-content:center;margin-top:0.75rem}
+.sig-btn{
+  padding:0.4rem 0.8rem;font-family:var(--mono);font-size:0.6rem;
+  background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);cursor:pointer;
+}
+.sig-btn:hover{color:#fff;border-color:var(--accent)}
+.sig-btn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+
+/* ─── ENCRYPTION DISPLAY ─── */
+.cipher-box{
+  display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;
+}
+.cipher-col{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;
+}
+.cipher-col h4{font-family:var(--mono);font-size:0.6rem;color:var(--dim);text-transform:uppercase;margin-bottom:0.5rem}
+.cipher-col .content{
+  font-family:var(--mono);font-size:0.6rem;color:var(--text);line-height:1.6;word-break:break-all;
+  min-height:100px;background:var(--bg);padding:0.75rem;border-radius:4px;
+}
+.cipher-col.encrypted .content{color:var(--accent2);font-size:0.55rem}
+
+/* ─── WATERMARK PREVIEW ─── */
+.watermark-preview{
+  position:relative;display:inline-block;margin:1rem auto;
+}
+.watermark-preview img{max-width:200px;border-radius:var(--radius)}
+.watermark-preview .wm-overlay{
+  position:absolute;bottom:10px;right:10px;width:30px;height:30px;
+  opacity:0.3;pointer-events:none;
+  font-family:var(--mono);font-size:5px;color:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;line-height:1;
+}
+
+/* ─── FLOW STEPS ─── */
+.flow-steps{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:0.5rem;margin-bottom:1.5rem;
+}
+.flow-step{
+  text-align:center;padding:0.75rem 0.5rem;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  font-family:var(--mono);font-size:0.55rem;color:var(--dim);
+  transition:all 0.3s;
+}
+.flow-step.active{border-color:var(--accent);color:var(--accent)}
+.flow-step .fs-icon{font-size:1.2rem;display:block;margin-bottom:0.25rem}
+.flow-step .fs-label{text-transform:uppercase;letter-spacing:0.05em}
+
+/* ─── BUTTONS ─── */
+.btn-row{display:flex;gap:0.75rem;justify-content:center;margin:1rem 0}
+.btn{
+  padding:0.7rem 1.5rem;font-family:var(--mono);font-size:0.7rem;
+  border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;
+  transition:all 0.2s;text-transform:uppercase;letter-spacing:0.05em;
+}
+.btn:hover{color:#fff}
+.btn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.btn.secondary{background:transparent;color:var(--text)}
+.btn.danger{background:var(--rust);color:#fff;border-color:var(--rust)}
+.btn:disabled{opacity:0.3;cursor:not-allowed}
+
+/* ─── STATUS BAR ─── */
+.status-bar{
+  display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  font-family:var(--mono);font-size:0.6rem;margin-bottom:1rem;
+}
+.status-bar .dot{width:8px;height:8px;border-radius:50%}
+.status-bar .dot.green{background:var(--accent)}
+.status-bar .dot.amber{background:var(--amber)}
+.status-bar .dot.red{background:var(--rust)}
+
+@media(max-width:768px){
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:span 1}
+  .flow-steps{grid-template-columns:repeat(3,1fr)}
+  .cipher-box{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="brand">Vistamations SOAP Pipeline</div>
+  <h1>Handy Mail</h1>
+  <div class="subtitle">Secure Document Delivery — QR Encrypted, Digitally Signed, Steganographically Watermarked</div>
+  <span class="soap-tag">SOAP / XML-RPC Protocol</span>
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar" id="statusBar">
+  <div class="dot green" id="statusDot"></div>
+  <span id="statusText">Ready — Fill customer details to begin</span>
+  <span style="margin-left:auto;color:var(--dim)" id="sessionId"></span>
+</div>
+
+<!-- LAYER VISUALIZER -->
+<div class="layers">
+  <div class="layer active" id="layer1">
+    <div class="l-num">1</div>
+    <div class="l-info"><div class="l-name">Bento UI</div><div class="l-desc">Customer Information, Website Link, QR Code, Logo</div></div>
+    <div class="l-status">active</div>
+  </div>
+  <div class="layer" id="layer2">
+    <div class="l-num">2</div>
+    <div class="l-info"><div class="l-name">Signature</div><div class="l-desc">Handwritten Digital Signature Capture</div></div>
+    <div class="l-status"></div>
+  </div>
+  <div class="layer" id="layer3">
+    <div class="l-num">3</div>
+    <div class="l-info"><div class="l-name">Encryption</div><div class="l-desc">Scrambled Payload — Legible text becomes cipher text</div></div>
+    <div class="l-status"></div>
+  </div>
+  <div class="layer" id="layer4">
+    <div class="l-num">4</div>
+    <div class="l-info"><div class="l-name">Watermark</div><div class="l-desc">30×30px transparent 'vistamations' hidden under Logo Layer</div></div>
+    <div class="l-status"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- LAYER 1: BENTO UI — CUSTOMER INFO + QR -->
+<!-- ════════════════════════════════════════ -->
+<div id="section1">
+  <h3 style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:1rem">// Layer 1: Customer Information & QR Generation</h3>
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="custName" placeholder="Customer full legal name" oninput="updateQR()">
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="custEmail" placeholder="customer@example.com" oninput="updateQR()">
+    </div>
+    <div class="form-group">
+      <label>Website / Reference Link</label>
+      <input type="text" id="custLink" placeholder="https://www.vistamations.com/..." oninput="updateQR()">
+    </div>
+    <div class="form-group">
+      <label>Document ID</label>
+      <input type="text" id="custDocId" value="HM-DOC-0001" readonly style="color:var(--dim)">
+    </div>
+    <div class="form-group full">
+      <label>Message / Instructions</label>
+      <textarea id="custMessage" placeholder="Enter the message content to be encrypted and delivered..." oninput="updateQR()"></textarea>
+    </div>
+  </div>
+
+  <!-- QR Code Preview -->
+  <div class="qr-area">
+    <canvas id="qrCanvas" width="180" height="180"></canvas>
+    <div class="qr-info">
+      <h4 style="font-family:var(--mono);font-size:0.7rem;color:#fff">QR Encoded Payload</h4>
+      <p style="font-size:0.6rem;color:var(--dim)">Scan to initiate the 5-step authentication & decode workflow</p>
+      <div class="hash" id="qrHash">Payload hash will appear here...</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn primary" onclick="processLayer1()">✓ Confirm Customer Info</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- LAYER 2: SIGNATURE -->
+<!-- ════════════════════════════════════════ -->
+<div id="section2" style="display:none">
+  <h3 style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:1rem">// Layer 2: Digital Signature Capture</h3>
+
+  <div class="sig-section">
+    <canvas id="sigCanvas" width="500" height="150"></canvas>
+    <div class="sig-tools">
+      <button class="sig-btn" onclick="clearSig()">Clear</button>
+      <button class="sig-btn" onclick="undoSig()">Undo</button>
+      <button class="sig-btn primary" onclick="captureSignature()">✍️ Capture & Hash Signature</button>
+    </div>
+    <div style="text-align:center;margin-top:0.5rem;font-family:var(--mono);font-size:0.55rem;color:var(--dim)" id="sigHash">SHA-256 hash will appear on capture</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- LAYER 3: ENCRYPTION -->
+<!-- ════════════════════════════════════════ -->
+<div id="section3" style="display:none">
+  <h3 style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:1rem">// Layer 3: Payload Encryption (KMS + AES-256-GCM)</h3>
+
+  <div class="cipher-box">
+    <div class="cipher-col">
+      <h4>Plaintext (Legible)</h4>
+      <div class="content" id="plaintext">Customer data will appear here...</div>
+    </div>
+    <div class="cipher-col encrypted">
+      <h4>Ciphertext (Scrambled)</h4>
+      <div class="content" id="ciphertext">Encrypted payload will appear here...</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn primary" onclick="encryptPayload()">🔐 Encrypt with AES-256-GCM + Cloud KMS</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- LAYER 4: WATERMARK + FINALIZE -->
+<!-- ════════════════════════════════════════ -->
+<div id="section4" style="display:none">
+  <h3 style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:1rem">// Layer 4: Steganographic Watermark & Finalize</h3>
+
+  <div style="text-align:center;padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem">
+    <div style="position:relative;display:inline-block">
+      <div style="width:200px;height:200px;background:linear-gradient(135deg, var(--accent2), var(--accent));border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:1.5rem;color:#fff">V</div>
+      <div style="position:absolute;bottom:12px;right:12px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:5px;color:rgba(255,255,255,0.4);line-height:1;text-align:center">vista<br>mati<br>ons</div>
+    </div>
+    <p style="font-size:0.6rem;color:var(--dim);margin-top:0.75rem;font-family:var(--mono)">30×30px transparent 'vistamations' steganographic watermark embedded under logo</p>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn primary" onclick="finalizeDocument()">📦 Finalize & Seal Document</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- DECODE WORKFLOW (5-STEP SIMULATION) -->
+<!-- ════════════════════════════════════════ -->
+<div id="section5" style="display:none">
+  <h3 style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:1rem">// Authentication & Decoding Workflow</h3>
+
+  <div class="flow-steps" id="flowSteps">
+    <div class="flow-step active" data-flow="1">
+      <span class="fs-icon">📱</span>
+      <span class="fs-label">1. QR Scan</span>
+    </div>
+    <div class="flow-step" data-flow="2">
+      <span class="fs-icon">📡</span>
+      <span class="fs-label">2. C2 Signal</span>
+    </div>
+    <div class="flow-step" data-flow="3">
+      <span class="fs-icon">🔓</span>
+      <span class="fs-label">3. Lift Restrictions</span>
+    </div>
+    <div class="flow-step" data-flow="4">
+      <span class="fs-icon">🔑</span>
+      <span class="fs-label">4. Passkey Verify</span>
+    </div>
+    <div class="flow-step" data-flow="5">
+      <span class="fs-icon">📦</span>
+      <span class="fs-label">5. Packet Unlock</span>
+    </div>
+  </div>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;text-align:center" id="flowLog">
+    <p style="font-family:var(--mono);font-size:0.65rem;color:var(--dim)">Press "Simulate Decode" to run the 5-step authentication pipeline</p>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn primary" id="simBtn" onclick="simulateDecode()">🔄 Simulate Decode Pipeline</button>
+    <button class="btn secondary" onclick="resetAll()">Reset</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+const state = {
+  custName: '', custEmail: '', custLink: '', custDocId: 'HM-DOC-0001', custMessage: '',
+  layer: 1, sigHash: null, ciphertext: null, keyId: 'vistamations-kms-key-001',
+  sessionId: crypto.randomUUID ? crypto.randomUUID().substring(0,8) : 'HM-' + Date.now().toString(36),
+};
+
+document.getElementById('sessionId').textContent = 'Session: ' + state.sessionId;
+
+// ════════════════════════════════════════
+// LAYER 1: QR CODE GENERATION
+// ════════════════════════════════════════
+function updateQR() {
+  state.custName = document.getElementById('custName').value;
+  state.custEmail = document.getElementById('custEmail').value;
+  state.custLink = document.getElementById('custLink').value;
+  state.custMessage = document.getElementById('custMessage').value;
+
+  const payload = JSON.stringify({
+    name: state.custName, email: state.custEmail,
+    link: state.custLink, docId: state.custDocId,
+    session: state.sessionId,
+  });
+
+  // Simple QR-like visual (grid pattern from hash)
+  const canvas = document.getElementById('qrCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0,0,180,180);
+
+  // Generate pseudo-QR pattern from payload hash
+  const encoder = new TextEncoder();
+  const data = encoder.encode(payload);
+  let hash = 0;
+  for (let i=0;i<data.length;i++) { hash = ((hash<<5)-hash)+data[i]; hash |= 0; }
+
+  const size = 10; // modules
+  const moduleSize = 14;
+  const offset = (180 - size * moduleSize) / 2;
+
+  // Draw position markers (3 corners)
+  drawFinder(ctx, offset, offset, moduleSize);
+  drawFinder(ctx, offset + (size-3)*moduleSize, offset, moduleSize);
+  drawFinder(ctx, offset, offset + (size-3)*moduleSize, moduleSize);
+
+  // Draw data modules from hash
+  for (let y=0;y<size;y++) {
+    for (let x=0;x<size;x++) {
+      if (x<3&&y<3 || x>size-4&&y<3 || x<3&&y>size-4) continue;
+      const bit = (hash >> ((y*size+x)%32)) & 1;
+      if (bit) {
+        ctx.fillStyle = '#111';
+        ctx.fillRect(offset+x*moduleSize, offset+y*moduleSize, moduleSize, moduleSize);
+      }
+    }
+  }
+
+  // Show hash
+  document.getElementById('qrHash').textContent = 'Payload: ' + btoa(payload).substring(0,64) + '...';
+}
+
+function drawFinder(ctx, x, y, ms) {
+  ctx.fillStyle = '#111'; ctx.fillRect(x,y,ms*3,ms*3);
+  ctx.fillStyle = '#fff'; ctx.fillRect(x+ms,y+ms,ms,ms);
+}
+
+// ════════════════════════════════════════
+// LAYER NAVIGATION
+// ════════════════════════════════════════
+function setLayer(n) {
+  state.layer = n;
+  document.querySelectorAll('.layer').forEach((l,i) => {
+    l.classList.remove('active','done');
+    if (i+1 === n) l.classList.add('active');
+    if (i+1 < n) l.classList.add('done');
+    if (i+1 < n) l.querySelector('.l-status').textContent = 'done';
+  });
+  for (let i=1;i<=5;i++) {
+    const s = document.getElementById('section' + i);
+    if (s) s.style.display = i === n ? 'block' : 'none';
+  }
+}
+
+function processLayer1() {
+  if (!state.custName || !state.custEmail) {
+    updateStatus('⚠️', 'Name and email are required', 'amber');
+    return;
+  }
+  updateStatus('✓', 'Layer 1 complete — proceed to signature', 'green');
+  setLayer(2);
+  initSignature();
+}
+
+// ════════════════════════════════════════
+// LAYER 2: SIGNATURE
+// ════════════════════════════════════════
+let sigCtx, sigDrawing = false, sigPath = [];
+
+function initSignature() {
+  const c = document.getElementById('sigCanvas');
+  sigCtx = c.getContext('2d');
+  sigCtx.lineWidth = 2.5; sigCtx.strokeStyle = '#111';
+  sigCtx.lineCap = 'round'; sigCtx.lineJoin = 'round';
+  sigPath = [];
+  c.onmousedown = e => { sigDrawing=true; sigCtx.beginPath(); sigCtx.moveTo(e.offsetX,e.offsetY); sigPath.push(['M',e.offsetX,e.offsetY]); };
+  c.onmousemove = e => { if(!sigDrawing)return; sigCtx.lineTo(e.offsetX,e.offsetY); sigCtx.stroke(); sigPath.push(['L',e.offsetX,e.offsetY]); };
+  c.onmouseup = c.onmouseleave = () => sigDrawing=false;
+}
+
+function clearSig() { sigCtx.clearRect(0,0,500,150); sigPath=[]; state.sigHash=null; document.getElementById('sigHash').textContent='SHA-256 hash will appear on capture'; }
+function undoSig() { sigCtx.clearRect(0,0,500,150); sigPath.pop(); sigCtx.beginPath(); for(const cmd of sigPath){ if(cmd[0]==='M')sigCtx.moveTo(cmd[1],cmd[2]); else sigCtx.lineTo(cmd[1],cmd[2]); } sigCtx.stroke(); }
+
+async function captureSignature() {
+  if (sigPath.length<4) { updateStatus('⚠️','Draw signature first','amber'); return; }
+  const d = new TextEncoder().encode(JSON.stringify(sigPath)+':'+state.custDocId+':'+Date.now());
+  const buf = await crypto.subtle.digest('SHA-256', d);
+  state.sigHash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  document.getElementById('sigHash').textContent = 'SHA-256: '+state.sigHash.substring(0,40)+'...';
+  updateStatus('✓','Signature captured & hashed','green');
+  setLayer(3);
+}
+
+// ════════════════════════════════════════
+// LAYER 3: ENCRYPTION
+// ════════════════════════════════════════
+async function encryptPayload() {
+  const plaintext = JSON.stringify({
+    name: state.custName, email: state.custEmail, link: state.custLink,
+    docId: state.custDocId, message: state.custMessage,
+    sigHash: state.sigHash, session: state.sessionId,
+    timestamp: new Date().toISOString(),
+  }, null, 2);
+  document.getElementById('plaintext').textContent = plaintext;
+
+  // Simulated AES-256-GCM encryption (in production: Cloud KMS + WebCrypto)
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(state.keyId + ':' + state.sessionId);
+  const keyHash = await crypto.subtle.digest('SHA-256', keyData);
+  const keyBytes = new Uint8Array(keyHash);
+
+  // XOR-based cipher simulation (visual)
+  const ptBytes = encoder.encode(plaintext);
+  const ctBytes = new Uint8Array(ptBytes.length);
+  for (let i=0;i<ptBytes.length;i++) ctBytes[i] = ptBytes[i] ^ keyBytes[i % keyBytes.length];
+
+  state.ciphertext = btoa(String.fromCharCode(...ctBytes));
+  document.getElementById('ciphertext').textContent = state.ciphertext.substring(0,300) + '...';
+
+  updateStatus('🔐','AES-256-GCM encrypted via Cloud KMS key: '+state.keyId,'green');
+  setLayer(4);
+}
+
+// ════════════════════════════════════════
+// LAYER 4: WATERMARK + FINALIZE
+// ════════════════════════════════════════
+function finalizeDocument() {
+  updateStatus('📦','Document sealed — watermark embedded, QR signed, ciphertext locked','green');
+  document.querySelectorAll('.layer')[3].classList.add('done');
+  document.querySelectorAll('.layer')[3].querySelector('.l-status').textContent = 'done';
+  setLayer(5);
+}
+
+// ════════════════════════════════════════
+// 5-STEP DECODE SIMULATION
+// ════════════════════════════════════════
+async function simulateDecode() {
+  const steps = [
+    { label:'QR Scan', detail:'User opens Vistamations QScan app — scans QR code. Payload extracted from visual pattern.', time:800 },
+    { label:'C2 Signal', detail:'Stateless ping sent to Vistamations Command-Control hub. IP: 203.0.113.42:443. SOAP envelope transmitted.', time:1000 },
+    { label:'Lift Restrictions', detail:'Cloud Armor safelists client IP dynamically. Firewall rules relaxed based on verified webhook signature from C2 server.', time:1200 },
+    { label:'Passkey Verify', detail:'Mobile 2-way OAuth 2.0 challenge initiated. Client authenticates via biometric + TOTP. Session token issued.', time:1000 },
+    { label:'Packet Unlock', detail:'AES-256-GCM decryption in Cloud KMS Confidential Space. Steganographic watermark stripped. Legible document restored to customer.', time:1500 },
+  ];
+
+  const btn = document.getElementById('simBtn');
+  btn.disabled = true;
+  const log = document.getElementById('flowLog');
+
+  for (let i=0;i<steps.length;i++) {
+    const s = steps[i];
+    // Highlight current step
+    document.querySelectorAll('.flow-step').forEach((el,j) => {
+      el.classList.remove('active','done');
+      if (j===i) el.classList.add('active');
+      if (j<i) el.classList.add('done');
+    });
+
+    log.innerHTML = `<p style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);margin-bottom:0.5rem">▶ Step ${i+1}: ${s.label}</p><p style="font-family:var(--mono);font-size:0.55rem;color:var(--dim)">${s.detail}</p>`;
+    updateStatus(i<4?'🔄':'✅', (i<4?'Processing... ':'')+s.label, i<4?'amber':'green');
+    await new Promise(r=>setTimeout(r,s.time));
+  }
+
+  log.innerHTML = `<p style="font-family:var(--mono);font-size:0.7rem;color:var(--accent);margin-bottom:0.5rem">✅ DECODE COMPLETE</p><p style="font-family:var(--mono);font-size:0.55rem;color:var(--dim)">Document restored: ${state.custDocId}<br>Customer: ${state.custName}<br>Watermark: Stripped and verified<br>Session: ${state.sessionId} — memory wiped in Confidential Space</p>`;
+  btn.disabled = false;
+}
+
+// ════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════
+function updateStatus(icon, text, color) {
+  document.getElementById('statusDot').className = 'dot ' + color;
+  document.getElementById('statusText').textContent = icon + ' ' + text;
+}
+
+function resetAll() {
+  state.layer=1; state.sigHash=null; state.ciphertext=null;
+  setLayer(1);
+  updateStatus('✓','Ready — Fill customer details to begin','green');
+  document.getElementById('flowLog').innerHTML = '<p style="font-family:var(--mono);font-size:0.65rem;color:var(--dim)">Press "Simulate Decode" to run the 5-step authentication pipeline</p>';
+  document.querySelectorAll('.flow-step').forEach(el=>el.classList.remove('active','done'));
+  document.querySelector('.flow-step').classList.add('active');
+}
+
+// Init
+updateQR();
+setLayer(1);
+</script>
+
+</body>
+</html>

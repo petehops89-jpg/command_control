@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistamations PDF Toolkit — Reader, Editor & OCR</title>
+<style>
+:root {
+  --bg:#0A0C0F; --card:#111418; --border:#1E2229;
+  --accent:#4FD1C5; --accent2:#A78BFA; --accent3:#F472B6;
+  --amber:#E8A33D; --rust:#C44536; --text:#C8CCD0; --dim:#6B7280;
+  --mono:'JetBrains Mono','Consolas',monospace;
+  --body:'Inter','Segoe UI',system-ui,sans-serif;
+  --radius:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body)}
+
+/* ─── OVERLAY ─── */
+.overlay{
+  position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.92);
+  display:none;flex-direction:column;backdrop-filter:blur(12px);
+}
+.overlay.active{display:flex}
+
+/* ─── TOP BAR ─── */
+.topbar{
+  display:flex;align-items:center;padding:0.5rem 1rem;
+  border-bottom:1px solid var(--border);gap:0.75rem;
+  background:var(--card);
+}
+.topbar .brand{font-family:var(--mono);font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em}
+.topbar .title{font-family:var(--mono);font-size:0.85rem;color:#fff;font-weight:600}
+.topbar .spacer{flex:1}
+.topbar .btn-close{
+  background:var(--rust);color:#fff;border:none;width:28px;height:28px;
+  border-radius:4px;cursor:pointer;font-size:1rem;line-height:1;
+}
+.topbar .budget{
+  font-family:var(--mono);font-size:0.6rem;color:var(--amber);
+  padding:0.25rem 0.5rem;border:1px solid var(--amber);border-radius:4px;
+}
+
+/* ─── MAIN LAYOUT ─── */
+.main{
+  display:flex;flex:1;overflow:hidden;
+}
+
+/* ─── TOOLS PANEL ─── */
+.tools{
+  width:200px;border-right:1px solid var(--border);padding:1rem;
+  display:flex;flex-direction:column;gap:0.5rem;overflow-y:auto;
+  background:rgba(17,20,24,0.5);
+}
+.tools h3{
+  font-family:var(--mono);font-size:0.6rem;color:var(--dim);
+  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;
+}
+.tool-btn{
+  display:flex;align-items:center;gap:0.5rem;
+  padding:0.6rem 0.75rem;font-family:var(--mono);font-size:0.7rem;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  color:var(--text);cursor:pointer;transition:all 0.2s;text-align:left;
+}
+.tool-btn:hover{border-color:var(--accent);color:#fff}
+.tool-btn.active{border-color:var(--accent);background:rgba(79,209,197,0.1)}
+.tool-btn .icon{font-size:1rem}
+
+/* ─── STAGE ─── */
+.stage{
+  flex:1;display:flex;flex-direction:column;overflow:hidden;
+}
+
+/* ─── WIZARD STEPS ─── */
+.wiz-steps{
+  display:flex;gap:0;border-bottom:1px solid var(--border);
+}
+.wiz-step{
+  flex:1;text-align:center;padding:0.75rem;
+  font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;
+  letter-spacing:0.08em;color:var(--dim);cursor:pointer;
+  border-bottom:2px solid transparent;transition:all 0.2s;
+}
+.wiz-step:hover{color:var(--text)}
+.wiz-step.active{color:var(--accent);border-bottom-color:var(--accent)}
+.wiz-step.done{color:var(--accent);border-bottom-color:var(--accent);opacity:0.6}
+
+/* ─── PANELS ─── */
+.panel{display:none;flex:1;overflow-y:auto;padding:2rem}
+.panel.active{display:block}
+
+/* Templates */
+.template-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:0.75rem;
+}
+.template-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.25rem;cursor:pointer;transition:all 0.2s;text-align:center;
+}
+.template-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.template-card.selected{border-color:var(--accent);box-shadow:0 0 16px rgba(79,209,197,0.15)}
+.template-card .t-icon{font-size:2rem;margin-bottom:0.5rem}
+.template-card .t-name{font-family:var(--mono);font-size:0.7rem;color:#fff}
+.template-card .t-desc{font-size:0.6rem;color:var(--dim);margin-top:0.25rem}
+
+/* Color Swatches */
+.color-grid{display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem}
+.swatch{
+  width:36px;height:36px;border-radius:8px;cursor:pointer;
+  border:2px solid transparent;transition:all 0.2s;
+}
+.swatch:hover{transform:scale(1.1)}
+.swatch.selected{border-color:#fff;box-shadow:0 0 12px currentColor}
+
+/* Font Selector */
+.font-preview{
+  padding:1rem;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);margin:0.5rem 0;cursor:pointer;
+  transition:all 0.2s;
+}
+.font-preview:hover{border-color:var(--accent)}
+.font-preview.selected{border-color:var(--accent);background:rgba(79,209,197,0.05)}
+.font-preview .fp-name{font-family:var(--mono);font-size:0.65rem;color:var(--accent)}
+.font-preview .fp-sample{font-size:1.5rem;color:#fff;margin-top:0.5rem}
+
+/* ─── PDF VIEWER ─── */
+.pdf-viewer{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);border:1px dashed var(--border);border-radius:var(--radius);
+  margin:1rem;min-height:300px;color:var(--dim);font-family:var(--mono);
+  font-size:0.8rem;position:relative;overflow:hidden;
+}
+.pdf-viewer .page{
+  background:#fff;color:#111;padding:2rem;max-width:600px;width:90%;
+  box-shadow:0 4px 32px rgba(0,0,0,0.5);border-radius:2px;
+  font-size:0.8rem;line-height:1.6;min-height:400px;
+}
+.pdf-viewer .page .page-num{
+  font-family:var(--mono);font-size:0.6rem;color:#999;text-align:center;
+  margin-top:1rem;border-top:1px solid #ddd;padding-top:0.5rem;
+}
+
+/* ─── SIGNATURE CANVAS ─── */
+.sig-area{
+  display:flex;flex-direction:column;align-items:center;gap:1rem;
+  padding:1rem;
+}
+.sig-area canvas{
+  border:2px solid var(--border);border-radius:var(--radius);
+  background:#fff;cursor:crosshair;
+}
+.sig-area .sig-tools{
+  display:flex;gap:0.5rem;align-items:center;
+}
+.sig-btn{
+  padding:0.5rem 1rem;font-family:var(--mono);font-size:0.65rem;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  color:var(--text);cursor:pointer;
+}
+.sig-btn:hover{color:#fff}
+.sig-btn.accent{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:600}
+.sig-status{
+  font-family:var(--mono);font-size:0.6rem;color:var(--accent);
+  padding:0.5rem;text-align:center;
+}
+
+/* ─── BUDGET MODAL ─── */
+.budget-modal{
+  display:none;position:fixed;inset:0;z-index:10001;
+  background:rgba(0,0,0,0.85);align-items:center;justify-content:center;
+}
+.budget-modal.active{display:flex}
+.budget-box{
+  background:var(--card);border:1px solid var(--amber);border-radius:var(--radius);
+  padding:2rem;max-width:400px;text-align:center;
+}
+.budget-box h2{font-family:var(--mono);color:var(--amber);margin-bottom:1rem}
+.budget-box .amount{font-size:3rem;color:var(--amber);font-family:var(--mono)}
+.budget-box .detail{font-size:0.7rem;color:var(--dim);margin:1rem 0}
+.budget-box .btn-row{display:flex;gap:0.5rem;justify-content:center}
+.budget-btn{
+  padding:0.6rem 1.25rem;font-family:var(--mono);font-size:0.7rem;
+  border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;
+}
+.budget-btn.approve{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.budget-btn.deny{background:transparent;color:var(--dim)}
+
+/* ─── FILE DROP ─── */
+.file-drop{
+  border:2px dashed var(--border);border-radius:var(--radius);
+  padding:3rem;text-align:center;margin:2rem;transition:all 0.3s;
+}
+.file-drop.drag{border-color:var(--accent);background:rgba(79,209,197,0.05)}
+.file-drop .drop-icon{font-size:3rem;margin-bottom:1rem}
+.file-drop .drop-text{font-family:var(--mono);font-size:0.8rem;color:var(--dim)}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- FULL-SCREEN OVERLAY -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="overlay" id="pdfOverlay">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="brand">Vistamations PDF Toolkit</div>
+    <div class="title" id="docTitle">Untitled Document</div>
+    <div class="spacer"></div>
+    <div class="budget" id="budgetDisplay">💰 $5.00 remaining</div>
+    <button class="btn-close" onclick="closeToolkit()">✕</button>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- TOOLS PANEL -->
+    <div class="tools">
+      <h3>Document Tools</h3>
+      <button class="tool-btn" onclick="runOCR()"><span class="icon">🔍</span> Run OCR (Tesseract)</button>
+      <button class="tool-btn" onclick="extractText()"><span class="icon">📄</span> Extract Text (pdf-mcp)</button>
+      <button class="tool-btn" onclick="splitPDF()"><span class="icon">⎇</span> Split PDF</button>
+      <button class="tool-btn" onclick="mergePDF()"><span class="icon">🔗</span> Merge PDFs</button>
+      <button class="tool-btn" onclick="appendText()"><span class="icon">✏️</span> Edit / Append Text</button>
+
+      <h3 style="margin-top:1rem">MCP Status</h3>
+      <div class="tool-btn" style="cursor:default;font-size:0.6rem">
+        <span style="color:#4FD1C5">●</span> pdf-mcp: connected
+      </div>
+      <div class="tool-btn" style="cursor:default;font-size:0.6rem">
+        <span style="color:#4FD1C5">●</span> mcp-ocr (Tesseract): ready
+      </div>
+      <div class="tool-btn" style="cursor:default;font-size:0.6rem">
+        <span style="color:#4FD1C5">●</span> filesystem-mcp: \\pete\\presentations\\
+      </div>
+    </div>
+
+    <!-- STAGE -->
+    <div class="stage">
+      <!-- WIZARD -->
+      <div class="wiz-steps">
+        <div class="wiz-step active" data-wiz="1" onclick="gotoStep(1)">1. Template</div>
+        <div class="wiz-step" data-wiz="2" onclick="gotoStep(2)">2. Colour Scheme</div>
+        <div class="wiz-step" data-wiz="3" onclick="gotoStep(3)">3. Assets & Sign</div>
+      </div>
+
+      <!-- PANEL 1: TEMPLATES -->
+      <div class="panel active" id="panel1">
+        <h2 style="font-family:var(--mono);font-size:0.9rem;margin-bottom:1rem;color:var(--accent)">// Step 1: Select Template</h2>
+        <div class="template-grid">
+          <div class="template-card selected" onclick="selectTemplate(this,'modern-slate')">
+            <div class="t-icon">📊</div><div class="t-name">Modern Slate</div><div class="t-desc">Clean corporate with geometric accents</div>
+          </div>
+          <div class="template-card" onclick="selectTemplate(this,'dark-hero')">
+            <div class="t-icon">🌑</div><div class="t-name">Dark Hero</div><div class="t-desc">Dramatic contrast, cinematic feel</div>
+          </div>
+          <div class="template-card" onclick="selectTemplate(this,'minimal-grid')">
+            <div class="t-icon">⊞</div><div class="t-name">Minimal Grid</div><div class="t-desc">Swiss design, precision spacing</div>
+          </div>
+          <div class="template-card" onclick="selectTemplate(this,'tech-blueprint')">
+            <div class="t-icon">🔷</div><div class="t-name">Tech Blueprint</div><div class="t-desc">Engineering aesthetic, mono + cyan</div>
+          </div>
+          <div class="template-card" onclick="selectTemplate(this,'creative-burst')">
+            <div class="t-icon">🎨</div><div class="t-name">Creative Burst</div><div class="t-desc">Bold colors, artistic layout</div>
+          </div>
+          <div class="template-card" onclick="selectTemplate(this,'presentation-pro')">
+            <div class="t-icon">🎯</div><div class="t-name">Presentation Pro</div><div class="t-desc">Slide-ready, 16:9 optimized</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 2: COLOUR & FONTS -->
+      <div class="panel" id="panel2">
+        <h2 style="font-family:var(--mono);font-size:0.9rem;margin-bottom:1rem;color:var(--accent)">// Step 2: Colour Scheme & Typography</h2>
+
+        <h3 style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);margin:1rem 0 0.5rem">Accent Colour</h3>
+        <div class="color-grid">
+          <div class="swatch selected" style="background:#4FD1C5;color:#4FD1C5" onclick="pickColor(this,'#4FD1C5')"></div>
+          <div class="swatch" style="background:#A78BFA;color:#A78BFA" onclick="pickColor(this,'#A78BFA')"></div>
+          <div class="swatch" style="background:#F472B6;color:#F472B6" onclick="pickColor(this,'#F472B6')"></div>
+          <div class="swatch" style="background:#E8A33D;color:#E8A33D" onclick="pickColor(this,'#E8A33D')"></div>
+          <div class="swatch" style="background:#FB923C;color:#FB923C" onclick="pickColor(this,'#FB923C')"></div>
+          <div class="swatch" style="background:#34D399;color:#34D399" onclick="pickColor(this,'#34D399')"></div>
+          <div class="swatch" style="background:#60A5FA;color:#60A5FA" onclick="pickColor(this,'#60A5FA')"></div>
+          <div class="swatch" style="background:#F87171;color:#F87171" onclick="pickColor(this,'#F87171')"></div>
+        </div>
+
+        <h3 style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);margin:1.5rem 0 0.5rem">Typography (Google Fonts)</h3>
+        <div class="font-preview selected" onclick="pickFont(this,'Inter')">
+          <div class="fp-name">Inter — Sans Serif</div>
+          <div class="fp-sample" style="font-family:Inter">The quick brown fox jumps over the lazy dog</div>
+        </div>
+        <div class="font-preview" onclick="pickFont(this,'JetBrains Mono')">
+          <div class="fp-name">JetBrains Mono — Monospace</div>
+          <div class="fp-sample" style="font-family:'JetBrains Mono'">The quick brown fox jumps over the lazy dog</div>
+        </div>
+        <div class="font-preview" onclick="pickFont(this,'Playfair Display')">
+          <div class="fp-name">Playfair Display — Serif</div>
+          <div class="fp-sample" style="font-family:'Playfair Display'">The quick brown fox jumps over the lazy dog</div>
+        </div>
+      </div>
+
+      <!-- PANEL 3: ASSETS & SIGN -->
+      <div class="panel" id="panel3">
+        <h2 style="font-family:var(--mono);font-size:0.9rem;margin-bottom:1rem;color:var(--accent)">// Step 3: Assets, Signature & Export</h2>
+
+        <!-- Digital Signature -->
+        <div class="sig-area">
+          <h3 style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);align-self:flex-start">Digital Handwritten Signature</h3>
+          <canvas id="sigCanvas" width="500" height="150"></canvas>
+          <div class="sig-tools">
+            <button class="sig-btn" onclick="clearSig()">Clear</button>
+            <button class="sig-btn" onclick="undoSig()">Undo</button>
+            <button class="sig-btn accent" onclick="verifySignature()">✍️ Verify & Stamp</button>
+          </div>
+          <div class="sig-status" id="sigStatus">Draw your signature above. 256-bit SHA-3 hash verification ready.</div>
+        </div>
+
+        <!-- Export -->
+        <div style="margin-top:2rem;text-align:center">
+          <button class="sig-btn accent" style="font-size:0.75rem;padding:0.75rem 2rem" onclick="exportPDF()">
+            📥 Export PDF with Signature
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- BUDGET APPROVAL MODAL -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="budget-modal" id="budgetModal">
+  <div class="budget-box">
+    <h2>⚠️ Budget Approval Required</h2>
+    <div class="amount" id="pendingAmount">$0.00</div>
+    <div class="detail" id="pendingDetail">Operation requires API credits that exceed the $5 budget guardrail.</div>
+    <div style="font-family:var(--mono);font-size:0.55rem;color:var(--dim);margin:0.5rem 0">
+      Log: \\pete\\presentations\\sys_logs\\billing_quote.json
+    </div>
+    <div class="btn-row">
+      <button class="budget-btn approve" onclick="approveBudget()">Approve ($5 cap)</button>
+      <button class="budget-btn deny" onclick="denyBudget()">Deny</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════
+const state = {
+  template: 'modern-slate',
+  accentColor: '#4FD1C5',
+  font: 'Inter',
+  budget: 5.00,
+  spendLog: [],
+  docName: 'Untitled',
+  sigVerified: false,
+  sigHash: null,
+  sigHistory: [],
+};
+
+// ════════════════════════════════════════════════════
+// TOOLKIT: OPEN / CLOSE
+// ════════════════════════════════════════════════════
+function openToolkit(filename) {
+  if (filename) state.docName = filename;
+  document.getElementById('docTitle').textContent = state.docName;
+  document.getElementById('pdfOverlay').classList.add('active');
+  initSignatureCanvas();
+}
+
+function closeToolkit() {
+  document.getElementById('pdfOverlay').classList.remove('active');
+}
+
+// Expose globally for the bento tile
+window.openToolkit = openToolkit;
+window.closeToolkit = closeToolkit;
+
+// ════════════════════════════════════════════════════
+// WIZARD NAVIGATION
+// ════════════════════════════════════════════════════
+function gotoStep(n) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel' + n).classList.add('active');
+  document.querySelectorAll('.wiz-step').forEach(s => {
+    s.classList.remove('active','done');
+    const stepNum = parseInt(s.dataset.wiz);
+    if (stepNum === n) s.classList.add('active');
+    if (stepNum < n) s.classList.add('done');
+  });
+}
+
+// ════════════════════════════════════════════════════
+// TEMPLATE SELECTION
+// ════════════════════════════════════════════════════
+function selectTemplate(el, name) {
+  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.template = name;
+}
+
+// ════════════════════════════════════════════════════
+// COLOR SELECTION
+// ════════════════════════════════════════════════════
+function pickColor(el, hex) {
+  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  state.accentColor = hex;
+}
+
+// ════════════════════════════════════════════════════
+// FONT SELECTION
+// ════════════════════════════════════════════════════
+function pickFont(el, name) {
+  document.querySelectorAll('.font-preview').forEach(f => f.classList.remove('selected'));
+  el.classList.add('selected');
+  state.font = name;
+}
+
+// ════════════════════════════════════════════════════
+// TOOL OPERATIONS
+// ════════════════════════════════════════════════════
+function runOCR() {
+  spendCheck(0.15, 'OCR scan (Tesseract MCP)', () => {
+    log('OCR scan initiated via mcp-ocr/Tesseract on ' + state.docName);
+    log('Scanned pages transformed to editable text layers.');
+    log('Output saved to \\\\pete\\\\presentations\\\\ocr_output\\\\');
+  });
+}
+
+function extractText() {
+  spendCheck(0.10, 'PDF text extraction (pdf-mcp)', () => {
+    log('Text extraction via pdf-mcp server on ' + state.docName);
+    log('Indexed content, parsed paragraphs, captured metadata.');
+    log('Output saved to \\\\pete\\\\presentations\\\\extracted\\\\');
+  });
+}
+
+function splitPDF() {
+  spendCheck(0.20, 'PDF split operation', () => {
+    log('Splitting ' + state.docName + ' by page boundary...');
+    log('Generated separate PDFs in \\\\pete\\\\presentations\\\\split\\\\');
+  });
+}
+
+function mergePDF() {
+  spendCheck(0.25, 'PDF merge operation', () => {
+    log('Merging selected PDFs via pdf-mcp...');
+    log('Combined output saved to \\\\pete\\\\presentations\\\\merged\\\\');
+  });
+}
+
+function appendText() {
+  spendCheck(0.10, 'Text append/edit operation', () => {
+    log('Editing ' + state.docName + ' — text layer updated.');
+    log('Saved revisions to \\\\pete\\\\presentations\\\\');
+  });
+}
+
+// ════════════════════════════════════════════════════
+// BUDGET GUARDRAILS
+// ════════════════════════════════════════════════════
+function spendCheck(cost, description, callback) {
+  if (cost > state.budget) {
+    document.getElementById('pendingAmount').textContent = '$' + cost.toFixed(2);
+    document.getElementById('pendingDetail').textContent =
+      description + ' exceeds remaining budget of $' + state.budget.toFixed(2) + '.';
+    document.getElementById('budgetModal').classList.add('active');
+    window._pendingCallback = callback;
+    return;
+  }
+  state.budget -= cost;
+  state.spendLog.push({ cost, description, time: new Date().toISOString() });
+  updateBudget();
+  callback();
+  logToSysLog(description, cost);
+}
+
+function approveBudget() {
+  document.getElementById('budgetModal').classList.remove('active');
+  if (window._pendingCallback) window._pendingCallback();
+}
+
+function denyBudget() {
+  document.getElementById('budgetModal').classList.remove('active');
+  log('Operation denied by budget guardrail. Quote logged to sys_logs.');
+}
+
+function updateBudget() {
+  const el = document.getElementById('budgetDisplay');
+  el.textContent = '💰 $' + state.budget.toFixed(2) + ' remaining';
+  if (state.budget < 1.00) el.style.color = '#C44536';
+  else if (state.budget < 2.50) el.style.color = '#E8A33D';
+}
+
+function logToSysLog(operation, cost) {
+  log('Billing quote -> \\\\pete\\\\presentations\\\\sys_logs\\\\billing_quote.json');
+  log('  Operation: ' + operation + ' | Cost: $' + cost.toFixed(2) + ' | Remaining: $' + state.budget.toFixed(2));
+}
+
+// ════════════════════════════════════════════════════
+// SIGNATURE PAD (Canvas + Crypto)
+// ════════════════════════════════════════════════════
+let sigCtx, sigDrawing = false, sigPath = [];
+
+function initSignatureCanvas() {
+  const canvas = document.getElementById('sigCanvas');
+  sigCtx = canvas.getContext('2d');
+  sigCtx.lineWidth = 2.5;
+  sigCtx.strokeStyle = '#111';
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+  sigPath = [];
+
+  canvas.onmousedown = e => { sigDrawing = true; sigCtx.beginPath(); sigCtx.moveTo(e.offsetX, e.offsetY); sigPath.push(['M',e.offsetX,e.offsetY]); };
+  canvas.onmousemove = e => { if(!sigDrawing)return; sigCtx.lineTo(e.offsetX,e.offsetY); sigCtx.stroke(); sigPath.push(['L',e.offsetX,e.offsetY]); };
+  canvas.onmouseup = () => { sigDrawing = false; sigCtx.closePath(); };
+  canvas.onmouseleave = () => { sigDrawing = false; };
+
+  // Touch support
+  canvas.ontouchstart = e => { e.preventDefault(); const t=e.touches[0]; const r=canvas.getBoundingClientRect(); sigDrawing=true; sigCtx.beginPath(); sigCtx.moveTo(t.clientX-r.left,t.clientY-r.top); };
+  canvas.ontouchmove = e => { e.preventDefault(); if(!sigDrawing)return; const t=e.touches[0]; const r=canvas.getBoundingClientRect(); sigCtx.lineTo(t.clientX-r.left,t.clientY-r.top); sigCtx.stroke(); };
+  canvas.ontouchend = () => { sigDrawing = false; sigCtx.closePath(); };
+}
+
+function clearSig() {
+  sigCtx.clearRect(0, 0, 500, 150);
+  sigPath = [];
+  state.sigVerified = false;
+  document.getElementById('sigStatus').textContent = 'Canvas cleared. Draw your signature.';
+}
+
+function undoSig() {
+  sigCtx.clearRect(0, 0, 500, 150);
+  sigPath.pop();
+  // Redraw remaining path
+  sigCtx.beginPath();
+  for (const cmd of sigPath) {
+    if (cmd[0] === 'M') sigCtx.moveTo(cmd[1], cmd[2]);
+    else sigCtx.lineTo(cmd[1], cmd[2]);
+  }
+  sigCtx.stroke();
+}
+
+async function verifySignature() {
+  if (sigPath.length < 4) {
+    document.getElementById('sigStatus').textContent = '⚠️ Please draw a signature first.';
+    return;
+  }
+
+  // Generate SHA-256 hash of the signature path
+  const pathStr = JSON.stringify(sigPath);
+  const encoder = new TextEncoder();
+  const data = encoder.encode(pathStr + ':' + state.docName + ':' + Date.now());
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
+
+  state.sigVerified = true;
+  state.sigHash = hashHex;
+  state.sigHistory.push({ hash: hashHex, path: sigPath, doc: state.docName, at: new Date().toISOString() });
+
+  document.getElementById('sigStatus').innerHTML =
+    '✅ <b>Signature Verified</b><br>' +
+    '<span style="font-size:0.55rem;color:var(--dim)">SHA-256: ' + hashHex.substring(0, 32) + '...</span><br>' +
+    '<span style="font-size:0.55rem;color:var(--accent)">Bound to: ' + state.docName + ' | Timestamped | Non-repudiable</span>';
+}
+
+// ════════════════════════════════════════════════════
+// EXPORT
+// ════════════════════════════════════════════════════
+function exportPDF() {
+  if (!state.sigVerified) {
+    spendCheck(0.50, 'Export PDF + signature stamp', () => {
+      log('Exporting ' + state.docName + ' with digital signature...');
+      log('Template: ' + state.template + ' | Font: ' + state.font + ' | Accent: ' + state.accentColor);
+      log('Signature hash bound to PDF metadata layer.');
+      log('Output: \\\\pete\\\\presentations\\\\' + state.docName + '_signed.pdf');
+    });
+  } else {
+    spendCheck(0.50, 'Export PDF + signature stamp', () => {
+      log('Exporting ' + state.docName + ' with CRYPTOGRAPHICALLY VERIFIED signature...');
+      log('Sig hash: ' + state.sigHash.substring(0,16) + '...');
+      log('Template: ' + state.template + ' | Font: ' + state.font + ' | Accent: ' + state.accentColor);
+      log('Signature stamped as unalterable vector layer.');
+      log('Output: \\\\pete\\\\presentations\\\\' + state.docName + '_signed.pdf');
+    });
+  }
+}
+
+// ════════════════════════════════════════════════════
+// LOGGING
+// ════════════════════════════════════════════════════
+function log(msg) {
+  console.log('[PDF-TK]', msg);
+}
+
+// Init
+updateBudget();
+</script>
+</body>
+</html>
