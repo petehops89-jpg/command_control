@@ -1,0 +1,12 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: gem
+      - generic [ref=e6]: online — music AI
+    - generic [ref=e7]: 10:39:05 am AEST
+  - generic [ref=e9]:
+    - generic [ref=e10]: gem
+    - text: Online and listening. I can see your music library — 23 Tim Cochrane tracks. Neo-classical shred guitar is my specialty. Ask me anything.
+  - generic [ref=e11]:
+    - textbox "Ask gem about music, Suno, neo-classical shred..." [active] [ref=e12]
+    - button "Send" [ref=e13] [cursor=pointer]

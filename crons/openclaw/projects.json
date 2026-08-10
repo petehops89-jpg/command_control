@@ -4,12 +4,12 @@
     "name": "OpenClaw Infrastructure",
     "dominion": "DOM-001",
     "stats": {
-      "totalRuns": 54,
-      "publications": 3,
-      "published": 3,
-      "valueScore": 80,
-      "accumulatedValue": 27588,
-      "lastRun": "2026-08-07T00:12:39.397Z"
+      "totalRuns": 55,
+      "publications": 4,
+      "published": 4,
+      "valueScore": 79,
+      "accumulatedValue": 37940,
+      "lastRun": "2026-08-09T02:00:02.575Z"
     }
   },
   {
@@ -68,12 +68,12 @@
     "name": "Distribution Strategy",
     "dominion": "DOM-004",
     "stats": {
-      "totalRuns": 1,
-      "publications": 1,
-      "published": 1,
-      "valueScore": 81,
-      "accumulatedValue": 9411,
-      "lastRun": "2026-08-08T05:00:03.028Z"
+      "totalRuns": 2,
+      "publications": 2,
+      "published": 2,
+      "valueScore": 80,
+      "accumulatedValue": 19144,
+      "lastRun": "2026-08-08T23:00:04.360Z"
     }
   },
   {

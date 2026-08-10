@@ -66,6 +66,18 @@ const PERSONAS = {
       return replies[Math.floor(Math.random() * replies.length)];
     },
   },
+  gem: {
+    name: 'gem',
+    reply: function () {
+      const replies = [
+        'Online and listening. Your music library has 23 Tim Cochrane tracks loaded. Neo-classical shred is my specialty — ready to research, suggest, or just vibe.',
+        'Scanned your favourites folder — lots of Tim Cochrane. The Matheus and Soul Shadows variations suggest you gravitate toward melodic technical guitar. Want me to find similar Suno prompts?',
+        'Music AI reporting in. I can research Suno news, generate neo-classical shred prompts, track what you play, and build a taste profile over time. Just ask.',
+        'Gem here. Your music taste is forming a clear cluster: neo-classical shred guitar with melodic phrasing, Tim Cochrane as anchor artist. I am tracking 23 tracks across 6 variations of Space is not nothing alone. Ready when you are.',
+      ];
+      return replies[Math.floor(Math.random() * replies.length)];
+    },
+  },
 };
 
 // ─── Olivia interprets Pete's message, decides which agents to ask ───
@@ -78,6 +90,7 @@ const AGENT_KEYWORDS = {
   dee:        ['dee','cron','publish','scrape','research','monitor','post','webhook','report','schedule','quick'],
   stefi:      ['stefi','steffi','design','ui','layout','bento','dashboard','branding','icon','illustration','animation','svg','visual','graphic','stitch'],
   terence:    ['terence','openclaw','think tank','metacognition','cluster','vector','mapping','boundary','centroid','cosine','synthesis','idea','concept','framework','philosophy','reasoning'],
+  gem:        ['gem','music','song','track','suno','guitar','shred','neo classical','play','playlist','listen','audio','mp3','taste','genre','artist','Tim Cochrane','melodic'],
   // Meta keywords — if Pete mentions these, ask everyone
   all:        ['everyone','all agents','everybody','briefing','sitrep','full report'],
 };
@@ -177,6 +190,33 @@ async function processQueue() {
       task.status = 'done';
     } catch (e) {
       console.error('[agent-daemon] Failed to post Olivia reply: ' + e.message);
+    }
+
+    // ─── Direct Olivia-to-Pete Java Tunnel Ping ───
+    try {
+      const payload = JSON.stringify({
+        event: 'new_reply',
+        responseId: task.responseId,
+        message: oliviaReport.substring(0, 150) + (oliviaReport.length > 150 ? '...' : '')
+      });
+      const tunnelReq = http.request({
+        hostname: 'localhost',
+        port: 3001,
+        path: '/tunnel',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(payload)
+        }
+      }, (tunnelRes) => {
+        // quiet consume
+        tunnelRes.on('data', () => {});
+      });
+      tunnelReq.on('error', () => { /* java portal offline, fallback quietly */ });
+      tunnelReq.write(payload);
+      tunnelReq.end();
+    } catch (tunnelError) {
+      // safe fallback
     }
 
     await new Promise(r => setTimeout(r, 1000));

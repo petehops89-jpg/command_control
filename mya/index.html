@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mya's World — Vistamations</title>
+<style>
+  :root {
+    --bg:#0a0014;
+    --card-bg:#120024;
+    --border:#2a1040;
+    --fortnite-purple:#9D4EDD;
+    --fortnite-blue:#00B4D8;
+    --fortnite-pink:#FF006E;
+    --fortnite-gold:#FFBE0B;
+    --fortnite-orange:#FB5607;
+    --storm:#1a0030;
+    --text:#E8D5F5;
+    --dim:#8B6BAE;
+    --font-mono:'JetBrains Mono','Consolas',monospace;
+    --font-display:'Bangers','Impact',cursive;
+    --font-body:'Inter','Segoe UI',sans-serif;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  /* ─── Storm Particles Background ─── */
+  .storm-bg{
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    pointer-events:none;z-index:0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(157,78,221,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 30%, rgba(0,180,216,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(255,0,110,0.05) 0%, transparent 50%);
+  }
+
+  /* ─── Hero Banner ─── */
+  .hero{
+    position:relative;z-index:1;
+    text-align:center;padding:3rem 1rem 2rem;
+    background:linear-gradient(180deg, rgba(157,78,221,0.15) 0%, transparent 100%);
+    border-bottom:2px solid var(--fortnite-purple);
+  }
+  .hero .llama{font-size:4rem;animation:bounce 2s infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+  .hero h1{
+    font-family:var(--font-display);font-size:3.5rem;
+    background:linear-gradient(135deg, var(--fortnite-purple), var(--fortnite-blue), var(--fortnite-pink));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;margin:0.5rem 0;
+    text-shadow:none;letter-spacing:0.02em;
+  }
+  .hero .subtitle{
+    font-family:var(--font-mono);font-size:0.85rem;color:var(--fortnite-gold);
+    text-transform:uppercase;letter-spacing:0.2em;margin-bottom:1rem;
+  }
+  .hero .players{
+    display:flex;justify-content:center;gap:2rem;margin-top:1rem;
+    font-family:var(--font-mono);font-size:0.75rem;color:var(--dim);
+  }
+  .hero .players span{color:var(--fortnite-blue)}
+
+  /* ─── Ticker ─── */
+  .ticker{
+    position:relative;z-index:1;
+    background:var(--card-bg);border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    padding:0.5rem 0;overflow:hidden;white-space:nowrap;
+  }
+  .ticker-inner{
+    display:inline-block;animation:scroll 30s linear infinite;
+    font-family:var(--font-mono);font-size:0.7rem;color:var(--fortnite-gold);
+    letter-spacing:0.1em;text-transform:uppercase;
+  }
+  @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+  /* ─── Bento Grid ─── */
+  .bento{
+    position:relative;z-index:1;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:1rem;padding:1.5rem;max-width:1400px;margin:0 auto;
+  }
+  .bento-card{
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:1.5rem;
+    transition:all 0.3s;
+    overflow:hidden;
+    position:relative;
+  }
+  .bento-card:hover{
+    border-color:var(--fortnite-purple);
+    transform:translateY(-2px);
+    box-shadow:0 8px 32px rgba(157,78,221,0.15);
+  }
+  .bento-card.wide{grid-column:span 2}
+  .bento-card.tall{grid-row:span 2}
+  .bento-card.giant{grid-column:span 2;grid-row:span 2}
+
+  .bento-card .card-tag{
+    font-family:var(--font-mono);font-size:0.55rem;
+    text-transform:uppercase;letter-spacing:0.15em;
+    padding:0.2rem 0.6rem;border-radius:4px;
+    display:inline-block;margin-bottom:0.75rem;
+  }
+  .tag-fortnite{background:rgba(157,78,221,0.2);color:var(--fortnite-purple)}
+  .tag-art{background:rgba(0,180,216,0.2);color:var(--fortnite-blue)}
+  .tag-game{background:rgba(255,0,110,0.2);color:var(--fortnite-pink)}
+  .tag-dad{background:rgba(255,190,11,0.2);color:var(--fortnite-gold)}
+  .tag-mya{background:rgba(251,86,7,0.2);color:var(--fortnite-orange)}
+
+  .bento-card h2{
+    font-family:var(--font-display);font-size:1.5rem;color:#fff;margin-bottom:0.5rem;
+  }
+  .bento-card p{font-size:0.8rem;color:var(--dim);line-height:1.5}
+  .bento-card img{
+    width:100%;height:200px;object-fit:cover;border-radius:8px;
+    margin-top:0.75rem;border:1px solid var(--border);
+  }
+
+  /* ─── Battle Pass Progress ─── */
+  .battle-pass{
+    position:relative;z-index:1;
+    max-width:1400px;margin:1rem auto;padding:0 1.5rem;
+  }
+  .bp-bar{
+    height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin:0.5rem 0;
+  }
+  .bp-fill{
+    height:100%;background:linear-gradient(90deg,var(--fortnite-purple),var(--fortnite-gold));
+    border-radius:4px;transition:width 0.5s;
+  }
+  .bp-label{
+    font-family:var(--font-mono);font-size:0.65rem;color:var(--dim);
+    text-transform:uppercase;letter-spacing:0.1em;
+    display:flex;justify-content:space-between;
+  }
+
+  /* ─── Loading ─── */
+  .loader{
+    text-align:center;padding:3rem;
+    font-family:var(--font-mono);font-size:0.8rem;color:var(--dim);
+  }
+  .loader .dot{animation:dots 1.5s infinite}
+  @keyframes dots{0%,20%{opacity:0}50%{opacity:1}100%{opacity:0}}
+
+  /* ─── Footer ─── */
+  .footer{
+    position:relative;z-index:1;
+    text-align:center;padding:2rem;
+    border-top:1px solid var(--border);
+    font-family:var(--font-mono);font-size:0.65rem;color:var(--dim);
+  }
+  .footer a{color:var(--fortnite-purple);text-decoration:none}
+
+  /* ─── Responsive ─── */
+  @media(max-width:768px){
+    .bento{grid-template-columns:1fr;padding:1rem}
+    .bento-card.wide,.bento-card.giant{grid-column:span 1}
+    .hero h1{font-size:2rem}
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="storm-bg"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="llama">🦙</div>
+  <h1>Mya's World</h1>
+  <div class="subtitle">// Fortnite Edition // Powered by Vistamations</div>
+  <div class="players">
+    <span>👑 Mya</span> &amp; <span>👑 Dad (Pete)</span>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker">
+    🎮 VICTORY ROYALE INCOMING &nbsp;✦&nbsp; LLAMA SPOTTED &nbsp;✦&nbsp; BATTLE BUS DEPARTING &nbsp;✦&nbsp; STORM CLOSING IN &nbsp;✦&nbsp; CHUG JUG READY &nbsp;✦&nbsp; NEW EMOTE UNLOCKED &nbsp;✦&nbsp;
+    🎮 VICTORY ROYALE INCOMING &nbsp;✦&nbsp; LLAMA SPOTTED &nbsp;✦&nbsp; BATTLE BUS DEPARTING &nbsp;✦&nbsp; STORM CLOSING IN &nbsp;✦&nbsp; CHUG JUG READY &nbsp;✦&nbsp; NEW EMOTE UNLOCKED &nbsp;✦&nbsp;
+  </div>
+</div>
+
+<!-- BATTLE PASS -->
+<div class="battle-pass">
+  <div class="bp-label"><span>Battle Pass Progress</span><span id="bpLevel">Level 1</span></div>
+  <div class="bp-bar"><div class="bp-fill" id="bpFill" style="width:15%"></div></div>
+</div>
+
+<!-- BENTO GRID -->
+<div class="bento" id="bentoGrid">
+  <!-- Static cards (loaded immediately) -->
+  <div class="bento-card wide">
+    <span class="card-tag tag-fortnite">Fortnite</span>
+    <h2>🦙 Supply Llama Spotted!</h2>
+    <p>Mya and Dad's favorite Fortnite moments. Drop in, grab the loot, and build something amazing together. This is our Victory Royale headquarters.</p>
+  </div>
+
+  <div class="bento-card">
+    <span class="card-tag tag-mya">Mya's Picks</span>
+    <h2>🎨 Favorite Skins</h2>
+    <p>Loading Mya's favorite Fortnite skins and cosmetics from the Item Shop...</p>
+  </div>
+
+  <div class="bento-card">
+    <span class="card-tag tag-dad">Dad's Builds</span>
+    <h2>🏗️ Creative Mode</h2>
+    <p>Pete's Fortnite Creative builds and island codes. Engineering meets gaming — structured chaos.</p>
+  </div>
+
+  <div class="bento-card tall">
+    <span class="card-tag tag-game">Live</span>
+    <h2>🎯 Drop Spot</h2>
+    <p>Today's featured landing zone. Where we're dropping next match.</p>
+    <div style="margin-top:1rem;padding:1rem;background:rgba(0,0,0,0.3);border-radius:8px;text-align:center">
+      <div style="font-size:3rem">🗺️</div>
+      <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--fortnite-gold);margin-top:0.5rem">TILTED TOWERS</div>
+    </div>
+  </div>
+
+  <div class="bento-card">
+    <span class="card-tag tag-art">Art</span>
+    <h2>🎨 Fan Art Wall</h2>
+    <p>Mya's Fortnite drawings and creations. Powered by Stefi's design magic and Adobe Firefly image generation.</p>
+  </div>
+
+  <div class="bento-card">
+    <span class="card-tag tag-game">Stats</span>
+    <h2>📊 Victory Stats</h2>
+    <p>Wins: Loading... | K/D: Loading... | Favorite Weapon: Loading...</p>
+  </div>
+</div>
+
+<!-- LOADER (infinite scroll trigger) -->
+<div class="loader" id="loader">
+  <span class="dot">Loading more awesome stuff...</span>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Mya's World is a Vistamations production &copy; 2026</p>
+  <p>Built with ❤️ by Dad (Big Brother) &amp; Design by Stefi</p>
+  <p><a href="mailto:info@vistamations.com">info@vistamations.com</a></p>
+</div>
+
+<script>
+// ─── Infinite Scroll ───
+const bentoGrid = document.getElementById('bentoGrid');
+const loader = document.getElementById('loader');
+let page = 0;
+let loading = false;
+
+const cardPool = [
+  { tag:'tag-fortnite', tagText:'Fortnite', title:'🎪 Party Royale', body:'Mya loves Party Royale mode — no fighting, just dancing and hanging out with friends. Best way to chill after school.' },
+  { tag:'tag-mya', tagText:'Mya\'s Faves', title:'💃 Best Emotes', body:'Flippin\' Sexy, Take the L, Orange Justice — Mya\'s top 3 emotes ranked. Which one should we unlock next?' },
+  { tag:'tag-dad', tagText:'Dad\'s Corner', title:'🔧 Loadout Lab', body:'Pete\'s weapon tier list and ideal loadout for duos. Scar + Pump + Minis = Victory Royale formula.' },
+  { tag:'tag-art', tagText:'Art Drop', title:'🖼️ New Wallpaper', body:'Fresh Fortnite-themed wallpaper generated by Adobe Firefly. Download in 4K for Mya\'s desktop.' },
+  { tag:'tag-game', tagText:'Update', title:'📦 Chapter 5 News', body:'Latest Fortnite patch notes, new weapons, map changes, and battle pass rewards. Stay ahead of the storm.' },
+  { tag:'tag-mya', tagText:'Mya\'s World', title:'🌟 Dream Locker', body:'If Mya could have ANY skin in the game... here\'s her dream locker setup. Dad\'s taking notes for the Item Shop.' },
+  { tag:'tag-fortnite', tagText:'Duos', title:'🤝 Duo Strategy', body:'Our winning duo strategy: Mya builds / Dad snipes. Communication tips, drop zone selection, and storm rotation.' },
+  { tag:'tag-dad', tagText:'Engineering', title:'⚡ Vistamations Tech', body:'How Dad\'s agent swarm monitors game updates, tracks Item Shop rotations, and alerts us when our favorite skins return.' },
+  { tag:'tag-art', tagText:'Stefi Design', title:'🎨 Concept Art', body:'Stefi\'s Fortnite-inspired UI concepts for Mya\'s World. Gradient purple-to-blue color scheme with neon accents.' },
+  { tag:'tag-game', tagText:'Event', title:'🎵 Live Event', body:'Fortnite live event countdown. Next concert or chapter-ending event — Mya and Dad watching together.' },
+  { tag:'tag-mya', tagText:'Memory', title:'📸 Screenshot Reel', body:'Our best Fortnite moments captured. First Victory Royale together, the 20-bomb game, and that clutch revive.' },
+  { tag:'tag-fortnite', tagText:'Battle Pass', title:'⭐ Tier 100 Grind', body:'Current Battle Pass progress tracker. How many levels until Tier 100? Mya\'s almost there!' },
+];
+
+// Generate cards for infinite scroll
+function generateCard(data, wide=false) {
+  const card = document.createElement('div');
+  card.className = 'bento-card' + (wide ? ' wide' : '');
+  card.innerHTML = `
+    <span class="card-tag ${data.tag}">${data.tagText}</span>
+    <h2>${data.title}</h2>
+    <p>${data.body}</p>
+  `;
+  return card;
+}
+
+// Load more cards
+function loadMore() {
+  if (loading) return;
+  loading = true;
+  loader.innerHTML = '<span class="dot">Loading more awesome stuff...</span>';
+
+  setTimeout(() => {
+    const count = 6 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < count; i++) {
+      const data = cardPool[Math.floor(Math.random() * cardPool.length)];
+      const wide = Math.random() > 0.7;
+      bentoGrid.appendChild(generateCard(data, wide));
+    }
+    page++;
+    loading = false;
+
+    // Update battle pass
+    const level = Math.min(100, 15 + page * 8);
+    document.getElementById('bpLevel').textContent = 'Level ' + level;
+    document.getElementById('bpFill').style.width = level + '%';
+
+    if (page >= 5) {
+      loader.innerHTML = '<span style="color:var(--fortnite-gold)">🏆 MAX BATTLE PASS — You reached Tier 100! 🏆</span>';
+    } else {
+      loader.innerHTML = '<span class="dot">Scroll for more...</span>';
+    }
+  }, 800 + Math.random() * 600);
+}
+
+// Intersection Observer for infinite scroll
+const observer = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting && page < 5) loadMore();
+}, { threshold: 0.1 });
+
+observer.observe(loader);
+
+// Load first batch immediately
+setTimeout(() => loadMore(), 500);
+</script>
+</body>
+</html>

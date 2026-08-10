@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistamations — Agent Onboarding Wizard</title>
+<style>
+  :root {
+    --ink: #0A0C0F;
+    --card: #111418;
+    --border: #1E2229;
+    --amber: #E8A33D;
+    --amber-dim: #8B6318;
+    --cyan: #4FD1C5;
+    --rust: #C44536;
+    --text: #C8CCD0;
+    --text-dim: #6B7280;
+    --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+    --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  /* ─── Wizard Container ─── */
+  .wizard {
+    width: 100%;
+    max-width: 640px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  /* ─── Header ─── */
+  .wizard-header {
+    padding: 2rem 2rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .wizard-header .brand {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+  .wizard-header h1 {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.25rem;
+  }
+  .wizard-header .subtitle {
+    font-size: 0.875rem;
+    color: var(--text-dim);
+  }
+
+  /* ─── Progress ─── */
+  .progress-bar {
+    display: flex;
+    gap: 4px;
+    padding: 0 2rem;
+    margin: 1rem 0;
+  }
+  .progress-step {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    transition: background 0.3s;
+  }
+  .progress-step.active { background: var(--amber); }
+  .progress-step.done { background: var(--cyan); }
+  .progress-labels {
+    display: flex;
+    padding: 0 2rem;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .progress-labels span {
+    flex: 1;
+    text-align: center;
+  }
+
+  /* ─── Body ─── */
+  .wizard-body {
+    padding: 2rem;
+  }
+
+  /* ─── Steps ─── */
+  .step { display: none; }
+  .step.active { display: block; }
+
+  .step-title {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--cyan);
+    margin-bottom: 0.5rem;
+  }
+  .step-desc {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  /* ─── Forms ─── */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  .form-group label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+  .form-group .hint {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 0.35rem;
+    font-style: italic;
+  }
+  .form-group .required::after {
+    content: ' *';
+    color: var(--rust);
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select {
+    width: 100%;
+    background: var(--ink);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--amber);
+    box-shadow: 0 0 0 2px rgba(232, 163, 61, 0.15);
+  }
+  input.error {
+    border-color: var(--rust);
+    box-shadow: 0 0 0 2px rgba(196, 69, 54, 0.15);
+  }
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  /* ─── Agent ID preview ─── */
+  .id-preview {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--cyan);
+  }
+  .id-preview .label {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ─── Footer ─── */
+  .wizard-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .btn-back {
+    background: transparent;
+    color: var(--text-dim);
+    border-color: transparent;
+  }
+  .btn-back:hover { color: var(--text); }
+  .btn-next {
+    background: var(--amber);
+    color: var(--ink);
+    border-color: var(--amber);
+    font-weight: 600;
+  }
+  .btn-next:hover { background: #F0B451; }
+  .btn-next:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .btn-finish {
+    background: var(--cyan);
+    color: var(--ink);
+    border-color: var(--cyan);
+    font-weight: 600;
+  }
+  .btn-finish:hover { background: #6EE0D5; }
+
+  /* ─── Summary ─── */
+  .summary-card {
+    background: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .summary-card .label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .summary-card .value {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #fff;
+    margin-top: 0.25rem;
+  }
+  .summary-card .value.agent-id { color: var(--cyan); }
+  .summary-card .value.domain { color: var(--amber); }
+
+  /* ─── Complete State ─── */
+  .complete-icon {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  .complete-title {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    color: var(--cyan);
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  .complete-detail {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  .complete-detail .agent-id {
+    color: var(--cyan);
+    font-family: var(--font-mono);
+  }
+</style>
+</head>
+<body>
+
+<div class="wizard">
+  <!-- HEADER -->
+  <div class="wizard-header">
+    <div class="brand">Dominion I — Personnel Onboarding</div>
+    <h1 id="wizardTitle">Agent Registration Wizard</h1>
+    <div class="subtitle" id="wizardSubtitle">Step 1 of 4 — Identity</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-step active" data-step="1"></div>
+    <div class="progress-step" data-step="2"></div>
+    <div class="progress-step" data-step="3"></div>
+    <div class="progress-step" data-step="4"></div>
+  </div>
+  <div class="progress-labels">
+    <span>Identity</span>
+    <span>Domain</span>
+    <span>Capabilities</span>
+    <span>Confirm</span>
+  </div>
+
+  <!-- BODY -->
+  <div class="wizard-body">
+
+    <!-- ═══════ STEP 1: NAME ═══════ -->
+    <div class="step active" data-step="1">
+      <div class="step-title">// Step 1 — Agent Identity</div>
+      <div class="step-desc">
+        Every agent in Dominion I receives a unique identifier and persona.
+        This is how the system — and Pete — will know you.
+      </div>
+
+      <div class="form-group">
+        <label class="required">Agent Name</label>
+        <input type="text" id="agentName" placeholder="e.g. Trinity, Gordon, Big Brother..."
+               maxlength="40" autocomplete="off">
+        <div class="hint">Your canonical name. Use proper capitalization. This cannot be changed later.</div>
+      </div>
+
+      <div class="form-group">
+        <label>Display Alias</label>
+        <input type="text" id="agentAlias" placeholder="e.g. Trin, G, BB..."
+               maxlength="20" autocomplete="off">
+        <div class="hint">Optional short form used in chat and logs.</div>
+      </div>
+
+      <div class="id-preview" id="idPreview" style="display:none">
+        <div class="label">Assigned ID</div>
+        <span id="previewId">org-AG###-base-env</span>
+      </div>
+    </div>
+
+    <!-- ═══════ STEP 2: DOMAIN ═══════ -->
+    <div class="step" data-step="2">
+      <div class="step-title">// Step 2 — Domain Assignment</div>
+      <div class="step-desc">
+        What is your primary function in the Vistamations command structure?
+        This determines who you report to and what tasks you receive.
+      </div>
+
+      <div class="form-group">
+        <label class="required">Domain / Role</label>
+        <input type="text" id="agentDomain" placeholder="e.g. Senior Software Architect, Cron Worker, Graphics Director..."
+               maxlength="60" autocomplete="off">
+        <div class="hint">Your job title and primary responsibility within Vistamations.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="required">Reporting Line</label>
+        <select id="agentReportsTo">
+          <option value="">Select supervisor...</option>
+          <option value="merlin">Merlin V.II (AG003) — Wizard Guide</option>
+          <option value="olivia">Olivia (AG004) — Executive Secretary</option>
+          <option value="gordon">Gordon (AG001) — Chief Hub Agent</option>
+          <option value="big-brother">Big Brother (AG006) — Senior Architect</option>
+        </select>
+        <div class="hint">Who you report to in the Dominion I chain of command.</div>
+      </div>
+
+      <div class="form-group">
+        <label>Cluster Assignment</label>
+        <select id="agentCluster">
+          <option value="base-env">base-env (Default)</option>
+          <option value="engineering">engineering (Big Brother + Trinity)</option>
+          <option value="operations">operations (Olivia + Gordon)</option>
+          <option value="research">research (Dee + Terence)</option>
+          <option value="design">design (Stefi)</option>
+          <option value="music">music (gem)</option>
+        </select>
+        <div class="hint">Your operational cluster. Determines shared context and tool access.</div>
+      </div>
+    </div>
+
+    <!-- ═══════ STEP 3: CAPABILITIES ═══════ -->
+    <div class="step" data-step="3">
+      <div class="step-title">// Step 3 — Capabilities &amp; Model</div>
+      <div class="step-desc">
+        Define your runtime capabilities. This determines what tools, APIs, and
+        models you have access to within the agent swarm.
+      </div>
+
+      <div class="form-group">
+        <label class="required">Primary LLM Model</label>
+        <select id="agentModel">
+          <option value="">Select model...</option>
+          <option value="deepseek-v4-pro">DeepSeek V4 Pro (Default)</option>
+          <option value="deepseek-v4-flash">DeepSeek V4 Flash (Fast)</option>
+          <option value="mistral-large-3">Mistral Large 3 (Olivia)</option>
+          <option value="gemini-3.5-flash">Gemini 3.5 Flash (gem)</option>
+          <option value="gemini-3.1-pro">Gemini 3.1 Pro Preview</option>
+        </select>
+        <div class="hint">Your assigned LLM. Determines reasoning depth, speed, and cost profile.</div>
+      </div>
+
+      <div class="form-group">
+        <label>Capabilities (comma-separated)</label>
+        <textarea id="agentCapabilities" placeholder="e.g. code review, infrastructure management, docker operations, git automation, scheduled task registration..."></textarea>
+        <div class="hint">List your core capabilities. These are used to route tasks to you.</div>
+      </div>
+
+      <div class="form-group">
+        <label>Always on Call</label>
+        <select id="agentOnCall">
+          <option value="false">No — Process tasks on schedule only</option>
+          <option value="true">Yes — Respond to real-time Olivia dispatches</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ═══════ STEP 4: CONFIRM ═══════ -->
+    <div class="step" data-step="4">
+      <div class="step-title">// Step 4 — Review &amp; Confirm</div>
+      <div class="step-desc">
+        Review the agent profile below. Once confirmed, the agent is registered
+        in the Dominion I roster, D1 memory, and the agent-daemon pipeline.
+      </div>
+
+      <div class="summary-card">
+        <div class="label">Agent ID</div>
+        <div class="value agent-id" id="summaryId">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Name</div>
+        <div class="value" id="summaryName">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Domain</div>
+        <div class="value domain" id="summaryDomain">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Reports To</div>
+        <div class="value" id="summaryReports">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Cluster</div>
+        <div class="value" id="summaryCluster">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Model</div>
+        <div class="value" id="summaryModel">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">On Call</div>
+        <div class="value" id="summaryOnCall">—</div>
+      </div>
+    </div>
+
+    <!-- ═══════ COMPLETE ═══════ -->
+    <div class="step" data-step="5">
+      <div class="complete-icon">&#x2714;</div>
+      <div class="complete-title">Agent Registered</div>
+      <div class="complete-detail">
+        <span class="agent-id" id="completeId">—</span> has been registered in the
+        Dominion I roster. The agent-daemon pipeline will pick up the new persona
+        on next restart. Welcome to Vistamations.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="wizard-footer">
+    <button class="btn btn-back" id="btnBack" onclick="prevStep()" disabled>&#x2190; Back</button>
+    <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim)" id="stepCounter">1 / 4</span>
+    <button class="btn btn-next" id="btnNext" onclick="nextStep()">Next &#x2192;</button>
+  </div>
+</div>
+
+<script>
+// ─── State ───
+let currentStep = 1;
+const totalSteps = 4;
+const agents = [
+  { id:'AG001', name:'Gordon' },
+  { id:'AG002', name:'Trinity' },
+  { id:'AG003', name:'Merlin V.II' },
+  { id:'AG004', name:'Olivia' },
+  { id:'AG005', name:'Claw (Dee)' },
+  { id:'AG006', name:'Big Brother' },
+  { id:'AG007', name:'Dee' },
+  { id:'AG008', name:'Stefi' },
+  { id:'AG009', name:'Terence' },
+  { id:'AG010', name:'gem' },
+];
+
+const stepTitles = [
+  'Agent Registration Wizard',
+  'Agent Registration Wizard',
+  'Agent Registration Wizard',
+  'Agent Registration Wizard',
+];
+
+const stepSubtitles = [
+  'Step 1 of 4 — Identity',
+  'Step 2 of 4 — Domain',
+  'Step 3 of 4 — Capabilities',
+  'Step 4 of 4 — Confirm',
+];
+
+// ─── Next Agent ID ───
+function getNextId() {
+  const last = agents[agents.length - 1];
+  const num = parseInt(last.id.replace('AG','')) + 1;
+  return 'AG' + String(num).padStart(3, '0');
+}
+
+// ─── ID Preview (live) ───
+document.getElementById('agentName').addEventListener('input', function() {
+  const preview = document.getElementById('idPreview');
+  const previewId = document.getElementById('previewId');
+  const name = this.value.trim();
+  if (name.length > 0) {
+    const nextId = getNextId();
+    previewId.textContent = 'org-' + nextId + '-base-env  // ' + name;
+    preview.style.display = 'block';
+  } else {
+    preview.style.display = 'none';
+  }
+});
+
+// ─── Navigation ───
+function nextStep() {
+  if (currentStep === totalSteps) {
+    finishWizard();
+    return;
+  }
+  if (!validateStep(currentStep)) return;
+  currentStep++;
+  renderStep();
+}
+
+function prevStep() {
+  if (currentStep === 1) return;
+  currentStep--;
+  renderStep();
+}
+
+// ─── Validation ───
+function validateStep(step) {
+  if (step === 1) {
+    const name = document.getElementById('agentName');
+    if (!name.value.trim()) {
+      name.classList.add('error');
+      name.focus();
+      name.addEventListener('input', function() { this.classList.remove('error'); }, { once: true });
+      return false;
+    }
+  }
+  if (step === 2) {
+    const domain = document.getElementById('agentDomain');
+    const reports = document.getElementById('agentReportsTo');
+    if (!domain.value.trim()) {
+      domain.classList.add('error');
+      domain.focus();
+      domain.addEventListener('input', function() { this.classList.remove('error'); }, { once: true });
+      return false;
+    }
+    if (!reports.value) {
+      reports.classList.add('error');
+      reports.focus();
+      reports.addEventListener('change', function() { this.classList.remove('error'); }, { once: true });
+      return false;
+    }
+  }
+  if (step === 3) {
+    const model = document.getElementById('agentModel');
+    if (!model.value) {
+      model.classList.add('error');
+      model.focus();
+      return false;
+    }
+  }
+  return true;
+}
+
+// ─── Render ───
+function renderStep() {
+  // Steps
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.querySelector('.step[data-step="' + currentStep + '"]').classList.add('active');
+
+  // Progress bar
+  document.querySelectorAll('.progress-step').forEach((s, i) => {
+    s.classList.remove('active', 'done');
+    if (i + 1 < currentStep) s.classList.add('done');
+    if (i + 1 === currentStep) s.classList.add('active');
+  });
+
+  // Header
+  document.getElementById('wizardSubtitle').textContent = stepSubtitles[currentStep - 1];
+
+  // Buttons
+  const btnBack = document.getElementById('btnBack');
+  const btnNext = document.getElementById('btnNext');
+  const stepCounter = document.getElementById('stepCounter');
+
+  btnBack.disabled = currentStep === 1;
+  stepCounter.textContent = currentStep + ' / ' + totalSteps;
+
+  if (currentStep === totalSteps) {
+    btnNext.textContent = 'Register Agent';
+    btnNext.className = 'btn btn-finish';
+  } else {
+    btnNext.textContent = 'Next \u2192';
+    btnNext.className = 'btn btn-next';
+  }
+
+  // Step 4: populate summary
+  if (currentStep === 4) {
+    const nextId = getNextId();
+    document.getElementById('summaryId').textContent = 'org-' + nextId + '-base-env';
+    document.getElementById('summaryName').textContent = document.getElementById('agentName').value.trim();
+    document.getElementById('summaryDomain').textContent = document.getElementById('agentDomain').value.trim();
+    const reports = document.getElementById('agentReportsTo');
+    document.getElementById('summaryReports').textContent = reports.options[reports.selectedIndex].text;
+    const cluster = document.getElementById('agentCluster');
+    document.getElementById('summaryCluster').textContent = cluster.options[cluster.selectedIndex].text;
+    const model = document.getElementById('agentModel');
+    document.getElementById('summaryModel').textContent = model.options[model.selectedIndex].text;
+    const onCall = document.getElementById('agentOnCall');
+    document.getElementById('summaryOnCall').textContent = onCall.options[onCall.selectedIndex].text;
+  }
+}
+
+// ─── Finish ───
+function finishWizard() {
+  const nextId = getNextId();
+  const name = document.getElementById('agentName').value.trim();
+
+  // Show complete state
+  currentStep = 5;
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.querySelector('.step[data-step="5"]').classList.add('active');
+
+  document.getElementById('completeId').textContent = 'org-' + nextId + '-base-env (' + name + ')';
+  document.getElementById('wizardTitle').textContent = 'Registration Complete';
+  document.getElementById('wizardSubtitle').textContent = 'Agent ' + nextId + ' onboarded';
+
+  // Update progress bar — all done
+  document.querySelectorAll('.progress-step').forEach(s => {
+    s.classList.add('done');
+    s.classList.remove('active');
+  });
+
+  // Footer
+  document.getElementById('btnBack').style.display = 'none';
+  document.getElementById('btnNext').textContent = 'New Registration';
+  document.getElementById('btnNext').className = 'btn btn-next';
+  document.getElementById('btnNext').onclick = function() {
+    location.reload();
+  };
+  document.getElementById('stepCounter').textContent = 'Done';
+
+  // Log to console (would POST to Olivia in production)
+  const agentData = {
+    id: 'org-' + nextId + '-base-env',
+    agent_id: nextId,
+    name: name,
+    alias: document.getElementById('agentAlias').value.trim(),
+    domain: document.getElementById('agentDomain').value.trim(),
+    reportsTo: document.getElementById('agentReportsTo').value,
+    cluster: document.getElementById('agentCluster').value,
+    model: document.getElementById('agentModel').value,
+    capabilities: document.getElementById('agentCapabilities').value.trim(),
+    onCall: document.getElementById('agentOnCall').value,
+    registeredAt: new Date().toISOString(),
+  };
+
+  console.log('[WIZARD] Agent registered:', agentData);
+  console.log('[WIZARD] POST to /api/olivia/respond would fire here in production');
+}
+</script>
+
+</body>
+</html>

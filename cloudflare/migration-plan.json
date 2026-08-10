@@ -1,0 +1,103 @@
+{
+  "report": {
+    "title": "Cloudflare D1 — Credential & Domain Status",
+    "date": "2026-08-09T09:52:42+10:00",
+    "domain": {
+      "name": "www.vistamations.com",
+      "status": "registered",
+      "registrar": "Cloudflare",
+      "nameservers": [
+        "amalia.ns.cloudflare.com",
+        "venkat.ns.cloudflare.com"
+      ],
+      "dns": {
+        "www": { "type": "A", "ips": ["172.67.136.91", "104.21.80.252"], "proxied": true },
+        "apex": { "type": "A", "ips": [], "status": "no A record — NS delegation only" }
+      },
+      "https": "not yet configured (no origin server wired)",
+      "action": "Add A record for apex → local IP or Cloudflare Tunnel; wire SSL via Cloudflare edge certs"
+    },
+    "d1": {
+      "database_name": "vistamations-agent-memory",
+      "schema": "8 tables: agents, agent_memory, sessions, music_plays, research_findings, vector_clusters + indexes",
+      "migration": "cloudflare/migrations/0001_initial_schema.sql — ready",
+      "worker": "cloudflare/src/worker.js — 7156 bytes, REST API",
+      "wrangler_config": "cloudflare/wrangler.toml — ready",
+      "setup_script": "cloudflare/setup-d1.ps1 — ready"
+    },
+    "credentials": {
+      "wrangler": "NOT AUTHENTICATED — run: npx wrangler login",
+      "blocked_by": "Browser OAuth to Cloudflare account",
+      "action_required": "Open terminal → npx wrangler login → authorize → then run: .\\cloudflare\\setup-d1.ps1 -Action setup"
+    },
+    "next_actions": [
+      "1. npx wrangler login (Pete — browser auth to Cloudflare)",
+      "2. .\\cloudflare\\setup-d1.ps1 -Action setup (creates DB, runs migration, deploys worker)",
+      "3. Configure vistamations.com apex A record → target origin",
+      "4. Enable Cloudflare SSL/TLS for HTTPS",
+      "5. Wire Cloudflare Pages or Workers for static site hosting"
+    ]
+  },
+  "migration_plan": {
+    "title": "4-Phase Migration to www.vistamations.com",
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Front End — Home Page Sync",
+        "status": "in_progress",
+        "deliverables": [
+          "Sync local index.html to vistamations.com root",
+          "Wire all static assets (CSS, JS, images, sub-pages)",
+          "Cloudflare Pages deployment or Workers static site",
+          "DNS: www + apex A records → Cloudflare Pages IP or Worker",
+          "SSL: Cloudflare edge certificate auto-provision",
+          "Verify: http://localhost matches https://www.vistamations.com"
+        ],
+        "current": "Wizard form created (agent-onboarding.html). Starting with name field — form validates, generates agent ID, reviews before submit."
+      },
+      {
+        "phase": 2,
+        "name": "Backend — API & Agent Pipeline",
+        "status": "planned",
+        "deliverables": [
+          "Deploy Olivia API behind Cloudflare (nginx → Cloudflare Tunnel)",
+          "Wire /api/olivia/* routes to vistamations.com/api/olivia/*",
+          "D1 agent memory deployed and connected",
+          "Gemini gem daemon live on vistamations.com",
+          "Google Docs reader cron wired"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "Wizard, Guide & Simulation Walkthrough",
+        "status": "planned",
+        "deliverables": [
+          "Multi-step onboarding wizard (4 forms: Identity, Domain, Capabilities, Confirm)",
+          "Guide: Merlin-assisted walkthrough with contextual help text",
+          "Simulation: test agent registration → daemon pickup → Olivia notification",
+          "Form validation with real-time ID preview",
+          "POST to /api/olivia/respond on completion",
+          "D1 write: new agent row in agents table"
+        ],
+        "current_form": {
+          "step1_name": "Complete — agent-onboarding.html",
+          "fields": ["Agent Name (required)", "Display Alias (optional)", "Live Agent ID preview showing org-AG###-base-env format"],
+          "validation": "Name required, generates next sequential ID (AG011+)",
+          "design": "Evidence Registry design system — #0A0C0F background, #E8A33D amber, #4FD1C5 cyan, JetBrains Mono + Inter fonts"
+        }
+      },
+      {
+        "phase": 4,
+        "name": "Full Simulation — Production Deploy",
+        "status": "planned",
+        "deliverables": [
+          "End-to-end test: wizard form → D1 write → agent-daemon pickup → Olivia report",
+          "Cloudflare Analytics and monitoring",
+          "SSL/TLS verified end-to-end",
+          "Custom domain email (olivia@vistamations.com?)",
+          "www.vistamations.com live with full agent portal"
+        ]
+      }
+    ]
+  }
+}

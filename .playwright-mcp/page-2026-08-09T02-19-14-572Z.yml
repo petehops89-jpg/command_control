@@ -1,0 +1,72 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]: 🦙
+    - heading "Mya's World" [level=1] [ref=e4]
+    - generic [ref=e5]: // Fortnite Edition // Powered by Vistamations
+    - generic [ref=e6]:
+      - generic [ref=e7]: 👑 Mya
+      - text: "&"
+      - generic [ref=e8]: 👑 Dad (Pete)
+  - generic [ref=e9]: 🎮 VICTORY ROYALE INCOMING ✦ LLAMA SPOTTED ✦ BATTLE BUS DEPARTING ✦ STORM CLOSING IN ✦ CHUG JUG READY ✦ NEW EMOTE UNLOCKED ✦ 🎮 VICTORY ROYALE INCOMING ✦ LLAMA SPOTTED ✦ BATTLE BUS DEPARTING ✦ STORM CLOSING IN ✦ CHUG JUG READY ✦ NEW EMOTE UNLOCKED ✦
+  - generic [ref=e12]:
+    - generic [ref=e13]: Battle Pass Progress
+    - generic [ref=e14]: Level 23
+  - generic [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]: Fortnite
+      - heading "🦙 Supply Llama Spotted!" [level=2] [ref=e20]
+      - paragraph [ref=e21]: Mya and Dad's favorite Fortnite moments. Drop in, grab the loot, and build something amazing together. This is our Victory Royale headquarters.
+    - generic [ref=e22]:
+      - generic [ref=e23]: Mya's Picks
+      - heading "🎨 Favorite Skins" [level=2] [ref=e24]
+      - paragraph [ref=e25]: Loading Mya's favorite Fortnite skins and cosmetics from the Item Shop...
+    - generic [ref=e26]:
+      - generic [ref=e27]: Dad's Builds
+      - heading "🏗️ Creative Mode" [level=2] [ref=e28]
+      - paragraph [ref=e29]: Pete's Fortnite Creative builds and island codes. Engineering meets gaming — structured chaos.
+    - generic [ref=e30]:
+      - generic [ref=e31]: Live
+      - heading "🎯 Drop Spot" [level=2] [ref=e32]
+      - paragraph [ref=e33]: Today's featured landing zone. Where we're dropping next match.
+      - generic [ref=e34]:
+        - generic [ref=e35]: 🗺️
+        - generic [ref=e36]: TILTED TOWERS
+    - generic [ref=e37]:
+      - generic [ref=e38]: Art
+      - heading "🎨 Fan Art Wall" [level=2] [ref=e39]
+      - paragraph [ref=e40]: Mya's Fortnite drawings and creations. Powered by Stefi's design magic and Adobe Firefly image generation.
+    - generic [ref=e41]:
+      - generic [ref=e42]: Stats
+      - heading "📊 Victory Stats" [level=2] [ref=e43]
+      - paragraph [ref=e44]: "Wins: Loading... | K/D: Loading... | Favorite Weapon: Loading..."
+    - generic [ref=e51]:
+      - generic [ref=e52]: Dad's Corner
+      - heading "🔧 Loadout Lab" [level=2] [ref=e53]
+      - paragraph [ref=e54]: Pete's weapon tier list and ideal loadout for duos. Scar + Pump + Minis = Victory Royale formula.
+    - generic [ref=e55]:
+      - generic [ref=e56]: Update
+      - heading "📦 Chapter 5 News" [level=2] [ref=e57]
+      - paragraph [ref=e58]: Latest Fortnite patch notes, new weapons, map changes, and battle pass rewards. Stay ahead of the storm.
+    - generic [ref=e59]:
+      - generic [ref=e60]: Mya's World
+      - heading "🌟 Dream Locker" [level=2] [ref=e61]
+      - paragraph [ref=e62]: If Mya could have ANY skin in the game... here's her dream locker setup. Dad's taking notes for the Item Shop.
+    - generic [ref=e63]:
+      - generic [ref=e64]: Fortnite
+      - heading "🎪 Party Royale" [level=2] [ref=e65]
+      - paragraph [ref=e66]: Mya loves Party Royale mode — no fighting, just dancing and hanging out with friends. Best way to chill after school.
+    - generic [ref=e67]:
+      - generic [ref=e68]: Engineering
+      - heading "⚡ Vistamations Tech" [level=2] [ref=e69]
+      - paragraph [ref=e70]: How Dad's agent swarm monitors game updates, tracks Item Shop rotations, and alerts us when our favorite skins return.
+    - generic [ref=e71]:
+      - generic [ref=e72]: Memory
+      - heading "📸 Screenshot Reel" [level=2] [ref=e73]
+      - paragraph [ref=e74]: Our best Fortnite moments captured. First Victory Royale together, the 20-bomb game, and that clutch revive.
+  - generic [ref=e45]: Scroll for more...
+  - generic [ref=e46]:
+    - paragraph [ref=e47]: Mya's World is a Vistamations production © 2026
+    - paragraph [ref=e48]: Built with ❤️ by Dad (Big Brother) & Design by Stefi
+    - paragraph [ref=e49]:
+      - link "info@vistamations.com" [ref=e50] [cursor=pointer]:
+        - /url: mailto:info@vistamations.com

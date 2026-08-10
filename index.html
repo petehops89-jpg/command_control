@@ -593,6 +593,19 @@
 <div class="sidebar-right">
   <div class="data-overview">
 
+    <!-- 🔴 Open PDF Bento Tile (20x10 ratio, micro button) -->
+    <div class="data-card" style="cursor:pointer;border-left:2px solid var(--accent2);position:relative;overflow:hidden;min-height:unset;padding:12px 14px"
+         onclick="window.open('pdf-toolkit.html','_blank')">
+      <svg style="position:absolute;width:100%;height:100%;top:0;left:0;opacity:0.08;pointer-events:none" viewBox="0 0 200 100">
+        <path d="M20,50 Q100,10 180,50" stroke="#A78BFA" stroke-width="1" fill="none"><animate attributeName="d" values="M20,50 Q100,10 180,50;M20,50 Q100,90 180,50;M20,50 Q100,10 180,50" dur="3s" repeatCount="indefinite"/></path>
+        <circle cx="100" cy="50" r="3" fill="#A78BFA"><animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/></circle>
+      </svg>
+      <div class="dc-label">Open PDF</div>
+      <div class="dc-value" style="font-size:11px">Toolkit</div>
+      <div class="dc-sub">Reader · Editor · OCR</div>
+      <div class="dc-bar" style="margin-top:6px"><div class="dc-bar-fill purple" style="width:100%"></div></div>
+    </div>
+
     <div class="data-card accent-cyan">
       <div class="dc-label">Publications</div>
       <div class="dc-value">4</div>

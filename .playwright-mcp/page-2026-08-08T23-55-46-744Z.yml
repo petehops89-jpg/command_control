@@ -1,0 +1,43 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: Dominion I — Personnel Onboarding
+    - heading "Agent Registration Wizard" [level=1] [ref=e5]
+    - generic [ref=e6]: Step 2 of 4 — Domain
+  - generic [ref=e12]:
+    - generic [ref=e13]: Identity
+    - generic [ref=e14]: Domain
+    - generic [ref=e15]: Capabilities
+    - generic [ref=e16]: Confirm
+  - generic [ref=e17]:
+    - text: "*"
+    - generic [ref=e35]:
+      - generic [ref=e36]: // Step 2 — Domain Assignment
+      - generic [ref=e37]: What is your primary function in the Vistamations command structure? This determines who you report to and what tasks you receive.
+      - generic [ref=e38]:
+        - generic [ref=e39]: Domain / Role *
+        - textbox "e.g. Senior Software Architect, Cron Worker, Graphics Director..." [ref=e40]
+        - generic [ref=e41]: Your job title and primary responsibility within Vistamations.
+      - generic [ref=e42]:
+        - generic [ref=e43]: Reporting Line *
+        - combobox [ref=e44]:
+          - option "Select supervisor..." [selected]
+          - option "Merlin V.II (AG003) — Wizard Guide"
+          - option "Olivia (AG004) — Executive Secretary"
+          - option "Gordon (AG001) — Chief Hub Agent"
+          - option "Big Brother (AG006) — Senior Architect"
+        - generic [ref=e45]: Who you report to in the Dominion I chain of command.
+      - generic [ref=e46]:
+        - generic [ref=e47]: Cluster Assignment
+        - combobox [ref=e48]:
+          - option "base-env (Default)" [selected]
+          - option "engineering (Big Brother + Trinity)"
+          - option "operations (Olivia + Gordon)"
+          - option "research (Dee + Terence)"
+          - option "design (Stefi)"
+          - option "music (gem)"
+        - generic [ref=e49]: Your operational cluster. Determines shared context and tool access.
+    - text: "*"
+  - generic [ref=e29]:
+    - button "← Back" [ref=e30] [cursor=pointer]
+    - generic [ref=e31]: 2 / 4
+    - button "Next →" [active] [ref=e32] [cursor=pointer]
