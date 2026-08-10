@@ -20,6 +20,7 @@
   <button data-tab="video">&#x1F3AC; Video</button>
   <button data-tab="torrent">&#x2B07; Torrent</button>
   <button data-tab="download">&#x1F4E5; Download</button>
+  <button data-tab="agents">&#x1F916; Agents</button>
   <button data-tab="settings">&#x2699; Settings</button>
 </div>
 
@@ -248,6 +249,64 @@
     </div>
   </div>
 
+  <!-- ═══════ AGENTS TAB ═══════ -->
+  <div class="tab-content" id="tab-agents">
+    <div class="agent-ui">
+      <!-- Channel sidebar -->
+      <div class="agent-sidebar">
+        <div class="sidebar-header">Dominion I</div>
+        <div class="agent-channels" id="agentChannels">
+          <button class="agent-channel active" data-agent="gordon">
+            <span class="ch-id">AG001</span>
+            <span class="ch-name">Gordon</span>
+          </button>
+          <button class="agent-channel" data-agent="trinity">
+            <span class="ch-id">AG002</span>
+            <span class="ch-name">Trinity</span>
+          </button>
+          <button class="agent-channel" data-agent="merlin">
+            <span class="ch-id">AG003</span>
+            <span class="ch-name">Merlin V.II</span>
+          </button>
+          <button class="agent-channel" data-agent="olivia">
+            <span class="ch-id">AG004</span>
+            <span class="ch-name">Olivia</span>
+          </button>
+          <button class="agent-channel" data-agent="claw">
+            <span class="ch-id">AG005</span>
+            <span class="ch-name">Claw</span>
+          </button>
+          <button class="agent-channel" data-agent="bigbrother">
+            <span class="ch-id">AG006</span>
+            <span class="ch-name">Big Brother</span>
+          </button>
+          <button class="agent-channel" data-agent="dee">
+            <span class="ch-id">AG007</span>
+            <span class="ch-name">Dee</span>
+          </button>
+          <button class="agent-channel" data-agent="stefi">
+            <span class="ch-id">AG008</span>
+            <span class="ch-name">Stefi</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat area -->
+      <div class="agent-chat">
+        <div class="chat-header" id="chatHeader">
+          <span class="ch-agent-id">AG001</span>
+          <span class="ch-agent-title">Gordon</span>
+          <span class="ch-agent-role">Chief Hub Agent</span>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-row">
+          <input type="text" class="input" id="chatInput" placeholder="Type a message..." autocomplete="off">
+          <button class="btn accent" id="chatSendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══════ SETTINGS TAB ═══════ -->
   <div class="tab-content" id="tab-settings">
     <div class="settings-grid">
@@ -331,6 +390,7 @@
 <script src="js/video.js"></script>
 <script src="js/torrent.js"></script>
 <script src="js/download.js"></script>
+<script src="js/agent-chat.js"></script>
 <script src="js/settings.js"></script>
 
 </body>

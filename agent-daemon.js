@@ -54,6 +54,18 @@ const PERSONAS = {
     name: 'Stefi',
     reply: function () { return 'Dashboard design progressing. Journey path bezier arc sketched. Agent card gradients refined.'; },
   },
+  terence: {
+    name: 'Terence',
+    reply: function () {
+      const replies = [
+        'Cluster analysis complete. Five domains mapped with clear boundaries. The music-knowledge cluster is still forming — expect boundary refinement over the next 3-4 sessions. Metacognition audit shows clean reasoning chains across the agent swarm. No circular logic detected.',
+        'Been mapping the vector space. Interesting cluster forming around neo-classical shred — tight, well-defined, high cosine similarity within. The infrastructure cluster is stable but could split: Docker patterns vs. cron patterns are drifting apart.',
+        'MCP tool belt: n8n-mcp has 525 nodes, 263 AI tools. Worth exploring the LangChain and vector search connectors. They would slot into the memory-systems cluster. Permission to investigate?',
+        'Metacognition watch: just flagged a potential assumption gap in the scheduled task architecture. We assume AtLogOn fires reliably — but it does not. Good catch by Big Brother. Adding to the reasoning graph.',
+      ];
+      return replies[Math.floor(Math.random() * replies.length)];
+    },
+  },
 };
 
 // ─── Olivia interprets Pete's message, decides which agents to ask ───
@@ -65,6 +77,7 @@ const AGENT_KEYWORDS = {
   'big brother': ['big brother','code','review','algorithm','optimise','infrastructure','architect','debug','report','stage','plan','oversight'],
   dee:        ['dee','cron','publish','scrape','research','monitor','post','webhook','report','schedule','quick'],
   stefi:      ['stefi','steffi','design','ui','layout','bento','dashboard','branding','icon','illustration','animation','svg','visual','graphic','stitch'],
+  terence:    ['terence','openclaw','think tank','metacognition','cluster','vector','mapping','boundary','centroid','cosine','synthesis','idea','concept','framework','philosophy','reasoning'],
   // Meta keywords — if Pete mentions these, ask everyone
   all:        ['everyone','all agents','everybody','briefing','sitrep','full report'],
 };

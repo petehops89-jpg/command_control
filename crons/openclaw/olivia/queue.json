@@ -214,5 +214,14 @@
     "assignedAt": "2026-08-08T15:50:55.540Z",
     "status": "done",
     "responseId": "RESP-0009"
+  },
+  {
+    "taskId": "TASK-0025",
+    "agent": "olivia",
+    "message": "Terence, whats your cluster map looking like?",
+    "from": "Pete",
+    "assignedAt": "2026-08-08T18:36:20.062Z",
+    "status": "done",
+    "responseId": "RESP-0006"
   }
 ]

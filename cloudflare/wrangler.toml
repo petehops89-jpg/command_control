@@ -1,0 +1,27 @@
+# Vistamations — Cloudflare Workers + D1 Configuration
+# Agent memory database, cron triggers, and vector-adjacent storage
+# Name: vistamations-agent-memory
+
+name = "vistamations-agent-memory"
+main = "src/worker.js"
+compatibility_date = "2026-08-09"
+
+# D1 Database — persistent agent memory, session state, play tracking
+[[d1_databases]]
+binding = "AGENT_DB"
+database_name = "vistamations-agent-memory"
+database_id = ""  # filled after `wrangler d1 create`
+
+# Cron triggers for periodic agent tasks
+[triggers]
+crons = []
+
+# Environment variables (non-secret)
+[vars]
+PROJECT_NAME = "Vistamations"
+PROJECT_DOMAIN = "vistamations-music"
+
+# Secrets (set via wrangler secret put)
+# GOOGLE_API_KEY — Gemini access
+# GOOGLE_GENAI_USE_ENTERPRISE — Enterprise mode flag
+# OLIVIA_API_URL — Command portal endpoint for agent reporting

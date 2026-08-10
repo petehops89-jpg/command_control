@@ -1,6 +1,6 @@
 /* Vistamations Media Player — Main Orchestrator */
 (function () {
-  const TABS = ['audio', 'video', 'torrent', 'download', 'settings'];
+  const TABS = ['audio', 'video', 'torrent', 'download', 'agents', 'settings'];
   let activeTab = 'audio';
 
   window.MP = {
@@ -38,6 +38,7 @@
     if (name === 'video' && window.VideoModule && window.VideoModule.onActivate) window.VideoModule.onActivate();
     if (name === 'torrent' && window.TorrentModule && window.TorrentModule.onActivate) window.TorrentModule.onActivate();
     if (name === 'audio' && window.AudioModule && window.AudioModule.onActivate) window.AudioModule.onActivate();
+    if (name === 'agents' && window.AgentChat && window.AgentChat.onActivate) window.AgentChat.onActivate();
   }
 
   document.querySelectorAll('.app-tabs button').forEach(function (btn) {
