@@ -1,0 +1,14 @@
+
+API
+Zone ID
+c105e512d3dffce2854c60adcba41c72
+Account ID
+a3cfe4297f6a3fedf411ba7e7d6f2751
+Get your API token
+API documentation
+Advanced Actions
+Pause Cloudflare
+Remove from Cloudflare
+
+
+a3cfe4297f6a3fedf411ba7e7d6f2751

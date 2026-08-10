@@ -1,0 +1,66 @@
+================================================================================
+VISTAMATIONS - OPENCLAW SYSTEM MANUAL
+SUBJECT: PowerShell Telegram Comms & Claw Commands
+LOCATION: C:\vistamations-music\.vscode\pete\claw-telegram-instructions.txt
+DATE STAMP: [10/08/2026 7:25 PM]
+================================================================================
+
+This manual details how to command, test, and control the Claw Telegram bot directly from your VS Code PowerShell (pwsh) terminal.
+
+1. BASIC DIRECT COMMS (SENDING MESSAGES TO YOUR TELEGRAM)
+---------------------------------------------------------
+Use the OpenClaw message utility to send direct text alerts from your PowerShell terminal to your Telegram client:
+
+* Send via your raw Telegram User ID (Fast & Reliable):
+  openclaw message send --channel telegram --target "8561862929" --message "Claw: System check initiated. All systems green."
+
+* Send via your Telegram Username:
+  openclaw message send --channel telegram --target "@james_hooper1973" --message "Claw: Warning — 15:00 publication was missed and manually caught up."
+
+2. READING & POLLING TELEGRAM CHATS FROM PWSH
+---------------------------------------------
+You can inspect recent messages, read chat trajectories, or poll for responses directly from the console:
+
+* Read the last 10 messages from your Telegram chat:
+  openclaw message read --channel telegram --target "8561862929" --limit 10
+
+* Check active session states and channels:
+  openclaw sessions list
+
+* Tail live logs of the background gateway:
+  openclaw sessions tail
+
+3. TESTING PAIRING & SECURITY STATUS
+------------------------------------
+If you get access configuration issues, use these commands to verify that your identity is registered and approved:
+
+* Check paired devices and tokens:
+  openclaw devices list
+
+* View current allowFrom list (authorized senders):
+  Get-Content "C:\Users\peteh\.openclaw\credentials\telegram-default-allowFrom.json"
+
+* Approve a new pairing code:
+  openclaw pairing approve telegram <CODE>
+
+4. AUTOMATING SCRIPT ALERTS IN PWSH
+-----------------------------------
+You can wire Claw alerts into your custom PowerShell scripts (like cron triggers or watchdogs). 
+
+Example PowerShell snippet to trigger a Telegram alert if a process fails:
+```powershell
+# Alert claw on Telegram if nginx is down
+$NginxCheck = Test-Connection -ComputerName "localhost" -Port 80 -Quiet
+if (-not $NginxCheck) {
+    openclaw message send --channel telegram --target "8561862929" --message "⚠️ ALERT: Nginx on port 80 is unreachable! Triggering rebuild."
+}
+```
+
+5. SYSTEM CONTEXT VALUES
+------------------------
+- Channel: telegram
+- User ID: 8561862929
+- Username: @james_hooper1973
+- Target Group: * (Requires mention)
+- Default Model: deepseek/deepseek-v4-flash
+================================================================================

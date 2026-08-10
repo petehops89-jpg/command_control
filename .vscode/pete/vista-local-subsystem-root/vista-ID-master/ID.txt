@@ -1,0 +1,61 @@
+================================================================================
+VISTAMATIONS LEDGER & IDENTIFIER LOGIC
+SUBJECT: Pattern Logic of System Keys, ID Ledgers, and Schema Forms
+LOCATION: C:\vistamations-music\.vscode\pete\ID.txt
+DATE STAMP: [10/08/2026 8:12 PM]
+================================================================================
+
+1. REFORMED 4-VALUE VISTAMATIONS IDENTIFIERS
+--------------------------------------------
+We have upgraded our naming structures from a 3-value convention to a 4-value convention to support the new hybrid local-to-cloud topology.
+All file names, databases, credentials, configurations, and ledger keys must strictly conform to this machine-parsable 4-value structure:
+
+Format: org-system-category-item(no.)
+(Four values separated by exactly three hyphens)
+
+* DEFINITION OF COMPONENTS:
+  - org: Organization identifier. Locked to "vista" across all modules.
+  - system: The subsystem layer where the entity resides:
+    - "local" (Your local Windows/Docker sub-system)
+    - "cloud" (The Cloudflare serverless / VPS edge sub-system)
+  - category: The functional resource type:
+    - "agent" (Dominion I Agents AG001 to AG010)
+    - "storage" (R2, localStorage, file assets, disks)
+    - "db" (D1 SQLite, local JSON files, SQLite DBs)
+    - "comms" (Slack webhooks, Telegram APIs, emails)
+    - "cron" (Wrangler triggers, task schedulers)
+  - item(no.): The specific file name, task index, or resource label.
+
+* KEY IMPLEMENTATION EXAMPLES:
+  - vista-cloud-storage-config.json (Cloudflare R2 and domain settings)
+  - vista-local-storage-playlist.json (Local Media Centre playlist file)
+  - vista-local-agent-AG001 (Gordon's core local Docker orchestration container)
+  - vista-cloud-agent-AG004 (Olivia's central edge router running on Cloudflare Workers)
+  - vista-cloud-db-links.json (Cloudflare D1 SQL ledger syncing the Evidence Registry)
+  - vista-local-queue-task0047.json (Olivia's local pending file queue task)
+  - vista-cloud-comms-slackWebhook (The webhook credentials for enterprise Slack)
+
+2. SYSTEM MAP: TRINITY-QUAD HYBRID SUB-SYSTEM
+---------------------------------------------
+With the introduction of the Trinity-Core and Trinity-Quad VM topology, the Vistamations architecture is mathematically formalized as:
+
+System = Local Sub-System + Cloud Sub-System
+
+* TRINITY-QUAD CORE STRUCTURAL COMPONENTS:
+  - vista-local-agent-trinityCore: Local systems bridge running in Docker.
+  - vista-cloud-agent-trinityWorker: Edge computing layer running on Cloudflare Workers.
+  - vista-cloud-db-trinityD1: Serverless cloud database syncing state to local.
+  - vista-cloud-storage-trinityR2: High-capacity external S3-compatible cloud storage.
+
+3. OCCURRING LEDGER PATTERNS ACQUIRED TO DATE:
+----------------------------------------------
+* DOMINIONS (vista-system-dominion-DOM###):
+  - vista-local-dominion-DOM001: Foundation (Nginx, App, Redis, Prometheus, local OpenClaw)
+  - vista-cloud-dominion-DOM002: Knowledge (Edge publishing, Cloudflare D1, links archive)
+  - vista-local-dominion-DOM003: Media (Root-level media-player.html, playlists, skins)
+  - vista-cloud-dominion-DOM004: Expansion (Cloud agent workers, gcloud endpoints, DNS)
+  - vista-cloud-dominion-DOM005: Corporation (Slack audit channels, business email info@)
+
+* ACTIVE PROTOCOLS (vista-system-protocol-xCode):
+  - vista-local-protocol-xinitiate: The mandatory Review-Validate-Verify-Confirm sequence.
+================================================================================

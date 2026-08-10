@@ -1,0 +1,458 @@
+worker cron job d1 storage, 4.30pm everyday, send email with info@vistamations.com - 10 part series of cloudflare edge, 10 day course
+
+
+
+
+
+Hide reasoning
+
+The user wants to create a Worker with a cron job that runs at 4:30 PM every day, uses D1 storage, and sends an email from info@vistamations.com for a 10-part series / 10-day course about Cloudflare edge.
+
+
+
+Let me break down what's needed:
+
+
+
+A Worker with a cron trigger (4:30 PM every day)
+
+D1 database binding (to track which day/part of the course)
+
+Email sending capability (from info@vistamations.com)
+
+A 10-part series of Cloudflare edge content (10-day course)
+
+Let me search for relevant documentation on Workers cron triggers, D1, and email sending options.
+
+
+
+Let me search for the relevant docs and also check what's available on the account.Let me analyze the request. The user wants:
+
+
+
+A Worker with a cron job
+
+D1 storage
+
+Runs at 4:30pm everyday
+
+Sends email with info@vistamations.com
+
+A 10-part series about Cloudflare Edge
+
+A 10-day course
+
+So this is a 10-day email course about Cloudflare Edge, sending one email per day at 4:30pm, with content stored in D1.
+
+
+
+I found that Cloudflare now has a native Email Sending service (public beta as of April 2026) using env.EMAIL.send(). This is better than Resend since it's native. However, it requires the Workers paid plan. Let me note that.
+
+
+
+Let me also note: the cron is in UTC. "4:30pm everyday" - I need to clarify the timezone. I'll assume UTC but mention it. Actually, let me just build it with a configurable approach and note the timezone.
+
+
+
+Let me build this project. I'll create:
+
+
+
+wrangler.jsonc - config with cron trigger, D1 binding, email binding
+
+src/index.js - the Worker code with scheduled handler
+
+schema.sql - D1 schema with the 10 course lessons
+
+README.md - instructions
+
+Let me think about the cron expression. "4:30pm everyday" - cron format is minute hour day month weekday. So 30 16 \* \* \* would be 4:30pm UTC. But the user might be in a different timezone. I'll note this and make it configurable.
+
+
+
+Let me think about the email service. The native Cloudflare Email Sending is in public beta and requires Workers paid plan. Since this is a Self-Serve Free user, they might not have the paid plan. Let me offer both options - native Email Sending (recommended) and Resend as an alternative. Actually, let me just build with the native one and note the requirement, and mention Resend as fallback.
+
+
+
+Actually, let me reconsider. The user is on a free plan. Email Sending requires the Workers paid plan ($5/month). I should mention this. But I'll build the code to use the native Email Sending binding since it's the cleanest, and note the requirement + Resend alternative.
+
+
+
+Let me build the project files now. I'll create a complete, well-structured project.
+
+
+
+Let me think about the D1 schema:
+
+
+
+A lessons table with: id, day\_number (1-10), title, content (HTML), subject
+
+A subscribers table: id, email, subscribed\_at, current\_day, status
+
+A progress table or tracking: subscriber\_id, day, sent\_at
+
+Actually, for a simple 10-day course, let me keep it focused:
+
+
+
+lessons table: day (1-10), title, subject, html\_content, text\_content
+
+subscribers table: email, current\_day, status (active/completed), created\_at
+
+The cron job runs daily at 4:30pm, finds all active subscribers, sends them their next lesson, and increments their current\_day.
+
+
+
+Let me write the 10 lessons about Cloudflare Edge as actual content. This is a "10 part series of cloudflare edge, 10 day course."
+
+
+
+Let me create the lessons content. I'll write 10 lessons covering:
+
+
+
+Introduction to the Cloudflare Edge
+
+Workers - Serverless at the Edge
+
+D1 - SQL Database at the Edge
+
+KV - Key-Value Storage
+
+R2 - Object Storage
+
+Durable Objects - Stateful Edge Computing
+
+Queues - Asynchronous Messaging
+
+Cron Triggers - Scheduled Tasks
+
+Email Service - Sending \& Receiving
+
+Putting It All Together - Building Full-Stack Edge Apps
+
+Let me write good content for each. This will be a substantial file but valuable.
+
+
+
+Let me build all the files now.
+
+
+
+
+
+See thinking
+
+Agent
+
+I'll research the key pieces — Workers cron triggers, D1, and email sending options on Cloudflare — then build this for you.I have everything I need. Here's the plan: a Worker with a cron trigger (daily at 4:30pm), a D1 database storing the 10 lessons and subscriber progress, and Cloudflare's native Email Sending to deliver each lesson. Let me build the full project.Now the Worker code that ties it all together — the scheduled handler, email sending, and subscription management endpoints.Now let me export the project so you can clone it and deploy it yourself.Your code is ready — use the Copy clone command button on the card to grab the repo before it expires (\~36 hours), then push it to your own git provider.
+
+
+
+What I built
+
+A complete Cloudflare Edge 10-Day Course Worker that:
+
+
+
+Runs on a cron trigger at 30 16 \* \* \* (4:30pm UTC every day)
+
+Stores lessons + subscriber progress in D1 (SQLite at the edge)
+
+Sends each daily lesson via Cloudflare Email Service from info@vistamations.com
+
+Tracks delivery — each subscriber gets one lesson per day, advancing through all 10, then is marked complete
+
+The 10-part series
+
+Introduction to the Cloudflare Edge
+
+Workers — Serverless at the Edge
+
+D1 — SQL Database at the Edge
+
+KV — Key-Value Storage at the Edge
+
+R2 — Object Storage at the Edge
+
+Durable Objects — Stateful Edge Computing
+
+Queues — Asynchronous Messaging at the Edge
+
+Cron Triggers — Scheduled Tasks at the Edge
+
+Email Service — Sending \& Receiving at the Edge
+
+Putting It All Together — Full-Stack Edge Apps
+
+Deploy steps
+
+npm install
+
+npm run db:create          # creates the D1 database — copy the ID into wrangler.jsonc
+
+npm run db:init            # loads the schema + all 10 lessons
+
+npm run deploy             # deploys the Worker with the cron trigger
+
+Then subscribe a learner:
+
+
+
+curl -X POST "https://cloudflare-edge-course.<your-subdomain>.workers.dev/subscribe?email=learner@example.com"
+
+Two things to set up before it sends email
+
+Email Service domain verification — vistamations.com must be a zone on your Cloudflare account and verified with the Email Service (SPF/DKIM/DMARC records). Email Sending is on the Workers paid plan — if you're on the free plan, the README explains how to swap in Resend instead (same Worker logic, just a different send call).
+
+D1 database ID — after npm run db:create, paste the printed database\_id into wrangler.jsonc replacing REPLACE\_WITH\_YOUR\_DATABASE\_ID.
+
+Want me to create the D1 database on your account now, or help you verify vistamations.com for email sending?
+
+
+
+
+
+
+
+cloudflare vistamations domain overview
+
+
+
+vistamations.com
+
+Monitor and configure how Cloudflare processes your web traffic with the services in the menu.
+
+
+
+Review Cloudflare fundamentals
+
+Add tag
+
+24 Hours
+
+7 Days
+
+30 Days
+
+
+
+
+
+8 AUGUST — 9 AUGUST
+
+
+
+Unique Visitors
+
+
+
+31
+
+
+
+Unique Visitors, - Use download data button to access chart data
+
+Total Requests
+
+
+
+75
+
+
+
+Total Requests, - Use download data button to access chart data
+
+Percent Cached
+
+
+
+49.76%
+
+
+
+Percent Cached, - Use download data button to access chart data
+
+Total Data Served
+
+
+
+4 MB
+
+
+
+Total Data Served, - Use download data button to access chart data
+
+Data Cached
+
+
+
+2 MB
+
+
+
+Data Cached, - Use download data button to access chart data
+
+View more analytics
+
+
+
+Download data
+
+Quick start guide
+
+
+
+Do not show again
+
+Your website or app is now behind Cloudflare. Requests to vistamations.com come to Cloudflare first, so we can stop attacks and speed up your web traffic.
+
+Get more out of your Free plan
+
+
+
+Customize and test your configuration
+
+
+
+Monitor traffic and threats
+
+
+
+Get notified
+
+
+
+DNS
+
+DNS Setup:
+
+Full
+
+DNS Records
+
+
+
+No Workers connected
+
+
+
+Build and deploy an application on Cloudflare’s global network, or connect an existing Worker to this domain.
+
+Manage AI bot access
+
+Block AI training bots
+
+
+
+Deploys a Cloudflare-managed rule to block bots that we categorize as AI training crawlers from visiting your site.
+
+Do not block (allow crawlers)
+
+See the list of bots and learn more
+
+Manage your robots.txt
+
+Set how Cloudflare manages your robots.txt file, which tells bots and crawlers how they should interact with your site.
+
+Content Signals Policy
+
+Learn more
+
+Quick Actions
+
+Markdown for Agents
+
+Pro plan
+
+Automatically convert HTML to Markdown for requests that use content negotiation headers (Accept: text/markdown)
+
+About Markdown for Agents
+
+
+
+
+
+Upgrade plan
+
+About Markdown for Agents
+
+Under Attack Mode
+
+Show visitors a non-interactive challenge when they visit your site.
+
+About Under Attack Mode
+
+
+
+Development Mode
+
+Temporarily bypass our cache. See changes to your origin server in realtime.
+
+About Development Mode
+
+
+
+
+
+Run speed test
+
+
+
+Configure caching
+
+Domain Registration
+
+Registrar:
+
+Cloudflare
+
+Status:
+
+Active
+
+Expires:
+
+July 1, 2027
+
+Manage domain registration
+
+Active Subscriptions
+
+Free plan
+
+Support Resources
+
+Documentation
+
+
+
+Community
+
+
+
+**<i>~~API~~</i>**
+
+**<i>~~Zone ID~~</i>**
+
+**<i>~~c105e512d3dffce2854c60adcba41c72~~</i>**
+
+**<i>~~Account ID~~</i>**
+
+**<i>~~a3cfe4297f6a3fedf411ba7e7d6f2751~~</i>**
+
+**<i>~~Get your API token~~</i>**
+
+**<i>~~API documentation~~</i>**
+
+**<i>~~Advanced Actions~~</i>**
+
+**<i>~~Pause Cloudflare~~</i>**
+
+**<i>~~Remove from Cloudflare~~</i>**
+
+
+
+
+

@@ -1,0 +1,38 @@
+================================================================================
+VISTAMATIONS COMMAND LIST
+SUBJECT: Console Commands & Agent Protocols
+LOCATION: C:\vistamations-music\.vscode\pete\vista-command-list.txt
+DATE STAMP: [10/08/2026 7:52 PM]
+================================================================================
+
+All manual inputs and console interactions on the Command Control and terminal interfaces must use the "x" prefix syntax instead of industry-standard backslash or slash characters.
+
+1. DIRECT COMMAND LIST
+----------------------
+* xinitiate [agent] [job/task]
+  - DESCRIPTION: The primary execution command for any agent job, workflow, or system task.
+  - FIRST PROTOCOL RULE: When you command "xinitiate", the assigned agent must strictly execute the four-stage execution loop:
+    1. REVIEW (Read the request and analyze the exact file boundaries).
+    2. VALIDATE (Check dependencies, permissions, and parameters on the local host).
+    3. VERIFY (Perform the action and inspect terminal outputs/test runs).
+    4. CONFIRM (Assert status in the local ledger, write file state, and report back).
+
+* xstatus [service]
+  - DESCRIPTION: Polls the real-time API status of the specified service, bypassing process-existence indicators.
+
+* xtelemetry
+  - DESCRIPTION: Forces an immediate 10-second AJAX update cycle on Command Control to synchronize status dots.
+
+* xsync
+  - DESCRIPTION: Triggers the OpenClaw /olivia/respond queue watcher to push and pull pending JSON tasks to disk.
+
+* xclear
+  - DESCRIPTION: Runs the message buffer compression algorithm, clearing logs down to the last 5 active items.
+
+* xpair [channel] [pairing-code]
+  - DESCRIPTION: Registers and approves an external client channel (such as Telegram) with OpenClaw.
+
+* xhelp
+  - DESCRIPTION: Prints this command reference list directly in the terminal interface.
+
+================================================================================
