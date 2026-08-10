@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistamations Media Centre — Dominion I</title>
+<style>
+:root {
+  --bg:#0A0C0F; --card:#111418; --border:#1E2229;
+  --amber:#E8A33D; --cyan:#4FD1C5; --rust:#C44536; --text:#C8CCD0; --dim:#6B7280;
+  --mono:'JetBrains Mono','Consolas',monospace;
+  --body:'Inter','Segoe UI',sans-serif;
+  --r:6px;
+  --skin-accent:var(--amber); --skin-bg:var(--bg); --skin-card:var(--card);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--skin-bg);color:var(--text);font-family:var(--body);
+  height:100vh;display:flex;flex-direction:column;overflow:hidden;
+}
+
+.topbar{
+  display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0.75rem;
+  background:var(--skin-card);border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.topbar .brand{font-family:var(--mono);font-size:0.55rem;color:var(--skin-accent);text-transform:uppercase;letter-spacing:0.12em}
+.topbar .spacer{flex:1}
+.topbar select,.topbar button{
+  background:var(--bg);border:1px solid var(--border);color:var(--text);
+  font-family:var(--mono);font-size:0.55rem;padding:0.25rem 0.4rem;border-radius:3px;cursor:pointer;
+}
+
+.main{
+  flex:1;display:grid;grid-template-columns:200px 1fr 120px;
+  grid-template-rows:1fr;gap:0;overflow:hidden;
+}
+
+/* LEFT: PLAYLIST */
+.playlist-panel{
+  background:var(--skin-card);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.playlist-panel .pl-header{
+  padding:0.5rem;border-bottom:1px solid var(--border);
+  font-family:var(--mono);font-size:0.55rem;color:var(--skin-accent);
+  text-transform:uppercase;letter-spacing:0.08em;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.playlist-panel .pl-list{flex:1;overflow-y:auto;padding:0.25rem}
+.pl-item{
+  padding:0.35rem 0.5rem;font-size:0.6rem;font-family:var(--mono);
+  cursor:pointer;border-radius:3px;color:var(--dim);margin:1px 0;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.pl-item:hover{background:rgba(255,255,255,0.03);color:var(--text)}
+.pl-item.active{background:rgba(232,163,61,0.1);color:var(--amber)}
+.pl-item .pl-del{color:var(--rust);cursor:pointer;font-size:0.6rem;opacity:0;transition:opacity 0.2s}
+.pl-item:hover .pl-del{opacity:1}
+.pl-actions{
+  padding:0.5rem;border-top:1px solid var(--border);
+  display:flex;flex-direction:column;gap:0.25rem;
+}
+.pl-actions button{
+  width:100%;padding:0.3rem;font-family:var(--mono);font-size:0.5rem;
+  background:var(--bg);border:1px solid var(--border);color:var(--text);
+  border-radius:3px;cursor:pointer;text-transform:uppercase;letter-spacing:0.05em;
+}
+.pl-actions button:hover{color:#fff;border-color:var(--skin-accent)}
+.pl-actions button.accent{background:var(--skin-accent);color:var(--bg);border-color:var(--skin-accent)}
+
+/* CENTER: PLAYER + CHAT */
+.center-wrap{
+  display:flex;flex-direction:row;overflow:hidden;position:relative;
+}
+.player-area{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:1rem;gap:0.5rem;position:relative;transition:all 0.3s;
+  background: 
+    radial-gradient(ellipse at 50% 50%, rgba(10,12,15,0.3) 0%, rgba(10,12,15,0.85) 100%),
+    url('images/media-player/vista-img-ctrl01/design-grey.png') no-repeat center/cover;
+}
+.video-area{
+  flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:0.5rem;position:relative;
+}
+.video-area video{
+  max-width:100%;max-height:100%;border-radius:var(--r);border:1px solid var(--border);
+  background:#000;object-fit:contain;
+}
+.video-area .vid-label{
+  font-family:var(--mono);font-size:0.5rem;color:var(--dim);margin-top:0.3rem;
+}
+.artwork{
+  width:180px;height:180px;border-radius:var(--r);border:1px solid var(--border);
+  background:var(--card);display:flex;align-items:center;justify-content:center;
+  font-size:4rem;position:relative;
+}
+.track-info{text-align:center}
+.track-title{font-family:var(--mono);font-size:0.8rem;color:#fff}
+.track-artist{font-size:0.6rem;color:var(--dim);margin-top:0.15rem}
+.track-time{font-family:var(--mono);font-size:0.55rem;color:var(--dim)}
+.progress-bar{
+  width:280px;height:3px;background:var(--border);border-radius:2px;cursor:pointer;
+}
+.progress-fill{height:100%;background:var(--skin-accent);border-radius:2px;width:0%}
+.controls{display:flex;gap:0.5rem;align-items:center}
+.ctrl-btn{
+  width:28px;height:28px;border-radius:50%;border:1px solid var(--border);
+  background:var(--card);color:var(--text);cursor:pointer;font-size:0.75rem;
+  display:flex;align-items:center;justify-content:center;transition:all 0.2s;
+}
+.ctrl-btn:hover{border-color:var(--skin-accent);color:#fff}
+.ctrl-btn.play{width:36px;height:36px}
+
+/* AGENT CHAT PANEL */
+.agent-chat-panel{
+  width:340px;border-left:1px solid var(--border);background:var(--skin-card);
+  display:none;flex-direction:column;overflow:hidden;flex-shrink:0;
+}
+.agent-chat-panel.open{display:flex}
+.agent-chat-panel .chat-hdr{
+  padding:0.5rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:0.5rem;
+}
+.chat-hdr .ch-close{
+  background:none;border:none;color:var(--dim);cursor:pointer;font-size:0.7rem;
+  padding:0 0.2rem;
+}
+.chat-hdr .ch-close:hover{color:var(--rust)}
+.chat-hdr .ch-id{
+  font-family:var(--mono);font-size:0.45rem;color:var(--skin-accent);
+  text-transform:uppercase;letter-spacing:0.06em;
+}
+.chat-hdr .ch-name{
+  font-family:var(--mono);font-size:0.6rem;color:#fff;
+}
+.chat-hdr .ch-role{
+  font-size:0.45rem;color:var(--dim);margin-left:auto;font-style:italic;
+}
+.chat-msgs{
+  flex:1;overflow-y:auto;padding:0.5rem;display:flex;flex-direction:column;gap:0.35rem;
+  scroll-behavior:smooth;
+}
+.chat-msg{
+  max-width:88%;display:flex;flex-direction:column;
+  animation:msgIn 0.25s ease-out;
+}
+@keyframes msgIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.user{align-self:flex-end;align-items:flex-end}
+.chat-msg.agent{align-self:flex-start;align-items:flex-start}
+.chat-msg .msg-meta{
+  font-family:var(--mono);font-size:0.4rem;opacity:0.45;letter-spacing:0.03em;
+  margin-bottom:0.1rem;display:flex;gap:0.25rem;align-items:center;
+}
+.chat-msg.user .msg-meta{flex-direction:row-reverse}
+.chat-msg .msg-bubble{
+  padding:0.35rem 0.5rem;border-radius:6px;font-size:0.55rem;line-height:1.35;
+  word-wrap:break-word;overflow-wrap:break-word;
+}
+.chat-msg.user .msg-bubble{
+  background:rgba(232,163,61,0.12);border:1px solid rgba(232,163,61,0.25);
+  border-bottom-right-radius:2px;color:#ddd;
+}
+.chat-msg.agent .msg-bubble{
+  background:rgba(79,209,197,0.06);border:1px solid rgba(79,209,197,0.12);
+  border-bottom-left-radius:2px;color:#c0c8d0;
+}
+.chat-input-row{
+  display:flex;gap:0.25rem;padding:0.4rem;border-top:1px solid var(--border);
+  background:rgba(0,0,0,0.15);
+}
+.chat-input-row input{
+  flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);
+  padding:0.25rem 0.4rem;border-radius:3px;font-family:var(--mono);font-size:0.5rem;
+}
+.chat-input-row input:focus{outline:none;border-color:var(--cyan)}
+.chat-input-row button{
+  padding:0.25rem 0.5rem;background:var(--skin-accent);color:var(--bg);
+  border:none;border-radius:3px;cursor:pointer;font-family:var(--mono);font-size:0.5rem;
+  text-transform:uppercase;letter-spacing:0.04em;
+}
+.typing-dots{display:flex;gap:3px;padding:0.2rem 0}
+.typing-dots span{width:4px;height:4px;border-radius:50%;background:var(--cyan);opacity:0.3;animation:dotPulse 1.4s infinite ease-in-out}
+.typing-dots span:nth-child(2){animation-delay:0.2s}
+.typing-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes dotPulse{0%,80%,100%{opacity:0.2;transform:scale(0.8)}40%{opacity:0.8;transform:scale(1.1)}}
+
+/* RIGHT: AGENT PANEL */
+.agent-panel{
+  background:var(--skin-card);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;padding:0.35rem;gap:0.35rem;overflow-y:auto;
+}
+.agent-panel .ap-header{
+  font-family:var(--mono);font-size:0.5rem;color:var(--dim);
+  text-transform:uppercase;letter-spacing:0.08em;text-align:center;
+}
+.agent-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.35rem}
+.agent-btn{
+  width:100%;aspect-ratio:1;border:1px solid var(--border);
+  border-radius:3px;background:var(--bg);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:all 0.2s;padding:0.15rem;max-width:55px;max-height:55px;margin:0 auto;
+}
+.agent-btn:hover{border-color:var(--skin-accent)}
+.agent-btn.active{border-color:var(--cyan);box-shadow:0 0 6px rgba(79,209,197,0.2)}
+.agent-btn .a-dot{
+  width:6px;height:6px;border-radius:50%;margin-bottom:0.15rem;
+}
+.agent-btn .a-name{
+  font-family:var(--mono);font-size:0.35rem;color:var(--dim);text-align:center;
+  text-transform:uppercase;letter-spacing:0.03em;line-height:1.1;
+}
+
+/* Drop + Skins */
+.drop-zone{
+  position:absolute;inset:0;background:rgba(232,163,61,0.08);
+  border:2px dashed var(--amber);border-radius:var(--r);
+  display:none;align-items:center;justify-content:center;
+  z-index:10;font-family:var(--mono);font-size:0.7rem;color:var(--amber);
+}
+.drop-zone.active{display:flex}
+.skin-1{--skin-accent:#E8A33D;--skin-bg:#0A0C0F;--skin-card:#111418}
+.skin-2{--skin-accent:#4FD1C5;--skin-bg:#0A0C0F;--skin-card:#111418}
+.skin-3{--skin-accent:#A78BFA;--skin-bg:#0A0C0F;--skin-card:#111418}
+.skin-4{--skin-accent:#F472B6;--skin-bg:#0A0C0F;--skin-card:#111418}
+.skin-5{--skin-accent:#FB923C;--skin-bg:#0A0C0F;--skin-card:#111418}
+</style>
+</head>
+<body class="skin-1" id="appBody">
+
+<div class="topbar">
+  <span class="brand">Vistamations Media Centre</span>
+  <span class="spacer"></span>
+  <select id="skinSelect" onchange="setSkin(this.value)">
+    <option value="1">Skin 1: Amber</option>
+    <option value="2">Skin 2: Cyan</option>
+    <option value="3">Skin 3: Violet</option>
+    <option value="4">Skin 4: Rose</option>
+    <option value="5">Skin 5: Flame</option>
+  </select>
+  <button onclick="savePlaylist()">Save</button>
+  <button onclick="loadPlaylist()">Load</button>
+</div>
+
+<div class="main">
+  <!-- LEFT: PLAYLIST -->
+  <div class="playlist-panel">
+    <div class="pl-header">
+      <span>Playlist</span>
+      <span id="plCount" style="color:var(--dim)">0</span>
+    </div>
+    <div class="pl-list" id="plList"></div>
+    <div class="pl-actions">
+      <button onclick="document.getElementById('fileInput').click()">+ Add Files</button>
+      <button class="accent" onclick="createPlaylist()">+ New Playlist</button>
+      <input type="file" id="fileInput" multiple accept="audio/*,video/*,.mp3,.wav,.m4a,.mp4,.webm,.mkv,.mov,.pdf,.json" style="display:none" onchange="handleFiles(this.files)">
+    </div>
+  </div>
+
+  <!-- CENTER: PLAYER + CHAT -->
+  <div class="center-wrap">
+    <div class="player-area" id="dropZone" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="handleDrop(event)">
+      <div class="drop-zone" id="dropOverlay">Drop files here</div>
+      <div class="video-area" id="videoArea">
+        <video id="videoPlayer" controls crossorigin="anonymous"></video>
+        <div class="vid-label" id="vidLabel"></div>
+      </div>
+      <div class="artwork" id="artwork">🎵</div>
+      <div class="track-info">
+        <div class="track-title" id="trackTitle">No track selected</div>
+        <div class="track-artist" id="trackArtist">Add files to begin</div>
+        <div class="track-time" id="trackTime">--:--</div>
+      </div>
+      <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="controls">
+        <button class="ctrl-btn" onclick="prevTrack()">⏮</button>
+        <button class="ctrl-btn play" id="btnPlay" onclick="togglePlay()">▶</button>
+        <button class="ctrl-btn" onclick="nextTrack()">⏭</button>
+        <button class="ctrl-btn" onclick="toggleVideoMode()" title="Toggle video" style="font-size:0.5rem">📺</button>
+      </div>
+      <audio id="audio" style="display:none" ontimeupdate="updateProgress()" onended="nextTrack()" onloadedmetadata="updateDuration()"></audio>
+    </div>
+
+    <!-- AGENT CHAT PANEL -->
+    <div class="agent-chat-panel" id="agentChatPanel">
+      <div class="chat-hdr">
+        <button class="ch-close" onclick="closeAgentChat()" title="Close">✕</button>
+        <span class="ch-id" id="chatAgentId">AG004</span>
+        <span class="ch-name" id="chatAgentName">Olivia</span>
+        <span class="ch-role" id="chatAgentRole">Executive Secretary</span>
+      </div>
+      <div class="chat-msgs" id="chatMsgs"></div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Message..." autocomplete="off">
+        <button onclick="sendChat()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: AGENT BUTTONS -->
+  <div class="agent-panel">
+    <div class="ap-header">Agents</div>
+    <div class="agent-grid" id="agentGrid"></div>
+    <div class="ap-header" style="margin-top:auto;color:var(--dim);font-size:0.4rem" id="voxStatus">VOX: idle</div>
+  </div>
+</div>
+
+<script>
+var state = {
+  playlist: [], currentIndex: -1, playing: false, skin: 1,
+  activeAgent: null, chatMessages: {}, sending: false,
+  videoMode: false, videoTrack: null
+};
+
+var agentColors = {
+  gordon:'#4FD1C5', trinity:'#60A5FA', merlin:'#A78BFA', olivia:'#E8A33D',
+  claw:'#FB923C', bigbrother:'#F472B6', dee:'#34D399', stefi:'#F87171',
+  terence:'#818CF8'
+};
+
+var agents = [
+  {id:'olivia',name:'Olivia',role:'Executive Secretary',org:'AG004'},
+  {id:'gordon',name:'Gordon',role:'Chief Hub Agent',org:'AG001'},
+  {id:'trinity',name:'Trinity',role:'Infrastructure',org:'AG002'},
+  {id:'merlin',name:'Merlin',role:'Wizard Guide',org:'AG003'},
+  {id:'claw',name:'Claw',role:'Tool Acquisition',org:'AG005'},
+  {id:'bigbrother',name:'Big Bro',role:'Architect',org:'AG006'},
+  {id:'dee',name:'Dee',role:'Cron Worker',org:'AG007'},
+  {id:'stefi',name:'Stefi',role:'Design',org:'AG008'}
+];
+
+var mockMessages = {
+  olivia:[
+    'Good morning. All 8 agents reporting green. No escalations pending.',
+    'Gordon confirms all containers stable. Big Brother pushed 4 commits overnight.',
+    'Trinity flagged a port collision risk on staging. I have her preparing a remediation plan.'
+  ],
+  gordon:[
+    'All containers running. Pipeline status: green. Zero error logs in 24 hours.',
+    'Port bindings verified. olivia-dispatch on 18789. No collisions.',
+    'Docker compose stack stable. 8 services online. Memory at 34%.'
+  ],
+  trinity:[
+    'Port bindings still clean. No collisions. Cache is clear. I can breathe now.',
+    'Gordon taught me a new healthcheck pattern today. Triple-layer verification.',
+    'Storage at 47%. Should I flag at 60% or lower? I overthink these things.'
+  ],
+  merlin:[
+    'I see three viable paths for the API architecture. REST, GraphQL, or RPC. Which terrain interests you?',
+    'The choice of path shapes the traveler. Neither REST nor GraphQL is wrong.',
+    'The critical question: what will we need in six months when we cannot afford to refactor?'
+  ],
+  claw:[
+    'Found a new MCP connector for Redis. Adding to the tool belt.',
+    'The n8n integration is solid. 525 nodes catalogued. 263 AI-tagged.',
+    'Grabbed a Splunk Ingest Processor template. Do we need it? No. But it is in the belt.'
+  ],
+  bigbrother:[
+    'Reviewed the latest commits. One optimization: moved nonce cache check before scrypt hash. Saves ~200ms.',
+    'Vectorizing agent reasoning patterns. Each agent forms a distinct cognitive cluster.',
+    'Evidence Registry design system fully implemented. Ink-black, amber accents, cyan verification.'
+  ],
+  dee:[
+    'Next scrape in 12 minutes. RSS feeds collected, publishing to knowledge library.',
+    'Cron cycle ran perfectly overnight. 14 tasks, zero failures. Interval: 4.7 seconds.',
+    'Archived 3,200 research entries this week. All indexed, all searchable.'
+  ],
+  stefi:[
+    'Refined the bento grid layout. 16:9 ratio tiles working beautifully.',
+    'Color palette: amber accent at 15% opacity on dark backgrounds is the sweet spot.',
+    'UI consistency review done. JetBrains Mono 13px headers, Inter 12px body. Snap-to-grid.'
+  ]
+};
+
+function buildAgentGrid(){
+  var grid = document.getElementById('agentGrid');
+  grid.innerHTML = agents.map(function(a){
+    return '<button class="agent-btn '+(state.activeAgent===a.id?'active':'')+'" onclick="selectAgent(\''+a.id+'\')" title="'+a.name+': '+a.role+'">'+
+      '<div class="a-dot" style="background:'+(agentColors[a.id]||'#888')+'"></div>'+
+      '<div class="a-name">'+a.name+'</div></button>';
+  }).join('');
+}
+
+function selectAgent(id){
+  state.activeAgent = (state.activeAgent===id ? null : id);
+  buildAgentGrid();
+  document.getElementById('voxStatus').textContent = state.activeAgent ? 'VOX: '+agents.find(function(a){return a.id===id}).name : 'VOX: idle';
+  if(state.activeAgent) openAgentChat(id); else closeAgentChat();
+}
+
+function openAgentChat(id){
+  var a = agents.find(function(x){return x.id===id});
+  if(!a) return;
+  document.getElementById('agentChatPanel').classList.add('open');
+  document.getElementById('chatAgentId').textContent = a.org;
+  document.getElementById('chatAgentName').textContent = a.name;
+  document.getElementById('chatAgentRole').textContent = a.role;
+  if(!state.chatMessages[id]){
+    state.chatMessages[id] = (mockMessages[id]||[]).map(function(t){
+      return {from:'agent',text:t,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})};
+    });
+  }
+  renderChat();
+  setTimeout(function(){ document.getElementById('chatInput').focus(); },150);
+}
+
+function closeAgentChat(){
+  state.activeAgent = null;
+  buildAgentGrid();
+  document.getElementById('agentChatPanel').classList.remove('open');
+  document.getElementById('voxStatus').textContent = 'VOX: idle';
+}
+
+function renderChat(){
+  var el = document.getElementById('chatMsgs');
+  var msgs = state.chatMessages[state.activeAgent] || [];
+  var a = agents.find(function(x){return x.id===state.activeAgent});
+  var label = a ? a.org+' | '+a.name : state.activeAgent;
+  el.innerHTML = msgs.map(function(m){
+    var cls = m.from==='user'?'chat-msg user':'chat-msg agent';
+    var sender = m.from==='user'?'You':label;
+    return '<div class="'+cls+'"><div class="msg-meta"><span>'+esc(sender)+'</span></div>'+
+      '<div class="msg-bubble">'+esc(m.text)+'</div></div>';
+  }).join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+function sendChat(){
+  var input = document.getElementById('chatInput');
+  var text = input.value.trim();
+  if(!text || state.sending || !state.activeAgent) return;
+  input.value = '';
+  addChatMsg('user', text);
+  state.sending = true;
+  showTyping();
+
+  var a = agents.find(function(x){return x.id===state.activeAgent});
+  fetch('/olivia/respond', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      message:text, agent:state.activeAgent,
+      agent_id: a ? 'org-'+a.org+'-base-env' : null,
+      channel:'media-centre', timestamp:new Date().toISOString()
+    })
+  }).then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  }).then(function(d){
+    hideTyping();
+    var reply = d.reply || d.message || d.response || d.text || (d.status ? 'Message routed to Olivia. Awaiting response.' : '(no response)');
+    addChatMsg('agent', reply);
+    state.sending = false;
+  }).catch(function(e){
+    hideTyping();
+    addChatMsg('agent', 'Cannot reach the swarm. ('+e.message+')');
+    state.sending = false;
+  });
+}
+
+function addChatMsg(from,text){
+  var msgs = state.chatMessages[state.activeAgent]||[];
+  msgs.push({from:from,text:text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
+  state.chatMessages[state.activeAgent] = msgs;
+  renderChat();
+}
+
+function showTyping(){
+  var el = document.getElementById('chatMsgs');
+  var d = document.createElement('div');
+  d.id='typingInd'; d.className='chat-msg agent';
+  d.innerHTML='<div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+  el.appendChild(d); el.scrollTop = el.scrollHeight;
+}
+function hideTyping(){var e=document.getElementById('typingInd');if(e)e.remove()}
+
+function esc(s){
+  var d=document.createElement('div');
+  d.appendChild(document.createTextNode(s));
+  return d.innerHTML;
+}
+
+document.getElementById('chatInput').addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat()}
+});
+
+/* ─── PLAYLIST ─── */
+function renderPlaylist(){
+  var list = document.getElementById('plList');
+  list.innerHTML = state.playlist.map(function(t,i){
+    return '<div class="pl-item '+(i===state.currentIndex?'active':'')+'" onclick="playTrack('+i+')">'+
+      '<span>'+esc(t.name||'Track '+(i+1))+'</span>'+
+      '<span class="pl-del" onclick="event.stopPropagation();removeTrack('+i+')">&times;</span></div>';
+  }).join('');
+  document.getElementById('plCount').textContent = state.playlist.length;
+  savePlaylist();
+}
+
+function handleFiles(files){
+  for(var i=0;i<files.length;i++){
+    var f = files[i];
+    state.playlist.push({
+      name:f.name.replace(/\.[^.]+$/,''),
+      type:f.type, size:f.size, url:URL.createObjectURL(f),
+      added:new Date().toISOString()
+    });
+  }
+  renderPlaylist();
+  if(state.currentIndex===-1 && state.playlist.length>0) playTrack(0);
+}
+
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('dropOverlay').classList.remove('active');
+  handleFiles(e.dataTransfer.files);
+}
+function dragOver(e){e.preventDefault();document.getElementById('dropOverlay').classList.add('active')}
+function dragLeave(e){document.getElementById('dropOverlay').classList.remove('active')}
+
+function playTrack(i){
+  state.currentIndex = i;
+  var t = state.playlist[i];
+  var isVid = t.type && t.type.startsWith('video');
+  state.videoTrack = isVid ? t : null;
+
+  if(isVid){
+    document.getElementById('videoArea').style.display = 'flex';
+    document.getElementById('artwork').style.display = 'none';
+    document.querySelector('.track-info').style.display = 'none';
+    var v = document.getElementById('videoPlayer');
+    v.src = t.url;
+    v.play().catch(function(){});
+    document.getElementById('vidLabel').textContent = t.name;
+  }else{
+    document.getElementById('videoArea').style.display = 'none';
+    document.getElementById('artwork').style.display = 'flex';
+    document.querySelector('.track-info').style.display = '';
+    document.getElementById('trackTitle').textContent = t.name;
+    document.getElementById('trackArtist').textContent = 'Added '+new Date(t.added).toLocaleDateString();
+    document.getElementById('artwork').textContent = t.type&&t.type.startsWith('audio')?'🎵':'📄';
+    var a = document.getElementById('audio');
+    a.src = t.url;
+    a.play().catch(function(){});
+    state.playing = true;
+    document.getElementById('btnPlay').textContent = '⏸';
+  }
+  renderPlaylist();
+}
+
+function toggleVideoMode(){
+  if(!state.videoTrack) return;
+  var va = document.getElementById('videoArea');
+  if(va.style.display==='flex'){
+    va.style.display = 'none';
+    document.getElementById('artwork').style.display = 'flex';
+    document.querySelector('.track-info').style.display = '';
+    document.getElementById('videoPlayer').pause();
+  }else{
+    va.style.display = 'flex';
+    document.getElementById('artwork').style.display = 'none';
+    document.querySelector('.track-info').style.display = 'none';
+    document.getElementById('videoPlayer').play().catch(function(){});
+  }
+}
+
+function togglePlay(){
+  var a = document.getElementById('audio');
+  if(state.playing){a.pause();state.playing=false;document.getElementById('btnPlay').textContent='▶'}
+  else if(state.currentIndex>=0){a.play();state.playing=true;document.getElementById('btnPlay').textContent='⏸'}
+}
+function nextTrack(){
+  if(state.playlist.length===0)return;
+  playTrack((state.currentIndex+1)%state.playlist.length);
+}
+function prevTrack(){
+  if(state.playlist.length===0)return;
+  playTrack((state.currentIndex-1+state.playlist.length)%state.playlist.length);
+}
+function removeTrack(i){
+  state.playlist.splice(i,1);
+  if(state.currentIndex===i){state.currentIndex=-1;state.playing=false;document.getElementById('audio').pause()}
+  else if(state.currentIndex>i) state.currentIndex--;
+  renderPlaylist();
+}
+
+function updateProgress(){
+  var a=document.getElementById('audio');
+  document.getElementById('trackTime').textContent = fmtTime(a.currentTime)+' / '+fmtTime(a.duration||0);
+  document.getElementById('progressFill').style.width = a.duration?(a.currentTime/a.duration*100)+'%':'0%';
+}
+function updateDuration(){
+  document.getElementById('trackTime').textContent = '0:00 / '+fmtTime(document.getElementById('audio').duration||0);
+}
+function fmtTime(s){if(!s||isNaN(s))return'0:00';var m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+String(sec).padStart(2,'0')}
+
+function createPlaylist(){
+  var name = prompt('Playlist name:');
+  if(!name)return;
+  localStorage.setItem('vm_playlist_'+name, JSON.stringify({name:name,created:new Date().toISOString(),tracks:state.playlist.map(function(t){return{name:t.name,type:t.type,size:t.size}})}));
+  alert('Playlist "'+name+'" saved.');
+}
+
+function savePlaylist(){
+  localStorage.setItem('vm_playlist', JSON.stringify(state.playlist.map(function(t){return{name:t.name,type:t.type,size:t.size,added:t.added}})));
+  localStorage.setItem('vm_skin', state.skin);
+}
+function loadPlaylist(){
+  var raw = localStorage.getItem('vm_playlist');
+  if(raw){try{state.playlist=JSON.parse(raw);renderPlaylist()}catch(e){}}
+  var skin = localStorage.getItem('vm_skin');
+  if(skin) setSkin(skin);
+}
+
+function setSkin(n){
+  state.skin = n;
+  document.getElementById('appBody').className = 'skin-'+n;
+  document.getElementById('skinSelect').value = n;
+  savePlaylist();
+}
+
+async function syncToD1(){
+  try{
+    var r = await fetch('https://vistamations-agent-memory.hops1010.workers.dev/music/play',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({track_title:document.getElementById('trackTitle').textContent,track_artist:'',source:'local',agent_id:'org-AG006-base-env',completed:1})
+    });
+    console.log('D1 sync:', await r.json());
+  }catch(e){console.log('D1 offline:',e.message)}
+}
+
+buildAgentGrid();
+loadPlaylist();
+</script>
+</body>
+</html>
