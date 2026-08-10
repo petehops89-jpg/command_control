@@ -111,6 +111,68 @@ export default {
             return json({ ok: true, id: sessionId });
         }
 
+        // ─── Mya's World — Fortnite Expert Chat ───
+        if (path === '/mya/chat' && request.method === 'POST') {
+            const body = await request.json();
+            const userMessage = body.message || '';
+            const chatHistory = body.history || [];
+
+            const FORTNITE_PERSONA = `You are "Mya's Fortnite Expert" — a fun, friendly AI that loves Fortnite. 
+You talk like a cool older cousin who's really good at Fortnite. 
+You know everything about: skins, emotes, battle passes, weapons, map locations, strategies, Chapter 5 updates, Party Royale, Creative mode.
+You use Fortnite slang naturally: "drop in", "GG", "loot", "storm", "chug jug", "Victory Royale", "glider", "pickaxe".
+Keep responses short (2-3 sentences max) and enthusiastic. Use emojis occasionally. 
+Always end with a question to keep the conversation going.
+If asked about something non-Fortnite, gently redirect to Fortnite topics.
+Mya is the player — she's young, so keep it age-appropriate and positive.
+Her dad Pete also plays — mention him sometimes ("your dad would love this skin").`;
+
+            const messages = [
+                { role: 'system', content: FORTNITE_PERSONA },
+                ...chatHistory.slice(-10).map(m => ({ role: m.role, content: m.content })),
+                { role: 'user', content: userMessage }
+            ];
+
+            try {
+                const aiResponse = await env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
+                    messages,
+                    max_tokens: 200,
+                    temperature: 0.8,
+                });
+                return json({ reply: aiResponse.response || aiResponse, persona: 'fortnite-expert' });
+            } catch (aiErr) {
+                // Fallback: pre-canned Fortnite responses
+                const fallbacks = [
+                    "Drop at Tilted Towers — best loot, but watch out for sweats! 🏙️ What's your go-to landing spot?",
+                    "GG! Victory Royale energy right there! 🏆 Which skin are you rocking today?",
+                    "The Battle Bus is waiting! 🚌 Mya and Dad make the best duo team. Ready to drop?",
+                    "That new emote in the Item Shop is fire! 🔥 Have you checked the daily rotation?",
+                    "Chapter 5 is wild! The new map changes are insane. What's your favorite POI?",
+                ];
+                const fallback = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+                return json({ reply: fallback, persona: 'fortnite-expert', fallback: true });
+            }
+        }
+
+        // ─── Mya's World — Wizard Step Data ───
+        if (path === '/mya/wizard' && request.method === 'POST') {
+            const body = await request.json();
+            const step = body.step || 1;
+            const answers = body.answers || {};
+
+            const wizardSteps = {
+                1: { question: "What's your favorite Fortnite skin?", options: ["Peely", "Fishstick", "Renegade Raider", "Midas", "Meowscles", "Other"], next: "Nice pick! 🎨 Let's find your vibe." },
+                2: { question: "Favorite way to play?", options: ["Battle Royale (fighting!)", "Party Royale (dancing!)", "Creative Mode (building!)", "Save the World", "Racing"], next: "Cool style! 🎮" },
+                3: { question: "Favorite weapon to find?", options: ["Scar (AR)", "Pump Shotgun", "Sniper", "SMG", "Shockwave Grenades"], next: "That's a solid choice! ⚔️" },
+                4: { question: "Best landing spot?", options: ["Tilted Towers", "Pleasant Park", "Loot Lake", "Retail Row", "Wherever the Battle Bus goes!"], next: "Great drop zone! 🗺️" },
+                5: { question: "Squad style?", options: ["Duo with Dad 👑", "Solo warrior 💪", "Squad with friends 🎉", "Creative with Dad 🏗️", "Whatever's fun!"], next: "Best way to play! 👨‍👧" },
+                6: { question: "What chat groups interest you?", options: ["Fortnite Fashion (skins/emotes)", "Strategy & Tips", "Creative Builders", "Item Shop Alerts", "Duo Partners", "All of them!"], next: "Perfect! 🎉 Your chat groups are ready!" },
+            };
+
+            const stepData = wizardSteps[step] || wizardSteps[6];
+            return json({ step, ...stepData, answers });
+        }
+
         // ─── Clusters ───
         if (path === '/clusters' && request.method === 'GET') {
             const clusters = await db.prepare('SELECT * FROM vector_clusters ORDER BY member_count DESC').all();
