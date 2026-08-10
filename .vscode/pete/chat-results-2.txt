@@ -101,5 +101,52 @@ ERROR FIXES DOCUMENTED IN CHAT-RESULTS.TXT (earlier today):
 
 ---
 
+---
+
+[10/08/2026 ~9:45PM] - COMPLETED: WORKTREE MERGE & FILE SYNC
+-------------------------------------------------------------
+* BEFORE (the problem):
+  - VS Code Explorer showed olivine-cabinet worktree (C:\vistamations-music\.kilo\worktrees\olivine-cabinet\)
+  - Windows File Explorer showed main repo (C:\vistamations-music\, branch: evidence-registry)
+  - These were two DIFFERENT folders with different files
+  - media-player.html existed only in main repo, agent-chat.js only in worktree
+
+* WHAT WE DID:
+  1. Committed 27 files from olivine-cabinet (agent-chat.js, cloudflare D1, personas, scripts, checklists)
+  2. Merged evidence-registry into olivine-cabinet (resolved 5 conflicts)
+  3. Merged olivine-cabinet back into evidence-registry (fast-forward)
+  4. Both branches now at commit 501d0e6, pushed to GitHub
+
+* RESULT:
+  - 7 of 8 key files now match between worktree and main repo
+  - agent-chat.js, player.css, index.html, main.js, nginx.conf, chat-results-2.txt, agent-daemon.js: ALL SYNCED
+  - Dockerfile: deleted in both (intentional)
+  - media-player.html (root level): exists as untracked file in main repo only — was never committed to git
+
+* NEXT: Cloudflare D1 + Worker deployment task
+
+---
+
+[10/08/2026 ~9:50PM] - IN PROGRESS: CLOUDFLARE D1 VM + WORKER DEPLOYMENT
+-------------------------------------------------------------------------
+* STATUS CHECK:
+  - Worker (worker.js): READY — 135 lines, REST API for agents/memory/music/research/sessions/clusters
+  - Schema (0001_initial_schema.sql): READY — 6 tables, 10 seed agents (AG001-AG010)
+  - wrangler.toml: READY — D1 + 3 KV namespaces + cron trigger configured
+  - setup-d1.ps1: READY — automated Create→Migrate→Deploy→Test pipeline
+  - Auth: CHECKING — need npx wrangler login (browser OAuth)
+
+* BLOCKER:
+  - Cloudflare Wrangler NOT authenticated yet
+  - Requires: npx wrangler login → opens browser → Pete logs into Cloudflare account
+  - After auth: .\cloudflare\setup-d1.ps1 -Action setup runs full deployment
+
+* MIGRATION PLAN (4 phases):
+  Phase 1: Front End — Home Page Sync to vistamations.com
+  Phase 2: Backend — Olivia API + D1 agent memory
+  Phase 3: Wizard & Agent Onboarding
+  Phase 4: Full Production Deploy
+
+
 END OF CHAT-RESULTS-2.TXT
 Recorded: 10/08/2026 by Big Brother (DeepSeek V4 Pro)

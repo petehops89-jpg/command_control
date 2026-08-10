@@ -10,29 +10,29 @@ compatibility_date = "2026-08-09"
 [[d1_databases]]
 binding = "AGENT_DB"
 database_name = "vistamations-agent-memory"
-database_id = ""  # filled after `wrangler d1 create`
+database_id = "6e916f3a-6f0d-48e0-ac1c-2a1d69e1b6b9"
 
-# ─── KV Namespaces — eventually-consistent, globally replicated key-value
-[[kv_namespaces]]
-binding = "HANDY_MAIL_KV"
-id = ""  # filled after `wrangler kv:namespace create`
-preview_id = ""
+# ─── KV Namespaces — deferred until after D1 is running
+# [[kv_namespaces]]
+# binding = "HANDY_MAIL_KV"
+# id = "FILL_AFTER_CREATE"
+# preview_id = "FILL_AFTER_CREATE"
+#
+# [[kv_namespaces]]
+# binding = "SESSION_KV"
+# id = "FILL_AFTER_CREATE"
+# preview_id = "FILL_AFTER_CREATE"
+#
+# [[kv_namespaces]]
+# binding = "MYA_KV"
+# id = "FILL_AFTER_CREATE"
+# preview_id = "FILL_AFTER_CREATE"
 
-[[kv_namespaces]]
-binding = "SESSION_KV"
-id = ""
-preview_id = ""
-
-[[kv_namespaces]]
-binding = "MYA_KV"
-id = ""
-preview_id = ""
-
-# ─── Cron triggers for periodic agent tasks
-[triggers]
-crons = [
-  { schedule = "*/5 * * * *", binding = "handyMailSessionGC" },
-]
+# ─── Cron triggers for periodic agent tasks (deferred — needs KV bindings first)
+# [triggers]
+# crons = [
+#   { schedule = "*/5 * * * *", binding = "handyMailSessionGC" },
+# ]
 
 # Environment variables (non-secret)
 [vars]

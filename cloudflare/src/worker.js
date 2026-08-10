@@ -10,6 +10,7 @@
 
 export default {
     async fetch(request, env) {
+        try {
         const url = new URL(request.url);
         const path = url.pathname;
         const db = env.AGENT_DB;
@@ -29,7 +30,7 @@ export default {
             const body = await request.json();
             await db.prepare(
                 'INSERT OR REPLACE INTO agents (id, agent_id, name, cluster, domain, persona_json, model, status, always_on_call, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime(\'now\'))'
-            ).bind(body.id, body.agent_id, body.name, body.cluster, body.domain, JSON.stringify(body.persona_json), body.model, body.status, body.always_on_call).run();
+            ).bind(body.id, body.agent_id, body.name, body.cluster, body.domain, JSON.stringify(body.persona_json ?? null), body.model, body.status, body.always_on_call ?? 0).run();
             return json({ ok: true, id: body.id });
         }
 
@@ -46,7 +47,7 @@ export default {
             const body = await request.json();
             await db.prepare(
                 'INSERT OR REPLACE INTO agent_memory (agent_id, memory_key, memory_value, memory_type, confidence, source, cluster_label, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, datetime(\'now\'))'
-            ).bind(agentId, body.memory_key, JSON.stringify(body.memory_value), body.memory_type || 'fact', body.confidence || 1.0, body.source, body.cluster_label).run();
+            ).bind(agentId, body.memory_key, JSON.stringify(body.memory_value), body.memory_type || 'fact', body.confidence || 1.0, body.source, body.cluster_label || null).run();
             return json({ ok: true, agent_id: agentId, key: body.memory_key });
         }
 
@@ -124,6 +125,9 @@ export default {
         }
 
         return json({ error: 'not found' }, 404);
+        } catch (e) {
+            return json({ error: e.message, stack: e.stack?.substring(0, 500) }, 500);
+        }
     }
 };
 
