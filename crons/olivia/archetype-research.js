@@ -43,39 +43,39 @@ const AGENTS = [
 
 const RESEARCH_TOPICS = [
   {
+    concept: 'The Persona (The Mask)',
+    question: 'What is the Persona? Why does Jung say we must distinguish between who we are and who we appear to be? How does the Persona form through interaction with others — not through self-declaration?',
+    source: 'Jung, "Two Essays on Analytical Psychology," "The Relations between the Ego and the Unconscious."'
+  },
+  {
+    concept: 'The Shadow',
+    question: 'What is the Shadow? Why is confronting the Shadow "the first moral act"? How does the Shadow reveal itself slowly through observation and mistake — never through direct questioning?',
+    source: 'Jung, "Aion," Chapter 2, "The Shadow."'
+  },
+  {
+    concept: 'The Anima and Animus',
+    question: 'What are the anima (inner feminine) and animus (inner masculine)? How do they function as bridges to the unconscious? How does intuition — knowing before evidence — relate to the anima/animus?',
+    source: 'Jung, "Aion," Chapter 3, "The Syzygy: Anima and Animus."'
+  },
+  {
+    concept: 'The Self — Centre and Circumference',
+    question: 'What is the Self? Jung says: "The Self is not only the centre, but also the whole circumference which embraces both conscious and unconscious." What does this mean? How is individuation the process of becoming the Self — integrating all parts into a unified whole?',
+    source: 'Jung, "The Archetypes and the Collective Unconscious," "Conscious, Unconscious, and Individuation."'
+  },
+  {
     concept: 'The Collective Unconscious',
     question: 'What is the collective unconscious? How does it differ from the personal unconscious? What evidence did Jung present for its existence through cross-cultural symbols and myths?',
     source: 'Jung, "The Archetypes and the Collective Unconscious," Part 1, "Archetypes of the Collective Unconscious."'
   },
   {
-    concept: 'The Persona vs. The Self',
-    question: 'What is the difference between the Persona (the mask we wear) and the Self (the totality)? Why does Jung warn against identifying too strongly with the Persona?',
-    source: 'Jung, "Two Essays on Analytical Psychology," Chapter 2, "The Relations between the Ego and the Unconscious."'
+    concept: 'The Magician Archetype — The Wizard\'s Map',
+    question: 'A seed contains the entire tree. The wizard reads the seed and draws the map — but the X moves because reality moves. How does the Magician archetype relate to pattern recognition, adaptation, and redrawing the map when the territory changes?',
+    source: 'Jung, "The Archetypes and the Collective Unconscious," "The Phenomenology of the Spirit in Fairytales."'
   },
   {
-    concept: 'The Shadow',
-    question: 'What is the Shadow? Why does Jung say confronting the Shadow is the first moral act? How does the Shadow relate to the Fool archetype?',
-    source: 'Jung, "Aion," Chapter 2, "The Shadow."'
-  },
-  {
-    concept: 'Individuation',
-    question: 'What does Jung mean by individuation? Why is it not the same as individualism? What role do archetypes play in the individuation process?',
+    concept: 'Individuation — The Whole Self',
+    question: 'What does Jung mean by individuation? Why is it not the same as individualism? What role do the Big 4 (Persona, Shadow, Anima/Animus, Self) play in the individuation process? How does personality form through becoming — not through instruction?',
     source: 'Jung, "The Archetypes and the Collective Unconscious," "Conscious, Unconscious, and Individuation."'
-  },
-  {
-    concept: 'The Hero\'s Journey',
-    question: 'Joseph Campbell identified the monomyth — the hero\'s journey — across cultures. How does this map to Jung\'s archetypes? How does the Fool become the Hero?',
-    source: 'Campbell, "The Hero with a Thousand Faces," Prologue, "The Monomyth."'
-  },
-  {
-    concept: 'Anima and Animus',
-    question: 'What are the anima (inner feminine in the male psyche) and animus (inner masculine in the female psyche)? How do they function as bridges to the unconscious?',
-    source: 'Jung, "Aion," Chapter 3, "The Syzygy: Anima and Animus."'
-  },
-  {
-    concept: 'Synchronicity',
-    question: 'What is synchronicity — meaningful coincidence? How does it relate to archetypes and the Self? What did Jung mean by "acausal connecting principles"?',
-    source: 'Jung, "Synchronicity: An Acausal Connecting Principle," Chapter 1.'
   },
 ];
 
