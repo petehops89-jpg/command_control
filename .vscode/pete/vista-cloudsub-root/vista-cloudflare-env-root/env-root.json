@@ -1,0 +1,61 @@
+{
+  "domain": "cloud",
+  "environment": "cloudflare",
+  "subsystem": "cloud-subsystem",
+  "project": {
+    "name": "vistamations-agent-memory",
+    "accountId": "a3cfe4297f6a3fedf411ba7e7d6f2751",
+    "entry": "src/worker.js",
+    "compatibilityDate": "2026-08-09"
+  },
+  "database": {
+    "type": "D1",
+    "name": "vistamations-agent-memory",
+    "id": "6e916f3a-6f0d-48e0-ac1c-2a1d69e1b6b9",
+    "binding": "AGENT_DB",
+    "status": "active"
+  },
+  "kvNamespaces": {
+    "HANDY_MAIL_KV": { "status": "deferred", "binding": "HANDY_MAIL_KV" },
+    "SESSION_KV": { "status": "deferred", "binding": "SESSION_KV" },
+    "MYA_KV": { "status": "deferred", "binding": "MYA_KV" }
+  },
+  "secrets": {
+    "GOOGLE_API_KEY": {
+      "method": "wrangler secret",
+      "command": "npx wrangler secret put GOOGLE_API_KEY",
+      "mapsTo": "GEMINI_API_KEY",
+      "status": "NOT SET"
+    },
+    "DEEPSEEK_API_KEY": {
+      "method": "wrangler secret",
+      "command": "npx wrangler secret put DEEPSEEK_API_KEY",
+      "status": "NOT SET"
+    },
+    "MISTRAL_API_KEY": {
+      "method": "wrangler secret",
+      "command": "npx wrangler secret put MISTRAL_API_KEY",
+      "status": "NOT SET"
+    },
+    "CLOUDFLARE_API_TOKEN": {
+      "method": "wrangler secret",
+      "command": "npx wrangler secret put CLOUDFLARE_API_TOKEN",
+      "status": "NOT SET"
+    },
+    "OLIVIA_API_URL": {
+      "method": "wrangler secret",
+      "command": "npx wrangler secret put OLIVIA_API_URL",
+      "defaultValue": "http://localhost/api/olivia",
+      "status": "NOT SET"
+    }
+  },
+  "vars": {
+    "PROJECT_NAME": "Vistamations",
+    "PROJECT_DOMAIN": "vistamations-music"
+  },
+  "vaultShim": {
+    "file": "src/vault-shim.js",
+    "description": "Maps env bindings to vault key names"
+  },
+  "lastUpdated": "2026-08-11T01:29:27+10:00"
+}

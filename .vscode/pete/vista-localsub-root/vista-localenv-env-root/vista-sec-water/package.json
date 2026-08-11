@@ -1,0 +1,13 @@
+{
+  "name": "vistamations-gate-manager",
+  "version": "0.1.0",
+  "description": "Hardened Gate Manager: signed envelopes, replay protection, and capability issuance for command_control.",
+  "main": "src/gate-manager.js",
+  "scripts": {
+    "demo": "node demo.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {}
+}

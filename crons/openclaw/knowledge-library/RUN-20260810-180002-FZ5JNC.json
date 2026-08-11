@@ -1,0 +1,26 @@
+{
+  "assetId": "ASSET-FOUNDATION-015",
+  "runId": "RUN-20260810-180002-FZ5JNC",
+  "projectId": "FOUNDATION-001",
+  "title": "Technology Review: Open Source — 10 August 2026",
+  "type": "Technology Review",
+  "dominion": "DOM-001",
+  "domain": "Open Source",
+  "timestamp": "2026-08-10T08:00:02.499Z",
+  "url": "/crons/openclaw/publications/RUN-20260810-180002-FZ5JNC.html",
+  "valueScore": {
+    "composite": 82,
+    "confidence": 80,
+    "breakdown": {
+      "businessValue": 90,
+      "originality": 84,
+      "depth": 79,
+      "relevance": 78,
+      "utility": 81
+    },
+    "estimatedCommercialValue": "$6,275",
+    "reviewStatus": "Automated Review"
+  },
+  "lifecycleState": "versioned",
+  "version": "1.0.0"
+}

@@ -78,7 +78,7 @@ try:
     
     redirect_uri = f"http://localhost:{port}"
     
-    # Build OAuth client config
+    # Build OAuth client config with login_hint to force petehops89@gmail.com
     client_config = {
         "installed": {
             "client_id": CLIENT_ID,
@@ -100,16 +100,28 @@ try:
         redirect_uri=redirect_uri,
     )
     
+    # Force petehops89@gmail.com and show account picker
+    flow.oauth2session.redirect_uri = redirect_uri
+    auth_url, _ = flow.authorization_url(
+        access_type='offline',
+        login_hint='petehops89@gmail.com',
+        prompt='select_account',
+    )
+    
     # Run local server for OAuth callback
     print(f"[AUTH] Starting local server on port {port}...")
-    print(f"[AUTH] Opening browser — log in as petehops89@gmail.com")
+    print(f"[AUTH] Opening browser - SELECT petehops89@gmail.com")
+    print(f"[AUTH] Google will show an account picker - pick petehops89@gmail.com")
     print()
+    
+    # Open browser with custom URL
+    webbrowser.open(auth_url)
     
     credentials = flow.run_local_server(
         port=port,
-        authorization_prompt_message="Please visit this URL to authorize: {url}",
+        authorization_prompt_message=None,
         success_message="Authorization complete! You may close this window.",
-        open_browser=True,
+        open_browser=False,
     )
     
     # Save to standard ADC location
@@ -119,20 +131,20 @@ try:
         "type": "authorized_user",
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
-        "refresh_token": credentials.refresh_token,
+        "refresh_token": getattr(credentials, 'refresh_token', credentials.token),
         "access_token": credentials.token,
         "token_uri": "https://oauth2.googleapis.com/token",
         "scopes": SCOPES,
     }
     
-    with open(ADC_PATH, "w") as f:
-        json.dump(adc_data, f, indent=2)
+    with open(ADC_PATH, "w", encoding="utf-8") as f:
+        json.dump(adc_data, f, indent=2, ensure_ascii=False)
     
     # Clean up temp config
     os.remove(temp_config_path)
     
     print()
-    print(f"[SAVED] ADC credentials → {ADC_PATH}")
+    print(f"[SAVED] ADC credentials -> {ADC_PATH}")
     print("[READY] All Google SDKs can now authenticate automatically.")
     print()
     print("Testing Gemini API...")

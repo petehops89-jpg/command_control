@@ -1,0 +1,12 @@
+{
+  "agentId": "olivia",
+  "messages": [
+    {
+      "id": "MSG-0001",
+      "from": "Pete",
+      "message": "Olivia, confirm agent chat API is wired up.",
+      "timestamp": "2026-08-10T02:30:00+10:00",
+      "agentId": "olivia"
+    }
+  ]
+}

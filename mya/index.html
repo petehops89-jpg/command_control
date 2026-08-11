@@ -1,147 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="fortnite">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mya's World — Fortnite Expert AI — Vistamations</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mya's World — Fortnite AI — Vistamations</title>
 <style>
-  :root {
-    --bg:#0a0014; --card-bg:#120024; --border:#2a1040;
-    --fortnite-purple:#9D4EDD; --fortnite-blue:#00B4D8; --fortnite-pink:#FF006E;
-    --fortnite-gold:#FFBE0B; --fortnite-orange:#FB5607; --storm:#1a0030;
-    --text:#E8D5F5; --dim:#8B6BAE;
-    --font-mono:'JetBrains Mono','Consolas',monospace;
-    --font-display:'Bangers','Impact',cursive;
-    --font-body:'Inter','Segoe UI',sans-serif;
-    --radius:12px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;}
+:root{--bg:#0a0014;--card-bg:#120024;--border:#2a1040;--purple:#9D4EDD;--blue:#00B4D8;--pink:#FF006E;--gold:#FFBE0B;--orange:#FB5607;--text:#E8D5F5;--dim:#8B6BAE;--radius:14px;--font-display:'Bangers','Impact',cursive;--font-body:'Inter','Segoe UI',sans-serif}
+[data-theme="sunset"]{--bg:#1a0010;--card-bg:#2a0020;--purple:#FF6B9D;--blue:#FFD93D;--pink:#FF4D6D;--gold:#FF8C42;--border:#4a1040;--text:#FFE5EC;--dim:#C27BA0}
+[data-theme="ocean"]{--bg:#001428;--card-bg:#001e3c;--purple:#00F5D4;--blue:#00BBF9;--pink:#FEE440;--gold:#F15BB5;--border:#003566;--text:#D8F3FF;--dim:#5FA8D3}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 
-  .storm-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;
-    background:radial-gradient(ellipse at 20% 50%, rgba(157,78,221,0.08) 0%, transparent 60%),
-               radial-gradient(ellipse at 80% 30%, rgba(0,180,216,0.06) 0%, transparent 50%),
-               radial-gradient(ellipse at 50% 80%, rgba(255,0,110,0.05) 0%, transparent 50%);}
+/* ─── LOCKED STATE — blurred content, single entry button ─── */
+.storm-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 20% 50%,rgba(157,78,221,0.12) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 30%,rgba(0,180,216,0.08) 0%,transparent 50%),
+             radial-gradient(ellipse at 50% 80%,rgba(255,0,110,0.06) 0%,transparent 50%);}
 
-  .hero{position:relative;z-index:1;text-align:center;padding:3rem 1rem 2rem;
-    background:linear-gradient(180deg, rgba(157,78,221,0.15) 0%, transparent 100%);
-    border-bottom:2px solid var(--fortnite-purple);}
-  .hero .llama{font-size:4rem;animation:bounce 2s infinite}
-  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
-  .hero h1{font-family:var(--font-display);font-size:3.5rem;
-    background:linear-gradient(135deg, var(--fortnite-purple), var(--fortnite-blue), var(--fortnite-pink));
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    margin:0.5rem 0;letter-spacing:0.02em;}
-  .hero .subtitle{font-family:var(--font-mono);font-size:0.85rem;color:var(--fortnite-gold);
-    text-transform:uppercase;letter-spacing:0.2em;margin-bottom:1rem;}
-  .hero .players{display:flex;justify-content:center;gap:2rem;margin-top:1rem;font-family:var(--font-mono);font-size:0.75rem;color:var(--dim);}
-  .hero .players span{color:var(--fortnite-blue)}
+#mainContent{transition:filter 0.8s ease,opacity 0.8s ease}
+#mainContent.blurred{filter:blur(8px) brightness(0.5);pointer-events:none}
 
-  .ticker{position:relative;z-index:1;background:var(--card-bg);
-    border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-    padding:0.5rem 0;overflow:hidden;white-space:nowrap;}
-  .ticker-inner{display:inline-block;animation:scroll 30s linear infinite;
-    font-family:var(--font-mono);font-size:0.7rem;color:var(--fortnite-gold);letter-spacing:0.1em;text-transform:uppercase;}
-  @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:200;display:flex;align-items:center;justify-content:center;transition:opacity 0.5s,visibility 0.5s}
+.welcome-overlay.gone{opacity:0;visibility:hidden;pointer-events:none}
+.welcome-content{text-align:center;padding:2rem}
+.welcome-content h1{font-family:var(--font-display);font-size:clamp(2.5rem,10vw,5rem);background:linear-gradient(135deg,var(--purple),var(--blue),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.5rem}
+.welcome-content .bee{font-size:5rem;animation:welcomeBounce 1.5s infinite}
+@keyframes welcomeBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+.welcome-content p{color:var(--dim);font-size:1rem;margin-bottom:2rem}
+.welcome-btn{display:inline-block;background:linear-gradient(135deg,var(--purple),var(--blue));border:none;color:#fff;padding:1.2rem 3rem;border-radius:50px;font-family:var(--font-display);font-size:clamp(1.3rem,5vw,2rem);cursor:pointer;letter-spacing:0.05em;box-shadow:0 8px 32px rgba(157,78,221,0.4);transition:all 0.3s;position:relative;overflow:hidden}
+.welcome-btn:hover{transform:scale(1.05);box-shadow:0 12px 40px rgba(157,78,221,0.6)}
+.welcome-btn::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,transparent,transparent);transition:none}
+.welcome-btn:hover::after{background:linear-gradient(45deg,transparent,rgba(255,255,255,0.1),transparent);animation:shimmer 1s}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.voice-status{text-align:center;margin-top:0.5rem;font-size:0.75rem;color:var(--gold);font-family:system-ui}
 
-  .bento{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-    gap:1rem;padding:1.5rem;max-width:1400px;margin:0 auto;}
-  .bento-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);
-    padding:1.5rem;transition:all 0.3s;overflow:hidden;position:relative;}
-  .bento-card:hover{border-color:var(--fortnite-purple);transform:translateY(-2px);
-    box-shadow:0 8px 32px rgba(157,78,221,0.15);}
-  .bento-card.wide{grid-column:span 2}
-  .bento-card .card-tag{font-family:var(--font-mono);font-size:0.55rem;text-transform:uppercase;
-    letter-spacing:0.15em;padding:0.2rem 0.6rem;border-radius:4px;display:inline-block;margin-bottom:0.75rem;}
-  .tag-fortnite{background:rgba(157,78,221,0.2);color:var(--fortnite-purple)}
-  .tag-mya{background:rgba(251,86,7,0.2);color:var(--fortnite-orange)}
-  .tag-dad{background:rgba(255,190,11,0.2);color:var(--fortnite-gold)}
-  .tag-game{background:rgba(255,0,110,0.2);color:var(--fortnite-pink)}
-  .tag-art{background:rgba(0,180,216,0.2);color:var(--fortnite-blue)}
-  .bento-card h2{font-family:var(--font-display);font-size:1.5rem;color:#fff;margin-bottom:0.5rem;}
-  .bento-card p{font-size:0.8rem;color:var(--dim);line-height:1.5}
+/* ─── HERO ─── */
+.hero{position:relative;z-index:1;text-align:center;padding:clamp(1.5rem,4vw,3rem) 1rem 1.5rem;border-bottom:2px solid var(--purple)}
+.hero .bee-hero{font-size:3rem}
+.hero h2{font-family:var(--font-display);font-size:clamp(2rem,8vw,3.2rem);background:linear-gradient(135deg,var(--purple),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0.3rem 0}
+.hero .sub{font-size:0.75rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.2em;font-family:system-ui;margin-bottom:0.5rem}
+.hero .status-row{display:flex;justify-content:center;gap:1.5rem;font-size:0.7rem;color:var(--dim);font-family:system-ui;margin-top:0.5rem;flex-wrap:wrap}
 
-  .battle-pass{position:relative;z-index:1;max-width:1400px;margin:1rem auto;padding:0 1.5rem;}
-  .bp-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin:0.5rem 0;}
-  .bp-fill{height:100%;background:linear-gradient(90deg,var(--fortnite-purple),var(--fortnite-gold));border-radius:4px;transition:width 0.5s;}
-  .bp-label{font-family:var(--font-mono);font-size:0.65rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em;display:flex;justify-content:space-between;}
+/* ─── ACTION BAR ─── */
+.action-bar{position:relative;z-index:1;display:flex;gap:0.6rem;padding:0.8rem 1rem;max-width:600px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.action-btn{background:linear-gradient(135deg,var(--purple),var(--blue));border:none;color:#fff;padding:0.7rem 1.2rem;border-radius:30px;font-size:0.85rem;cursor:pointer;transition:all 0.3s;font-family:system-ui;font-weight:600;box-shadow:0 4px 16px rgba(157,78,221,0.25);display:flex;align-items:center;gap:0.4rem}
+.action-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(157,78,221,0.4)}
+.action-btn.outline{background:transparent;border:1.5px solid var(--purple)}
+.action-btn.gold{background:var(--gold);color:#000}
+.action-btn.small{padding:0.4rem 0.8rem;font-size:0.7rem;border-radius:20px}
 
-  .loader{text-align:center;padding:3rem;font-family:var(--font-mono);font-size:0.8rem;color:var(--dim);}
-  .footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);
-    font-family:var(--font-mono);font-size:0.65rem;color:var(--dim);}
-  .footer a{color:var(--fortnite-purple);text-decoration:none}
+/* ─── BENTO CARDS ─── */
+.bento{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:0.75rem;padding:0 1rem 1rem;max-width:600px;margin:0 auto}
+.bento-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;transition:all 0.5s;position:relative;overflow:hidden}
+.bento-card.highlight{border-color:var(--gold);box-shadow:0 0 24px rgba(255,190,11,0.3);transform:scale(1.03);z-index:10}
+.bento-card .tag{font-size:0.55rem;text-transform:uppercase;letter-spacing:0.15em;padding:0.15rem 0.5rem;border-radius:4px;display:inline-block;margin-bottom:0.6rem;font-family:system-ui}
+.tag-ai{background:rgba(0,180,216,0.2);color:var(--blue)}
+.tag-mya{background:rgba(251,86,7,0.2);color:var(--orange)}
+.tag-dad{background:rgba(255,190,11,0.2);color:var(--gold)}
+.tag-game{background:rgba(255,0,110,0.2);color:var(--pink)}
+.tag-art{background:rgba(157,78,221,0.2);color:var(--purple)}
+.bento-card h3{font-family:var(--font-display);font-size:clamp(1.1rem,3vw,1.3rem);color:#fff;margin-bottom:0.3rem;letter-spacing:0.02em}
+.bento-card p{font-size:0.78rem;color:var(--dim);line-height:1.4}
 
-  /* ─── NEW: Action Buttons Row ─── */
-  .action-row{position:relative;z-index:1;max-width:1400px;margin:1rem auto;padding:0 1.5rem;
-    display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
-  .action-btn{background:linear-gradient(135deg,var(--fortnite-purple),var(--fortnite-blue));
-    border:none;color:#fff;padding:0.8rem 1.5rem;border-radius:var(--radius);
-    font-family:var(--font-display);font-size:1.1rem;cursor:pointer;transition:all 0.3s;
-    letter-spacing:0.05em;box-shadow:0 4px 16px rgba(157,78,221,0.3);
-    display:flex;align-items:center;gap:0.5rem;}
-  .action-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(157,78,221,0.5);}
-  .action-btn.secondary{background:linear-gradient(135deg,var(--fortnite-pink),var(--fortnite-orange));}
-  .action-btn.voice{background:linear-gradient(135deg,var(--fortnite-gold),var(--fortnite-orange));color:#000;}
+.battle-pass{padding:0 1rem 0.5rem;max-width:600px;margin:0 auto;position:relative;z-index:1}
+.bp-label{font-size:0.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em;display:flex;justify-content:space-between;font-family:system-ui;margin-bottom:0.3rem}
+.bp-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.bp-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:3px;transition:width 0.5s}
 
-  /* ─── NEW: Wizard Modal ─── */
-  .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);
-    z-index:100;display:none;align-items:center;justify-content:center;}
-  .modal-overlay.show{display:flex;}
-  .modal{background:var(--card-bg);border:2px solid var(--fortnite-purple);border-radius:var(--radius);
-    padding:2rem;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;position:relative;}
-  .modal h2{font-family:var(--font-display);font-size:2rem;color:var(--fortnite-gold);margin-bottom:1rem;}
-  .modal .step-dot{display:flex;gap:0.5rem;margin-bottom:1.5rem;justify-content:center;}
-  .modal .step-dot span{width:12px;height:12px;border-radius:50%;background:var(--border);transition:all 0.3s;}
-  .modal .step-dot span.active{background:var(--fortnite-purple);box-shadow:0 0 8px var(--fortnite-purple)}
-  .modal .step-dot span.done{background:var(--fortnite-gold)}
-  .modal label{display:block;font-family:var(--font-mono);font-size:0.9rem;color:var(--text);margin-bottom:1rem;}
-  .modal .option-btn{display:block;width:100%;background:var(--bg);border:1px solid var(--border);
-    color:var(--text);padding:0.8rem 1rem;border-radius:8px;margin-bottom:0.5rem;
-    font-family:var(--font-body);font-size:0.9rem;cursor:pointer;text-align:left;transition:all 0.2s;}
-  .modal .option-btn:hover,.modal .option-btn.selected{border-color:var(--fortnite-purple);background:rgba(157,78,221,0.15);}
-  .modal .next-btn{background:linear-gradient(135deg,var(--fortnite-purple),var(--fortnite-blue));
-    border:none;color:#fff;padding:0.8rem 2rem;border-radius:8px;font-family:var(--font-display);
-    font-size:1.1rem;cursor:pointer;margin-top:1rem;width:100%;}
-  .modal .next-btn:disabled{opacity:0.3;cursor:not-allowed}
-  .modal .close-btn{position:absolute;top:0.5rem;right:0.5rem;background:none;border:none;
-    color:var(--dim);font-size:1.5rem;cursor:pointer;}
+/* ─── WIZARD TUTORIAL OVERLAY ─── */
+.tutorial-overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:300;background:transparent;display:none;pointer-events:none}
+.tutorial-overlay.active{display:block;pointer-events:none}
+.tutorial-spotlight{position:fixed;z-index:301;pointer-events:none;box-shadow:0 0 0 9999px rgba(0,0,0,0.85);transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);opacity:0}
+.tutorial-spotlight.active{opacity:1}
+.tutorial-popup{position:fixed;z-index:302;background:var(--card-bg);border:2px solid var(--gold);border-radius:var(--radius);padding:1.2rem;width:min(320px,90vw);box-shadow:0 16px 64px rgba(0,0,0,0.8);transition:all 0.5s cubic-bezier(0.34,1.56,0.64,1);opacity:0;transform:translateY(20px) scale(0.95)}
+.tutorial-popup.active{opacity:1;transform:translateY(0) scale(1)}
+.tutorial-popup h4{font-family:var(--font-display);font-size:1.4rem;color:var(--gold);margin-bottom:0.5rem}
+.tutorial-popup p{font-size:0.8rem;color:var(--dim);margin-bottom:0.8rem;line-height:1.5}
+.tutorial-popup .tut-controls{display:flex;gap:0.5rem}
+.tutorial-popup .tut-btn{padding:0.5rem 1rem;border-radius:20px;border:none;cursor:pointer;font-family:system-ui;font-weight:600;font-size:0.75rem;transition:all 0.2s}
+.tutorial-popup .tut-next{background:var(--gold);color:#000}
+.tutorial-popup .tut-skip{background:transparent;border:1px solid var(--dim);color:var(--dim)}
+.tutorial-popup .tut-prev{background:transparent;border:1px solid var(--blue);color:var(--blue)}
 
-  /* ─── NEW: Chat Panel ─── */
-  .chat-toggle{position:fixed;bottom:1rem;right:1rem;z-index:90;
-    width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--fortnite-purple),var(--fortnite-blue));
-    border:none;color:#fff;font-size:1.5rem;cursor:pointer;box-shadow:0 4px 20px rgba(157,78,221,0.4);
-    display:flex;align-items:center;justify-content:center;transition:all 0.3s;}
-  .chat-toggle:hover{transform:scale(1.1)}
-  .chat-panel{position:fixed;bottom:5rem;right:1rem;z-index:90;
-    width:380px;max-height:500px;background:var(--card-bg);border:2px solid var(--fortnite-purple);
-    border-radius:var(--radius);display:none;flex-direction:column;overflow:hidden;
-    box-shadow:0 8px 40px rgba(0,0,0,0.5);}
-  .chat-panel.open{display:flex;}
-  .chat-header{background:linear-gradient(135deg,var(--fortnite-purple),var(--fortnite-blue));
-    padding:0.75rem 1rem;display:flex;align-items:center;gap:0.5rem;flex-shrink:0;}
-  .chat-header .ch-title{font-family:var(--font-display);font-size:1rem;color:#fff;}
-  .chat-header .ch-status{font-size:0.6rem;font-family:var(--font-mono);color:rgba(255,255,255,0.7);}
-  .chat-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.75rem;min-height:200px;max-height:300px;}
-  .chat-msg{max-width:85%;padding:0.6rem 0.8rem;border-radius:12px;font-size:0.8rem;line-height:1.4;}
-  .chat-msg.user{align-self:flex-end;background:rgba(157,78,221,0.3);border:1px solid rgba(157,78,221,0.4);border-bottom-right-radius:4px;}
-  .chat-msg.agent{align-self:flex-start;background:rgba(0,180,216,0.15);border:1px solid rgba(0,180,216,0.2);border-bottom-left-radius:4px;}
-  .chat-msg .sender{font-family:var(--font-mono);font-size:0.55rem;opacity:0.6;margin-bottom:0.2rem;text-transform:uppercase;letter-spacing:0.1em;}
-  .chat-input-row{display:flex;gap:0.5rem;padding:0.75rem 1rem;border-top:1px solid var(--border);flex-shrink:0;}
-  .chat-input-row input{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.5rem 0.75rem;border-radius:8px;font-family:var(--font-body);font-size:0.8rem;}
-  .chat-input-row input:focus{outline:none;border-color:var(--fortnite-purple)}
-  .chat-input-row button{background:var(--fortnite-purple);border:none;color:#fff;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;text-transform:uppercase;}
-  .typing{font-size:0.7rem;color:var(--dim);font-style:italic;padding:0.5rem;}
-  .voice-btn{background:var(--fortnite-gold);border:none;color:#000;padding:0.5rem;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .voice-btn.listening{animation:pulse 1s infinite;background:var(--fortnite-pink);color:#fff;}
-  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+/* ─── SETTINGS PANEL ─── */
+.settings-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:400;display:none;align-items:center;justify-content:center}
+.settings-overlay.open{display:flex}
+.settings-panel{background:var(--card-bg);border:2px solid var(--purple);border-radius:var(--radius);padding:1.5rem;width:min(360px,90vw);max-height:85vh;overflow-y:auto}
+.settings-panel h4{font-family:var(--font-display);font-size:1.3rem;color:var(--gold);margin-bottom:1rem}
+.settings-panel label{display:block;font-size:0.75rem;color:var(--dim);margin-bottom:0.3rem;font-family:system-ui}
+.settings-panel select,.settings-panel input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.5rem;border-radius:8px;font-size:0.8rem;margin-bottom:1rem}
+.setting-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.setting-row span{font-size:0.8rem}
+.setting-row input[type=checkbox]{width:auto;margin:0}
+.close-settings{position:absolute;top:0.5rem;right:0.5rem;background:none;border:none;color:var(--dim);font-size:1.5rem;cursor:pointer}
 
-  @media(max-width:768px){
-    .bento{grid-template-columns:1fr;padding:1rem}
-    .bento-card.wide{grid-column:span 1}
-    .hero h1{font-size:2rem}
-    .chat-panel{width:calc(100% - 2rem);right:1rem;left:1rem;}
-    .action-row{flex-direction:column;align-items:stretch;}
-  }
+/* ─── NEWS RSS POPUP ─── */
+.news-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:400;display:none;align-items:center;justify-content:center}
+.news-overlay.open{display:flex}
+.news-panel{background:var(--card-bg);border:2px solid var(--pink);border-radius:var(--radius);padding:1.5rem;width:min(400px,90vw);max-height:85vh;overflow-y:auto}
+.news-panel h4{font-family:var(--font-display);font-size:1.3rem;color:var(--pink);margin-bottom:0.5rem}
+.news-panel input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.5rem;border-radius:8px;font-size:0.8rem;margin-bottom:0.8rem}
+.news-item{padding:0.5rem;border-bottom:1px solid var(--border);font-size:0.78rem;cursor:pointer;transition:background 0.2s}
+.news-item:hover{background:rgba(255,0,110,0.08)}
+.news-item .ni-title{color:var(--text);margin-bottom:0.2rem}
+.news-item .ni-date{font-size:0.6rem;color:var(--dim)}
+
+/* ─── FLOATING BEE ─── */
+.bee-float{position:fixed;bottom:1.2rem;right:1.2rem;z-index:100;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--orange));border:none;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 20px rgba(255,190,11,0.3);transition:all 0.3s;display:flex;align-items:center;justify-content:center}
+.bee-float:hover{transform:scale(1.15)}
+.bee-float.talking{animation:beeTalk 0.5s infinite alternate;box-shadow:0 4px 24px var(--gold)}
+@keyframes beeTalk{from{transform:scale(1) rotate(-5deg)}to{transform:scale(1.1) rotate(5deg)}}
+
+@media(min-width:600px){
+  .bento{grid-template-columns:repeat(2,1fr);max-width:800px}
+  .bento-card.expert{grid-column:span 2}
+}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
 </head>
@@ -149,397 +122,508 @@
 
 <div class="storm-bg"></div>
 
-<!-- HERO -->
+<!-- ─── WELCOME OVERLAY ─── -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-content">
+    <div class="bee">🐝</div>
+    <h1>Mya's World</h1>
+    <p>Fortnite Edition • Powered by Vistamations</p>
+    <button class="welcome-btn" id="welcomeBtn" onclick="startMya()">Mya, start here</button>
+    <div class="voice-status" id="welcomeVoiceStatus">🎤 Bee is listening...</div>
+  </div>
+</div>
+
+<!-- ─── MAIN CONTENT ─── -->
+<div id="mainContent" class="blurred">
+
 <div class="hero">
-  <div class="llama">🦙</div>
-  <h1>Mya's World</h1>
-  <div class="subtitle">// Fortnite Edition // Powered by Vistamations AI</div>
-  <div class="players">
-    <span>👑 Mya</span> &amp; <span>👑 Dad (Pete)</span> &amp; <span>🤖 Fortnite Expert AI</span>
+  <div class="bee-hero">🐝</div>
+  <h2>Mya's World</h2>
+  <div class="sub">// Fortnite Edition // Bee AI Guide</div>
+  <div class="status-row">
+    <span>🐝 Bee online</span>
+    <span>🦙 Expert standing by</span>
+    <span id="voiceStatus">🎤 Voice on</span>
   </div>
 </div>
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner" id="ticker">
-    🎮 VICTORY ROYALE INCOMING &nbsp;✦&nbsp; LLAMA SPOTTED &nbsp;✦&nbsp; BATTLE BUS DEPARTING &nbsp;✦&nbsp; STORM CLOSING IN &nbsp;✦&nbsp; CHUG JUG READY &nbsp;✦&nbsp; NEW EMOTE UNLOCKED &nbsp;✦&nbsp;
-    🎮 VICTORY ROYALE INCOMING &nbsp;✦&nbsp; LLAMA SPOTTED &nbsp;✦&nbsp; BATTLE BUS DEPARTING &nbsp;✦&nbsp; STORM CLOSING IN &nbsp;✦&nbsp; CHUG JUG READY &nbsp;✦&nbsp; NEW EMOTE UNLOCKED &nbsp;✦&nbsp;
-  </div>
+<div class="action-bar">
+  <button class="action-btn gold" onclick="startTutorial()" id="tutLaunch">🐝 Start Tour</button>
+  <button class="action-btn outline" onclick="openSettings()">⚙️ Settings</button>
+  <button class="action-btn outline" onclick="openNews()">📰 News</button>
 </div>
 
-<!-- ACTION BUTTONS -->
-<div class="action-row">
-  <button class="action-btn" onclick="openWizard()">🎮 Join Chat Community</button>
-  <button class="action-btn secondary" onclick="openChat()">💬 Talk to Fortnite Expert</button>
-  <button class="action-btn voice" id="voiceLaunchBtn" onclick="startVoiceChat()">🎤 Voice Chat</button>
-</div>
-
-<!-- BATTLE PASS -->
 <div class="battle-pass">
-  <div class="bp-label"><span>Battle Pass Progress</span><span id="bpLevel">Level 1</span></div>
-  <div class="bp-bar"><div class="bp-fill" id="bpFill" style="width:15%"></div></div>
+  <div class="bp-label"><span>Mya's Journey</span><span id="bpLevel">Level 1</span></div>
+  <div class="bp-bar"><div class="bp-fill" id="bpFill" style="width:10%"></div></div>
 </div>
 
-<!-- BENTO GRID -->
 <div class="bento" id="bentoGrid">
-  <div class="bento-card wide">
-    <span class="card-tag tag-fortnite">Fortnite AI</span>
-    <h2>🦙 Fortnite Expert Is Live!</h2>
-    <p>Ask anything about skins, emotes, weapons, landing spots, Chapter 5 updates, or Battle Pass strategy. The AI knows it all — just like a cool older cousin who's amazing at Fortnite.</p>
+  <div class="bento-card expert" id="cardExpert" onclick="expertChatCard()" style="cursor:pointer">
+    <span class="tag tag-ai">Fortnite AI</span>
+    <h3>🦙 Fortnite Expert Is Live!</h3>
+    <p>Bee connects you to the Fortnite AI. Ask about skins, weapons, landing spots, Chapter 5. Like a cool older cousin who's amazing at Fortnite.</p>
   </div>
-  <div class="bento-card">
-    <span class="card-tag tag-mya">Mya's Picks</span>
-    <h2>🎨 Favorite Skins</h2>
-    <p>Loading Mya's favorite Fortnite skins and cosmetics from the Item Shop...</p>
+  <div class="bento-card" id="cardSkins">
+    <span class="tag tag-mya">My Stuff</span>
+    <h3>🎨 Your Skins & Emotes</h3>
+    <p>View your Fortnite locker — skins, emotes, back bling, and pickaxes. Track what you own and what's new.</p>
   </div>
-  <div class="bento-card">
-    <span class="card-tag tag-dad">Dad's Builds</span>
-    <h2>🏗️ Creative Mode</h2>
-    <p>Pete's Fortnite Creative builds and island codes. Engineering meets gaming — structured chaos.</p>
+  <div class="bento-card" id="cardCreative">
+    <span class="tag tag-dad">Creative Mode</span>
+    <h3>🏗️ Build with Dad</h3>
+    <p>Dad's island codes and Creative mode projects. Engineering meets Fortnite.</p>
   </div>
-  <div class="bento-card">
-    <span class="card-tag tag-game">Live</span>
-    <h2>🎯 Drop Spot</h2>
-    <p>Today's featured landing zone. Where we're dropping next match.</p>
-    <div style="margin-top:1rem;padding:1rem;background:rgba(0,0,0,0.3);border-radius:8px;text-align:center">
-      <div style="font-size:3rem">🗺️</div>
-      <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--fortnite-gold);margin-top:0.5rem">TILTED TOWERS</div>
+  <div class="bento-card" id="cardDrop">
+    <span class="tag tag-game">Live Drop</span>
+    <h3>🎯 Today's Drop Zone</h3>
+    <p>Where we're landing next match. Rotation routes and loot paths.</p>
+    <div style="text-align:center;font-size:3rem;margin-top:0.5rem">🗺️</div>
+    <div style="font-size:0.65rem;color:var(--gold);text-align:center;margin-top:0.3rem;font-family:system-ui">TILTED TOWERS</div>
+  </div>
+  <div class="bento-card" id="cardNews">
+    <span class="tag tag-art">News & Updates</span>
+    <h3>📡 Fortnite News Feed</h3>
+    <p>Latest Fortnite headlines, item shop, patch notes. Bee keeps you updated.</p>
+  </div>
+  <div class="bento-card" id="cardChat">
+    <span class="tag tag-game">Chat Groups</span>
+    <h3>👥 Your Communities</h3>
+    <p>Take the guided tour to discover your chat groups and meet other Fortnite fans!</p>
+  </div>
+</div>
+
+<div style="text-align:center;padding:1rem;position:relative;z-index:1">
+  <button class="action-btn small" onclick="startTutorial()">🐝 Replay Tour</button>
+</div>
+
+<div style="text-align:center;padding:1.5rem;border-top:1px solid var(--border);position:relative;z-index:1;font-size:0.6rem;color:var(--dim)">
+  <p>Mya's World is a Vistamations production © 2026</p>
+  <p>Built with ❤️ by Dad • Bee AI by Cloudflare Workers</p>
+</div>
+
+</div>
+
+<!-- ─── TUTORIAL WIZARD ─── -->
+<div class="tutorial-overlay" id="tutorialOverlay">
+  <div class="tutorial-spotlight" id="tutorialSpotlight"></div>
+  <div class="tutorial-popup" id="tutorialPopup">
+    <h4 id="tutTitle"></h4>
+    <p id="tutBody"></p>
+    <div class="tut-controls">
+      <button class="tut-btn tut-prev" onclick="tutorialPrev()" id="tutPrev" style="display:none">← Back</button>
+      <button class="tut-btn tut-skip" onclick="tutorialEnd()" id="tutSkip">Skip Tour</button>
+      <button class="tut-btn tut-next" onclick="tutorialNext()" id="tutNext">Next →</button>
     </div>
   </div>
-  <div class="bento-card">
-    <span class="card-tag tag-art">Art</span>
-    <h2>🎨 Fan Art Wall</h2>
-    <p>Mya's Fortnite drawings and creations. Powered by Stefi's design magic.</p>
-  </div>
-  <div class="bento-card">
-    <span class="card-tag tag-game">Chat Groups</span>
-    <h2>👥 Your Communities</h2>
-    <p id="chatGroupsStatus">Take the 6-step wizard to find your perfect chat groups!</p>
+</div>
+
+<!-- ─── SETTINGS ─── -->
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-panel" style="position:relative">
+    <button class="close-settings" onclick="closeSettings()">✕</button>
+    <h4>⚙️ Settings</h4>
+    <label>Colour Scheme</label>
+    <select onchange="changeTheme(this.value)" id="themeSelect">
+      <option value="fortnite">🎮 Fortnite Purple (Default)</option>
+      <option value="sunset">🌅 Sunset Pink</option>
+      <option value="ocean">🌊 Ocean Blue</option>
+    </select>
+    <label>🤖 AI Model</label>
+    <select id="modelSelect">
+      <option value="@cf/meta/llama-3.2-3b-instruct">🦙 Llama 3.2 (Fast)</option>
+      <option value="@cf/mistralai/mistral-small-3.1-24b-instruct">🧠 Mistral Small 3.1 (Smart)</option>
+      <option value="@cf/google/gemma-4-26b-a4b-it">💎 Gemma 4 (Latest)</option>
+    </select>
+    <div class="setting-row">
+      <span>🎤 Bee Voice Guide</span>
+      <input type="checkbox" id="voiceToggle" checked onchange="toggleVoiceSettings(this.checked)">
+    </div>
+    <div class="setting-row">
+      <span>📰 RSS News Feed</span>
+      <input type="checkbox" id="rssToggle" onchange="toggleRSS(this.checked)">
+    </div>
+    <label>RSS Feed URL</label>
+    <input type="url" id="rssFeedUrl" placeholder="https://example.com/fortnite/feed.xml" value="">
+    <button class="action-btn" style="width:100%" onclick="saveSettings()">Save Settings</button>
   </div>
 </div>
 
-<div class="loader" id="loader"><span class="dot">Loading more awesome stuff...</span></div>
-
-<div class="footer">
-  <p>Mya's World is a Vistamations production &copy; 2026</p>
-  <p>Built with ❤️ by Dad (Big Brother) &amp; Design by Stefi</p>
-  <p><a href="https://www.vistamations.com">www.vistamations.com</a></p>
-</div>
-
-<!-- ═══════ WIZARD MODAL ═══════ -->
-<div class="modal-overlay" id="wizardOverlay">
-  <div class="modal" id="wizardModal">
-    <button class="close-btn" onclick="closeWizard()">✕</button>
-    <h2>🦙 Find Your Chat Community</h2>
-    <div class="step-dot" id="stepDots"></div>
-    <div id="wizardContent"></div>
-  </div>
-</div>
-
-<!-- ═══════ CHAT PANEL ═══════ -->
-<button class="chat-toggle" id="chatToggle" onclick="toggleChat()" title="Talk to Fortnite Expert">🤖</button>
-<div class="chat-panel" id="chatPanel">
-  <div class="chat-header">
-    <span>🦙</span>
-    <span class="ch-title">Fortnite Expert AI</span>
-    <span class="ch-status" style="margin-left:auto" id="chatStatus">● online</span>
-  </div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="chat-msg agent">
-      <div class="sender">Fortnite Expert</div>
-      Hey Mya! Ready to drop into some Fortnite talk? 🚌 Ask me about skins, weapons, landing spots, or anything Battle Royale!
+<!-- ─── NEWS POPUP ─── -->
+<div class="news-overlay" id="newsOverlay">
+  <div class="news-panel" style="position:relative">
+    <button class="close-settings" onclick="closeNews()">✕</button>
+    <h4>📰 Fortnite News</h4>
+    <input type="url" placeholder="Enter RSS feed URL..." id="newsFeedInput" onchange="loadNewsFeed(this.value)">
+    <div id="newsContent">
+      <div class="news-item" onclick="window.open('https://fortnite.com/news','_blank')"><div class="ni-title">🎮 Fortnite Official News</div><div class="ni-date">Open fortnite.com</div></div>
+      <div class="news-item" onclick="window.open('https://www.fortnite.com/item-shop','_blank')"><div class="ni-title">🛒 Item Shop Today</div><div class="ni-date">Check latest cosmetics</div></div>
+      <div class="news-item" onclick="window.open('https://fn.gg','_blank')"><div class="ni-title">📊 Fortnite Tracker</div><div class="ni-date">Stats & leaderboards</div></div>
     </div>
   </div>
-  <div class="typing" id="typingIndicator" style="display:none">Fortnite Expert is thinking...</div>
-  <div class="chat-input-row">
-    <button class="voice-btn" id="chatVoiceBtn" onclick="toggleVoiceInput()" title="Voice input">🎤</button>
-    <input type="text" id="chatInput" placeholder="Ask about Fortnite..." onkeydown="if(event.key==='Enter')sendMessage()">
-    <button onclick="sendMessage()">Send</button>
-  </div>
 </div>
+
+<!-- ─── FLOATING BEE ─── -->
+<button class="bee-float" id="beeFloat" onclick="beeQuickHelp()" title="Ask Bee">🐝</button>
 
 <script>
-// ═══ API CONFIG ═══
 const API_BASE = 'https://vistamations-agent-memory.hops1010.workers.dev';
+let voiceEnabled = true;
+let tutorialStep = -1;
+let recognition = null;
 let chatHistory = [];
-let wizardAnswers = {};
-let currentWizardStep = 1;
-const TOTAL_STEPS = 6;
+let currentModel = '@cf/meta/llama-3.2-3b-instruct';
 
-// ═══ WIZARD ═══
-function openWizard() {
-  currentWizardStep = 1;
-  wizardAnswers = {};
-  document.getElementById('wizardOverlay').classList.add('show');
-  renderWizardStep();
-}
+function getModel() { return localStorage.getItem('mya-model') || '@cf/meta/llama-3.2-3b-instruct'; }
 
-function closeWizard() {
-  document.getElementById('wizardOverlay').classList.remove('show');
-}
-
-function renderWizardStep() {
-  const dots = document.getElementById('stepDots');
-  dots.innerHTML = Array.from({length: TOTAL_STEPS}, (_, i) =>
-    `<span class="${i+1 < currentWizardStep ? 'done' : i+1 === currentWizardStep ? 'active' : ''}"></span>`
-  ).join('');
-
-  fetch(`${API_BASE}/mya/wizard`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ step: currentWizardStep, answers: wizardAnswers })
-  })
-  .then(r => r.json())
-  .then(data => {
-    const content = document.getElementById('wizardContent');
-    content.innerHTML = `
-      <label>Step ${data.step}/${TOTAL_STEPS}: ${data.question}</label>
-      ${(data.options || []).map((opt, i) => `
-        <button class="option-btn ${wizardAnswers['step'+currentWizardStep] === opt ? 'selected' : ''}"
-                onclick="selectOption('${opt.replace(/'/g,"\\'")}', this)">${opt}</button>
-      `).join('')}
-      <button class="next-btn" id="wizardNextBtn" disabled
-              onclick="${currentWizardStep < TOTAL_STEPS ? 'nextWizardStep()' : 'finishWizard()'}">
-        ${currentWizardStep < TOTAL_STEPS ? 'Next →' : '🎉 Join Communities!'}
-      </button>
-    `;
-  })
-  .catch(() => {
-    // Offline fallback wizard
-    const offlineSteps = {
-      1: {question:"Favorite Fortnite skin?",options:["Peely","Fishstick","Midas","Meowscles","Other"]},
-      2: {question:"How do you like to play?",options:["Battle Royale","Party Royale","Creative Mode","Save the World"]},
-      3: {question:"Favorite weapon?",options:["Scar (AR)","Pump Shotgun","Sniper","SMG","Shockwaves"]},
-      4: {question:"Best landing spot?",options:["Tilted Towers","Pleasant Park","Loot Lake","Retail Row","Anywhere!"]},
-      5: {question:"Squad style?",options:["Duo with Dad","Solo warrior","Squad with friends","Creative with Dad"]},
-      6: {question:"What chat groups interest you?",options:["Fortnite Fashion","Strategy Tips","Creative Builders","Item Shop Alerts","Duo Partners","All of them!"]}
-    };
-    const data = offlineSteps[currentWizardStep];
-    const content = document.getElementById('wizardContent');
-    content.innerHTML = `
-      <label>Step ${currentWizardStep}/${TOTAL_STEPS}: ${data.question}</label>
-      ${(data.options || []).map(opt => `
-        <button class="option-btn ${wizardAnswers['step'+currentWizardStep] === opt ? 'selected' : ''}"
-                onclick="selectOption('${opt.replace(/'/g,"\\'")}', this)">${opt}</button>
-      `).join('')}
-      <button class="next-btn" id="wizardNextBtn" disabled
-              onclick="${currentWizardStep < TOTAL_STEPS ? 'nextWizardStep()' : 'finishWizard()'}">
-        ${currentWizardStep < TOTAL_STEPS ? 'Next →' : '🎉 Join Communities!'}
-      </button>
-    `;
-  });
-}
-
-function selectOption(value, btn) {
-  wizardAnswers['step'+currentWizardStep] = value;
-  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  document.getElementById('wizardNextBtn').disabled = false;
-}
-
-function nextWizardStep() {
-  currentWizardStep++;
-  renderWizardStep();
-}
-
-function finishWizard() {
-  const groups = [];
-  if (wizardAnswers.step6) groups.push(wizardAnswers.step6);
-  else groups.push('All Fortnite Communities');
-
-  document.getElementById('chatGroupsStatus').textContent =
-    '✅ Joined: ' + (Array.isArray(groups) ? groups.join(', ') : groups);
-  closeWizard();
-
-  // Auto-open chat to welcome to communities
+// ─── WELCOME — ENTRY GATE ───
+function startMya() {
+  const voiceStatus = document.getElementById('welcomeVoiceStatus');
+  voiceStatus.textContent = voiceEnabled ? '🎤 Bee is listening... say "start" or tap the button' : '🐝 Bee is ready!';
+  
   setTimeout(() => {
-    openChat();
-    addChatMessage('agent', `Welcome to your Fortnite communities, Mya! 🎉 Based on your choices, I found the perfect chat groups for you. Want to start chatting with other players who love ${wizardAnswers.step1 || 'Fortnite'}?`);
-  }, 500);
+    document.getElementById('welcomeOverlay').classList.add('gone');
+    document.getElementById('mainContent').classList.remove('blurred');
+    
+    if (voiceEnabled) {
+      beeSpeak("Hi Mya! I'm Bee, your AI guide. Let me show you around! Tap 'Start Tour' or say 'start tour'.");
+    } else {
+      beeSpeak("Hi Mya! I'm Bee, your AI guide. Tap 'Start Tour' to explore your new site!");
+    }
+    updateBP(15);
+  }, 600);
 }
 
-// ═══ CHAT ═══
-function toggleChat() {
-  document.getElementById('chatPanel').classList.toggle('open');
-}
-
-function openChat() {
-  document.getElementById('chatPanel').classList.add('open');
-  document.getElementById('chatInput').focus();
-}
-
-function addChatMessage(role, text) {
-  const msgs = document.getElementById('chatMessages');
-  const cls = role === 'user' ? 'user' : 'agent';
-  const sender = role === 'user' ? 'Mya' : 'Fortnite Expert';
-  msgs.innerHTML += `<div class="chat-msg ${cls}"><div class="sender">${sender}</div>${text}</div>`;
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function sendMessage() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
-
-  addChatMessage('user', text);
-  chatHistory.push({ role: 'user', content: text });
-  input.value = '';
-
-  document.getElementById('typingIndicator').style.display = 'block';
-  document.getElementById('chatStatus').textContent = '● thinking...';
-
-  fetch(`${API_BASE}/mya/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: text, history: chatHistory.slice(-10) })
-  })
-  .then(r => r.json())
-  .then(data => {
-    document.getElementById('typingIndicator').style.display = 'none';
-    document.getElementById('chatStatus').textContent = '● online';
-    const reply = data.reply || "GG! That's a great question! 🎮 What else do you want to know about Fortnite?";
-    addChatMessage('agent', reply);
-    chatHistory.push({ role: 'assistant', content: reply });
-
-    // Auto-speak response if voice mode active
-    if (window._voiceActive) speakText(reply);
-  })
-  .catch(err => {
-    document.getElementById('typingIndicator').style.display = 'none';
-    document.getElementById('chatStatus').textContent = '● online';
-    const fallbacks = [
-      "Drop at Tilted Towers — best loot in the game! 🏙️ What's your go-to landing spot?",
-      "Victory Royale vibes! 🏆 Ask me about your favorite skin!",
-      "The Battle Bus is waiting! 🚌 Ready to talk Fortnite strategy?",
-      "That new emote is fire! 🔥 What's in your locker right now?"
-    ];
-    addChatMessage('agent', fallbacks[Math.floor(Math.random() * fallbacks.length)]);
-  });
-}
-
-// ═══ VOICE CHAT (Voxtral / Web Speech API) ═══
-function startVoiceChat() {
-  openChat();
-  toggleVoiceInput();
-}
-
-function toggleVoiceInput() {
-  const btn = document.getElementById('chatVoiceBtn');
-  if (!window._voiceActive) {
-    startListening();
-    btn.classList.add('listening');
-    btn.textContent = '🔴';
+// ─── VOICE / BEE ───
+function beeSpeak(text) {
+  const btn = document.getElementById('beeFloat');
+  btn.classList.add('talking');
+  if (voiceEnabled && window.speechSynthesis) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1.0;
+    utterance.pitch = 1.3;
+    utterance.volume = 0.9;
+    const voices = speechSynthesis.getVoices();
+    utterance.voice = voices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira')) || voices[0];
+    utterance.onend = () => btn.classList.remove('talking');
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utterance);
   } else {
-    stopListening();
-    btn.classList.remove('listening');
-    btn.textContent = '🎤';
+    setTimeout(() => btn.classList.remove('talking'), 2000);
   }
 }
 
-function startListening() {
+function startVoiceRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    addChatMessage('agent', 'Voice chat needs Chrome or Edge browser. Type your message instead! ⌨️');
-    return;
+  if (!SpeechRecognition) return;
+  if (recognition) recognition.stop();
+  recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = false;
+  recognition.lang = 'en-US';
+  recognition.onresult = (e) => {
+    const text = e.results[e.results.length-1][0].transcript.toLowerCase().trim();
+    if (text.includes('start tour') || text.includes('show me')) startTutorial();
+    else if (text.includes('expert') || text.includes('ask bee')) beeQuickHelp();
+    else if (text.includes('settings')) openSettings();
+    else if (text.includes('news') || text.includes('feed')) openNews();
+    else if (text.includes('skins') || text.includes('locker')) highlightCard('cardSkins');
+    else if (text.includes('creative') || text.includes('build')) highlightCard('cardCreative');
+  };
+  recognition.onend = () => { if (voiceEnabled) recognition.start(); };
+  recognition.onerror = () => {};
+  try { recognition.start(); } catch(e) {}
+}
+
+function startWelcomeVoice() {
+  if (!voiceEnabled) return;
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) return;
+  const rec = new SpeechRecognition();
+  rec.continuous = false;
+  rec.interimResults = false;
+  rec.lang = 'en-US';
+  rec.onresult = (e) => {
+    const text = e.results[0][0].transcript.toLowerCase().trim();
+    if (text.includes('start') || text.includes('go') || text.includes('begin') || text.includes('mya')) startMya();
+  };
+  rec.onerror = () => {};
+  rec.onend = () => { if (voiceEnabled && !document.getElementById('welcomeOverlay').classList.contains('gone')) rec.start(); };
+  try { rec.start(); } catch(e) {}
+}
+
+function beeQuickHelp() {
+  const q = prompt("Ask Bee about Fortnite!", "What's the best landing spot?");
+  if (!q) return;
+  beeSpeak("Let me ask the Fortnite expert...");
+  askExpert(q);
+}
+
+function expertChatCard() {
+  const q = prompt("Type your Fortnite question!", "What skins are in the Item Shop?");
+  if (!q) return;
+  askExpert(q);
+}
+
+async function askExpert(message) {
+  chatHistory.push({ role: 'user', content: message });
+  const model = getModel();
+  try {
+    const res = await fetch(API_BASE + '/mya/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, history: chatHistory.slice(-10), model })
+    });
+    const data = await res.json();
+    const reply = data.reply || "GG! That's a great question!";
+    chatHistory.push({ role: 'assistant', content: reply });
+    const modelName = (data.model || model.split('/').pop()).replace(/-instruct.*/, '');
+    beeSpeak(reply);
+  } catch (e) {
+    beeSpeak("Oops, couldn't reach the expert. Try again?");
   }
-  window._recognition = new SpeechRecognition();
-  window._recognition.continuous = false;
-  window._recognition.interimResults = false;
-  window._recognition.lang = 'en-US';
-
-  window._recognition.onresult = function(event) {
-    const text = event.results[0][0].transcript;
-    document.getElementById('chatInput').value = text;
-    sendMessage();
-  };
-
-  window._recognition.onerror = function(event) {
-    addChatMessage('agent', 'Voice didnt catch that — try typing! ⌨️');
-    stopListening();
-  };
-
-  window._recognition.onend = function() {
-    if (window._voiceActive) window._recognition.start();
-  };
-
-  window._voiceActive = true;
-  window._recognition.start();
-  addChatMessage('agent', '🎤 Listening... Ask me anything about Fortnite!');
 }
 
-function stopListening() {
-  window._voiceActive = false;
-  if (window._recognition) window._recognition.stop();
-  const btn = document.getElementById('chatVoiceBtn');
-  btn.classList.remove('listening');
-  btn.textContent = '🎤';
-}
-
-// Text-to-speech for agent responses
-function speakText(text) {
-  if (!window.speechSynthesis) return;
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 1.1;
-  utterance.pitch = 1.0;
-  utterance.volume = 0.8;
-  const voices = speechSynthesis.getVoices();
-  utterance.voice = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha')) || voices[0];
-  speechSynthesis.speak(utterance);
-}
-
-// ═══ INFINITE SCROLL (kept from original) ═══
-const cardPool = [
-  { tag:'tag-fortnite', tagText:'Fortnite', title:'🎪 Party Royale', body:'Mya loves Party Royale mode — no fighting, just dancing and hanging out with friends. Best way to chill after school.' },
-  { tag:'tag-mya', tagText:'Mya\'s Faves', title:'💃 Best Emotes', body:'Flippin\' Sexy, Take the L, Orange Justice — Mya\'s top 3 emotes ranked. Which one should we unlock next?' },
-  { tag:'tag-dad', tagText:'Dad\'s Corner', title:'🔧 Loadout Lab', body:'Pete\'s weapon tier list and ideal loadout for duos. Scar + Pump + Minis = Victory Royale formula.' },
-  { tag:'tag-art', tagText:'Art Drop', title:'🖼️ New Wallpaper', body:'Fresh Fortnite-themed wallpaper. Download in 4K for Mya\'s desktop.' },
-  { tag:'tag-game', tagText:'Update', title:'📦 Chapter 5 News', body:'Latest Fortnite patch notes, new weapons, map changes, and battle pass rewards.' },
-  { tag:'tag-mya', tagText:'Mya\'s World', title:'🌟 Dream Locker', body:'If Mya could have ANY skin in the game... here\'s her dream locker setup.' },
-  { tag:'tag-fortnite', tagText:'Duos', title:'🤝 Duo Strategy', body:'Our winning duo strategy: Mya builds / Dad snipes. Communication tips and drop zone selection.' },
-  { tag:'tag-dad', tagText:'Engineering', title:'⚡ Vistamations Tech', body:'How Dad\'s agent swarm monitors game updates and alerts us when favorite skins return.' },
-  { tag:'tag-art', tagText:'Stefi Design', title:'🎨 Concept Art', body:'Stefi\'s Fortnite-inspired UI concepts. Gradient purple-to-blue with neon accents.' },
-  { tag:'tag-game', tagText:'Event', title:'🎵 Live Event', body:'Fortnite live event countdown. Next concert or chapter-ending event — Mya and Dad watching together.' },
-  { tag:'tag-mya', tagText:'Memory', title:'📸 Screenshot Reel', body:'Our best Fortnite moments captured. First Victory Royale together and that clutch revive.' },
-  { tag:'tag-fortnite', tagText:'Battle Pass', title:'⭐ Tier 100 Grind', body:'Current Battle Pass progress tracker. How many levels until Tier 100? Mya\'s almost there!' },
+// ─── TUTORIAL WIZARD ───
+const tutorialSteps = [
+  {
+    cardId: 'cardExpert',
+    position: 'center',
+    title: '🦙 Fortnite Expert AI',
+    body: 'This is where you get expert Fortnite help. Ask Bee anything — skins, weapons, strategy, map tips. The AI knows everything about Fortnite, just like a cool older cousin!'
+  },
+  {
+    cardId: 'cardSkins',
+    position: 'below',
+    title: '🎨 Your Skins & Locker',
+    body: 'View all your Fortnite skins, emotes, and gear here. Track your favorites, see what\'s new in the Item Shop, and plan your next outfit.'
+  },
+  {
+    cardId: 'cardCreative',
+    position: 'below',
+    title: '🏗️ Creative Mode with Dad',
+    body: 'Dad builds amazing Creative islands! Here you can find his island codes, playtest his latest builds, and see screenshots of his creations.'
+  },
+  {
+    cardId: 'cardDrop',
+    position: 'below',
+    title: '🎯 Today\'s Drop Zone',
+    body: 'Every day a new landing spot is featured. See the recommended loot paths and rotation routes. Check here before you drop into your next match!'
+  },
+  {
+    cardId: 'cardNews',
+    position: 'below',
+    title: '📡 Fortnite News Feed',
+    body: 'Latest Fortnite news, patch updates, item shop changes, and community highlights. You can swap the news feed in Settings to follow your favorite Fortnite news sources.'
+  },
+  {
+    cardId: 'cardChat',
+    position: 'below',
+    title: '👥 Your Communities',
+    body: 'Join Fortnite chat groups with players who share your style! Take the tour to match with skin collectors, creative builders, or duo partners.'
+  }
 ];
 
-function generateCard(data, wide) {
-  const card = document.createElement('div');
-  card.className = 'bento-card' + (wide ? ' wide' : '');
-  card.innerHTML = `<span class="card-tag ${data.tag}">${data.tagText}</span><h2>${data.title}</h2><p>${data.body}</p>`;
-  return card;
+function startTutorial() {
+  tutorialStep = 0;
+  document.getElementById('tutorialOverlay').classList.add('active');
+  showTutorialStep(0);
 }
 
-let page = 0, loading = false;
-function loadMore() {
-  if (loading) return;
-  loading = true;
-  document.getElementById('loader').innerHTML = '<span class="dot">Loading more awesome stuff...</span>';
-  setTimeout(() => {
-    const count = 6 + Math.floor(Math.random() * 4);
-    for (let i = 0; i < count; i++) {
-      const data = cardPool[Math.floor(Math.random() * cardPool.length)];
-      document.getElementById('bentoGrid').appendChild(generateCard(data, Math.random() > 0.7));
-    }
-    page++;
-    loading = false;
-    const level = Math.min(100, 15 + page * 8);
-    document.getElementById('bpLevel').textContent = 'Level ' + level;
-    document.getElementById('bpFill').style.width = level + '%';
-    if (page >= 5) {
-      document.getElementById('loader').innerHTML = '<span style="color:var(--fortnite-gold)">🏆 MAX BATTLE PASS — You reached Tier 100! 🏆</span>';
-    } else {
-      document.getElementById('loader').innerHTML = '<span class="dot">Scroll for more...</span>';
-    }
-  }, 800 + Math.random() * 600);
+function showTutorialStep(index) {
+  if (index >= tutorialSteps.length) { tutorialEnd(); return; }
+  if (index < 0) { tutorialEnd(); return; }
+  
+  tutorialStep = index;
+  const step = tutorialSteps[index];
+  
+  document.getElementById('tutTitle').textContent = step.title;
+  document.getElementById('tutBody').textContent = step.body;
+  document.getElementById('tutPrev').style.display = index > 0 ? 'inline-block' : 'none';
+  document.getElementById('tutNext').textContent = index === tutorialSteps.length - 1 ? '🎉 Finish!' : 'Next →';
+  document.getElementById('tutSkip').textContent = index === tutorialSteps.length - 1 ? 'Finish' : 'Skip Tour';
+  
+  // Spotlight + zoom on card
+  highlightCard(step.cardId);
+  positionSpotlight(step.cardId);
+  positionPopup(step.cardId);
+  
+  beeSpeak(step.body);
+  updateBP(15 + (index + 1) * 12);
 }
 
-new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting && page < 5) loadMore();
-}, { threshold: 0.1 }).observe(document.getElementById('loader'));
-setTimeout(() => loadMore(), 500);
+function highlightCard(cardId) {
+  unhighlightAll();
+  const card = document.getElementById(cardId);
+  if (card) card.classList.add('highlight');
+}
 
-console.log('🦙 Mya\'s World v2 — Fortnite Expert AI, 6-step Wizard, Voice Chat — Ready!');
+function unhighlightAll() {
+  document.querySelectorAll('.bento-card').forEach(c => c.classList.remove('highlight'));
+}
+
+function positionSpotlight(cardId) {
+  const card = document.getElementById(cardId);
+  const spotlight = document.getElementById('tutorialSpotlight');
+  if (!card) return;
+  
+  const rect = card.getBoundingClientRect();
+  spotlight.style.top = (rect.top - 8) + 'px';
+  spotlight.style.left = (rect.left - 8) + 'px';
+  spotlight.style.width = (rect.width + 16) + 'px';
+  spotlight.style.height = (rect.height + 16) + 'px';
+  spotlight.style.borderRadius = '14px';
+  spotlight.style.border = '2px solid var(--gold)';
+  spotlight.classList.add('active');
+}
+
+function positionPopup(cardId) {
+  const card = document.getElementById(cardId);
+  const popup = document.getElementById('tutorialPopup');
+  if (!card) return;
+  
+  const rect = card.getBoundingClientRect();
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  
+  let top, left;
+  if (rect.bottom + 220 < vh) {
+    top = rect.bottom + 16;
+  } else if (rect.top > 220) {
+    top = rect.top - 220;
+  } else {
+    top = vh / 2 - 110;
+  }
+  left = Math.max(8, Math.min(vw - 328, rect.left + (rect.width - 320) / 2));
+  
+  popup.style.top = top + 'px';
+  popup.style.left = left + 'px';
+  popup.classList.add('active');
+}
+
+function tutorialNext() {
+  showTutorialStep(tutorialStep + 1);
+}
+
+function tutorialPrev() {
+  showTutorialStep(tutorialStep - 1);
+}
+
+function tutorialEnd() {
+  document.getElementById('tutorialOverlay').classList.remove('active');
+  document.getElementById('tutorialSpotlight').classList.remove('active');
+  document.getElementById('tutorialPopup').classList.remove('active');
+  unhighlightAll();
+  beeSpeak("Great job Mya! You know your way around now. Tap the bee anytime for help, or explore on your own. Have fun!");
+  updateBP(100);
+  tutorialStep = -1;
+}
+
+// ─── SETTINGS ───
+function openSettings() {
+  document.getElementById('settingsOverlay').classList.add('open');
+  loadSettings();
+}
+function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); }
+function changeTheme(theme) { document.documentElement.setAttribute('data-theme', theme); localStorage.setItem('mya-theme', theme); }
+function toggleVoiceSettings(on) {
+  voiceEnabled = on;
+  document.getElementById('voiceStatus').textContent = on ? '🎤 Voice on' : '🔇 Voice off';
+  document.getElementById('voiceToggle').checked = on;
+  if (on) startVoiceRecognition();
+  else { if (recognition) recognition.stop(); }
+}
+function toggleRSS(on) {
+  const urlInput = document.getElementById('rssFeedUrl');
+  urlInput.disabled = !on;
+  if (on && urlInput.value) loadNewsFeed(urlInput.value);
+}
+function saveSettings() {
+  const theme = document.getElementById('themeSelect').value;
+  const voice = document.getElementById('voiceToggle').checked;
+  const rssOn = document.getElementById('rssToggle').checked;
+  const rssUrl = document.getElementById('rssFeedUrl').value;
+  const model = document.getElementById('modelSelect').value;
+  localStorage.setItem('mya-theme', theme);
+  localStorage.setItem('mya-voice', voice);
+  localStorage.setItem('mya-rss-on', rssOn);
+  localStorage.setItem('mya-rss-url', rssUrl);
+  localStorage.setItem('mya-model', model);
+  voiceEnabled = voice;
+  if (voice) startVoiceRecognition();
+  else { if (recognition) recognition.stop(); }
+  changeTheme(theme);
+  closeSettings();
+  beeSpeak('Settings saved!');
+}
+function loadSettings() {
+  const theme = localStorage.getItem('mya-theme') || 'fortnite';
+  const voice = localStorage.getItem('mya-voice') !== 'false';
+  const rssOn = localStorage.getItem('mya-rss-on') === 'true';
+  const rssUrl = localStorage.getItem('mya-rss-url') || '';
+  const model = localStorage.getItem('mya-model') || '@cf/meta/llama-3.2-3b-instruct';
+  document.getElementById('themeSelect').value = theme;
+  document.getElementById('voiceToggle').checked = voice;
+  document.getElementById('rssToggle').checked = rssOn;
+  document.getElementById('rssFeedUrl').value = rssUrl;
+  document.getElementById('rssFeedUrl').disabled = !rssOn;
+  document.getElementById('modelSelect').value = model;
+  changeTheme(theme);
+  voiceEnabled = voice;
+  document.getElementById('voiceStatus').textContent = voice ? '🎤 Voice on' : '🔇 Voice off';
+  if (voice) startVoiceRecognition();
+}
+
+// ─── NEWS RSS ───
+function openNews() { document.getElementById('newsOverlay').classList.add('open'); }
+function closeNews() { document.getElementById('newsOverlay').classList.remove('open'); }
+function loadNewsFeed(url) {
+  if (!url) return;
+  const container = document.getElementById('newsContent');
+  container.innerHTML = '<div class="news-item"><div class="ni-title">Loading feed...</div></div>';
+  fetch(url)
+    .then(r => r.text())
+    .then(xml => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xml, 'text/xml');
+      const items = doc.querySelectorAll('item');
+      if (items.length === 0) { container.innerHTML = '<div class="news-item"><div class="ni-title">No items found in feed</div></div>'; return; }
+      let html = '';
+      items.forEach((item, i) => {
+        if (i >= 10) return;
+        const title = item.querySelector('title')?.textContent || 'Untitled';
+        const link = item.querySelector('link')?.textContent || '#';
+        const date = item.querySelector('pubDate')?.textContent || '';
+        html += `<div class="news-item" onclick="window.open('${link}','_blank')"><div class="ni-title">${title}</div><div class="ni-date">${date}</div></div>`;
+      });
+      container.innerHTML = html;
+    })
+    .catch(() => {
+      container.innerHTML = '<div class="news-item"><div class="ni-title">Could not load feed. Check the URL and try again.</div></div>';
+    });
+}
+
+// ─── BATTLE PASS ───
+function updateBP(level) {
+  document.getElementById('bpLevel').textContent = 'Level ' + Math.min(100, level);
+  document.getElementById('bpFill').style.width = Math.min(100, level) + '%';
+}
+
+// ─── INIT ───
+function init() {
+  const theme = localStorage.getItem('mya-theme') || 'fortnite';
+  const voice = localStorage.getItem('mya-voice') !== 'false';
+  document.documentElement.setAttribute('data-theme', theme);
+  voiceEnabled = voice;
+  document.getElementById('voiceStatus').textContent = voice ? '🎤 Voice on' : '🔇 Voice off';
+  if (voice) {
+    startVoiceRecognition();
+    startWelcomeVoice();
+  }
+}
+
+init();
+console.log('🐝 Mya\'s World v3 — Bee AI Guide, Voice-First, Mobile-Ready');
 </script>
 </body>
 </html>

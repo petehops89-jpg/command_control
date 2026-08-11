@@ -1,0 +1,45 @@
+- generic [ref=e2]:
+  - img "Base" [ref=e4]
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]: Vistamations Media Centre
+      - generic [ref=e8]: 00:00 / 00:00
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - generic [ref=e11]: Playlist
+        - generic [ref=e12] [cursor=pointer]:
+          - generic [ref=e13]: "01"
+          - generic [ref=e14]: Tim Cochrane
+        - generic [ref=e15] [cursor=pointer]:
+          - generic [ref=e16]: "02"
+          - generic [ref=e17]: Neo-Shred
+        - generic [ref=e18] [cursor=pointer]:
+          - generic [ref=e19]: "03"
+          - generic [ref=e20]: Melodic Arc
+        - generic [ref=e21] [cursor=pointer]:
+          - generic [ref=e22]: "04"
+          - generic [ref=e23]: Space Alone
+        - generic [ref=e24] [cursor=pointer]:
+          - generic [ref=e25]: "05"
+          - generic [ref=e26]: Suno Prompt
+      - generic [ref=e27]:
+        - generic [ref=e28]: 🎵
+        - generic [ref=e34]:
+          - generic [ref=e35]: Space is not nothing alone
+          - generic [ref=e36]: Tim Cochrane · The Matheus
+          - generic [ref=e37]: 2:34 / 4:12
+        - generic [ref=e40]:
+          - button "⏮" [ref=e41] [cursor=pointer]
+          - button "▶" [ref=e42] [cursor=pointer]
+          - button "⏭" [ref=e43] [cursor=pointer]
+      - generic [ref=e44]:
+        - generic [ref=e45]: Agents
+        - generic [ref=e46]:
+          - button "Olivia" [ref=e47] [cursor=pointer]
+          - button "Gordon" [ref=e51] [cursor=pointer]
+          - button "Trinity" [ref=e55] [cursor=pointer]
+          - button "Merlin" [ref=e59] [cursor=pointer]
+          - button "Big Bro" [ref=e63] [cursor=pointer]
+          - button "Dee" [ref=e67] [cursor=pointer]
+          - button "Stefi" [ref=e71] [cursor=pointer]
+          - button "Terence" [ref=e75] [cursor=pointer]

@@ -1,0 +1,151 @@
+========================================
+VISTAMATIONS-MUSIC — SESSION CHAT RESULTS
+chat-results-4.txt
+========================================
+Date: 2026-08-11 13:23 AEST
+Branch: evidence-registry (50029cb)
+Workspace: C:\vistamations-music
+Session: System Architecture Documentation & VS Code Workspace Setup
+
+----------------------------------------
+PETE'S QUESTION: IS VISTAMATIONS-MUSIC A PROJECT, WORKSPACE, OR WHAT?
+----------------------------------------
+
+ANSWER: C:\vistamations-music is a git repository (remote: github.com/petehops89-jpg/command_control) and the VS Code workspace root folder. No .code-workspace file existed — VS Code treated it as a plain folder, which caused Cloudflare and GCP extensions to show "Open Folder" prompts instead of activating.
+
+There are three Cloudflare Worker configs in the system:
+  - cloudflare/wrangler.toml (vistamations-agent-memory — D1 + agent memory API)
+  - mya/wrangler.toml (mya-vistamations — wizard + chat at /mya)
+  - vistamations-home-bento/wrangler.jsonc (vistamations-webworker — homepage)
+
+One GCP project: vists-498322 (Vertex AI, Gemini 2.5 Pro, ADC auth configured).
+
+----------------------------------------
+PETE'S DEMAND: ALIGN VS CODE TERMS TO SYSTEM ARCHITECTURE
+----------------------------------------
+
+Pete was frustrated by inconsistent terminology (project, workspace, repo, branch, directory) being thrown around. He defined his system architecture as:
+
+    Vistamations System (C:\vistamations-music)
+    ├── Local Sub-System (Docker + Windows)
+    └── Cloud Sub-System (Cloudflare + Google Cloud)
+
+With 3 environments:
+    1. Local Environment (Windows/Docker)
+    2. Cloudflare Environment (Edge — Workers, D1, KV)
+    3. Google Cloud Environment (Vertex AI)
+
+A terminology bridge table was created mapping Vistamations terms ↔ industry terms:
+
+| Vistamations Term | Industry Term | Meaning |
+|---|---|---|
+| System | Repository / Workspace folder | C:\vistamations-music — everything |
+| Local Sub-System | Local environment | Docker + Windows on this PC |
+| Cloud Sub-System | Cloud infrastructure | Cloudflare + Google Cloud |
+| Environment | Environment / Runtime | Local, Cloudflare, GCloud |
+| System root | Workspace root / Repo root | C:\vistamations-music |
+| Agent mode file | System prompt | .kilo/modes/gordon.md |
+| Agent persona | Agent config | personas/big-brother.json |
+| Docker stack | Containerized services | 4 containers: nginx, app, Redis, Prometheus |
+| Git branch | Working branch | evidence-registry (all work lives here) |
+| Git commit | Snapshot / Changeset | A saved checkpoint |
+| Scheduled task | Cron job | Windows Task Scheduler entry |
+| API endpoint | Route / HTTP handler | GET /health etc. |
+| 4-value ID | Namespaced identifier | vista-{subsystem}-{environment}-{item} |
+| Command Control | Dashboard | index.html bento grid |
+| Command Portal | Message queue UI | command-portal.html |
+| Kilo | AI CLI tool | The AI managing the system |
+| OpenClaw | Gateway | Port 18789 external connector |
+| MCP | Tool protocol | n8n, Figma connections |
+| Status Dot | Health indicator | Green/red dot on Command Control |
+
+The bridge table was added to both README.md and AGENTS.md so all 10 agents reference the same terminology.
+
+----------------------------------------
+PETE'S QUESTION: WHAT IS EVIDENCE-REGISTRY? I NEVER SET THIS UP
+----------------------------------------
+
+Pete was unaware of the evidence-registry branch. He had only mentioned "evidence-based" in a chat session and never named or created this branch.
+
+GIT EVIDENCE:
+  - Branch "evidence-registry" was auto-created by the Vistamations-GitCommit scheduled task on 2026-08-09 02:08 AEST (commit 46fe1ef).
+  - The name came from the title of the first session's commit: "Evidence Registry v2: VM-series research capture pipeline" (56dcf3b).
+  - "main" branch contains only the initial commit (1a44669, "Initial commit") from 2026-08-07. It is 19 commits behind and effectively dead.
+  - ALL system files, features, and work since 2026-08-07 are on evidence-registry:
+    * Command Control Rollout
+    * Olivia Gate + Dispatch
+    * Command Portal
+    * Media Centre (8-agent grid)
+    * Mya v2 (Fortnite AI + wizard)
+    * Cloudflare D1 + Workers
+    * 4-value ID reorganization
+    * vista-sec-water (API key vault)
+    * Handy Mail 8-step gate
+    * All agent mode files and personas
+
+PETE'S MISCONCEPTION CLARIFICATION:
+  - The branch is NOT a separate directory, system, or environment.
+  - It IS the SAME directory (C:\vistamations-music) with git commit history on a named line.
+  - Switch to "main" and you lose everything.
+  - The branch name "evidence-registry" has no relationship to what actually lives on it.
+
+This was documented in pete-clarify.txt with full git log evidence.
+
+----------------------------------------
+VS CODE WORKSPACE FILE
+----------------------------------------
+
+Created vistamations-system.code-workspace at C:\vistamations-music\ to:
+  1. Register all 4 folders (system root + 3 Cloudflare Worker directories)
+  2. Point Cloudflare extensions at wrangler.toml
+  3. Configure GCP Cloud Code to recognize the project
+  4. Eliminate "Open Folder" prompts from extensions
+
+Folders in workspace:
+  - Vistamations System (local) → root
+  - Cloud Sub-System — Worker: vistamations-agent-memory → cloudflare/
+  - Cloud Sub-System — Worker: mya → mya/
+  - Cloud Sub-System — Worker: vistamations-home-bento → vistamations-home-bento/
+
+To activate: File → Open Workspace from File... → vistamations-system.code-workspace
+
+----------------------------------------
+MISSION STATEMENTS UPDATED
+----------------------------------------
+
+Three mission statement files updated with correct system architecture:
+  1. gemini_mission_statement.txt (gem, AG010)
+  2. deepseek_mission_statement.txt (Big Brother, AG006)
+  3. mistral_mission_statement.txt (Olivia, AG004)
+
+All now include:
+  - Full system architecture diagram (Local Sub-System + Cloud Sub-System)
+  - 3 environments listed
+  - Git branch clarification (evidence-registry is the active branch)
+  - 4-value ID convention
+  - Reporting chain
+  - Current critical gaps (46% system health)
+  - Agent-specific mission
+
+AGENTS.md — created at system root as the universal agent briefing file.
+Contains: system identity, architecture diagram, terminology bridge, agent roster,
+command list, branch clarification, and system health status.
+
+README.md — completely rewritten to use system terminology.
+Contains: terminology bridge, full architecture, Docker stack, Cloudflare
+resources, Google Cloud resources, agent roster, system health.
+
+----------------------------------------
+FILES CREATED/UPDATED THIS SESSION
+----------------------------------------
+  NEW: vistamations-system.code-workspace
+  NEW: AGENTS.md
+  NEW: chat-results-4.txt (this file)
+  UPDATED: README.md
+  UPDATED: .vscode/pete/vista-localsub-root/vista-localenv-env-root/vista-pete-clarify/pete-clarify.txt
+  UPDATED: .vscode/pete/vista-localsub-root/vista-localenv-env-root/vista-system-mission/gemini_mission_statement.txt
+  UPDATED: .vscode/pete/vista-localsub-root/vista-localenv-env-root/vista-system-mission/deepseek_mission_statement.txt
+  UPDATED: .vscode/pete/vista-localsub-root/vista-localenv-env-root/vista-system-mission/mistral_mission_statement.txt
+  UPDATED: .vscode/pete/vista-localsub-root/vista-localenv-env-root/vista-ag-commands/command.txt
+
+========================================

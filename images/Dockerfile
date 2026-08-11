@@ -8,6 +8,9 @@ COPY server.js ./
 COPY agent-daemon.js ./
 COPY start.sh ./
 
+COPY .vscode/pete/vista-localsub-root/vista-localenv-env-root/vista-sec-water/api-key-env-link/vault.js ./vault.js
+COPY .vscode/pete/vista-localsub-root/vista-localenv-env-root/vista-sec-water/api-key-env-link/gate-vault-bridge.js ./gate-vault-bridge.js
+
 RUN chmod +x start.sh
 RUN npm init -y 2>/dev/null; npm install express ioredis 2>/dev/null || true
 

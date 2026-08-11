@@ -1,0 +1,14 @@
+name = "mya-vistamations"
+main = "src/mya-worker.js"
+compatibility_date = "2026-08-09"
+workers_dev = true
+
+[assets]
+
+[[routes]]
+pattern = "www.vistamations.com/mya"
+zone_name = "vistamations.com"
+
+[[routes]]
+pattern = "www.vistamations.com/mya/*"
+zone_name = "vistamations.com"

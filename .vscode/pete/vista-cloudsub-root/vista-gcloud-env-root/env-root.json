@@ -1,0 +1,47 @@
+{
+  "domain": "cloud",
+  "environment": "google-cloud",
+  "subsystem": "cloud-subsystem",
+  "project": {
+    "id": "vists-498322",
+    "name": "Vistamations",
+    "region": "global",
+    "aiPlatform": "vertex-ai"
+  },
+  "auth": {
+    "method": "application-default-credentials",
+    "path": "%APPDATA%\\gcloud\\application_default_credentials.json",
+    "status": "configured"
+  },
+  "secrets": {
+    "GEMINI_API_KEY": {
+      "store": "vertex-ai-sdk",
+      "managedBy": "application-default-credentials",
+      "note": "Not a standalone key — uses GCloud ADC for Vertex AI auth"
+    },
+    "DEEPSEEK_API_KEY": {
+      "store": "kilo-gateway",
+      "managedBy": "kilo/kilo",
+      "note": "DeepSeek routed through Kilo Gateway, not GCloud"
+    }
+  },
+  "services": {
+    "vertexAi": {
+      "status": "configured",
+      "model": "gemini-2.5-pro",
+      "location": "global"
+    },
+    "geminiCli": {
+      "status": "configured",
+      "trustWorkspace": true
+    }
+  },
+  "envVars": {
+    "GOOGLE_CLOUD_PROJECT": "vists-498322",
+    "GOOGLE_CLOUD_LOCATION": "global",
+    "GOOGLE_GENAI_USE_VERTEXAI": "true",
+    "GOOGLE_APPLICATION_CREDENTIALS": "%APPDATA%\\gcloud\\application_default_credentials.json",
+    "GEMINI_CLI_TRUST_WORKSPACE": "true"
+  },
+  "lastUpdated": "2026-08-11T01:29:27+10:00"
+}

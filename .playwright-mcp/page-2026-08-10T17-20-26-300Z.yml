@@ -1,0 +1,55 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e2]:
+    - generic [ref=f3e3]: 🦙
+    - heading "Mya's World" [level=1] [ref=f3e4]
+    - generic [ref=f3e5]: // Fortnite Edition // Powered by Vistamations AI
+    - generic [ref=f3e6]:
+      - generic [ref=f3e7]: 👑 Mya
+      - text: "&"
+      - generic [ref=f3e8]: 👑 Dad (Pete)
+      - text: "&"
+      - generic [ref=f3e9]: 🤖 Fortnite Expert AI
+  - generic [ref=f3e10]: 🎮 VICTORY ROYALE INCOMING ✦ LLAMA SPOTTED ✦ BATTLE BUS DEPARTING ✦ STORM CLOSING IN ✦ CHUG JUG READY ✦ NEW EMOTE UNLOCKED ✦ 🎮 VICTORY ROYALE INCOMING ✦ LLAMA SPOTTED ✦ BATTLE BUS DEPARTING ✦ STORM CLOSING IN ✦ CHUG JUG READY ✦ NEW EMOTE UNLOCKED ✦
+  - generic [ref=f3e12]:
+    - button "🎮 Join Chat Community" [ref=f3e13] [cursor=pointer]
+    - button "💬 Talk to Fortnite Expert" [ref=f3e14] [cursor=pointer]
+    - button "🎤 Voice Chat" [ref=f3e15] [cursor=pointer]
+  - generic [ref=f3e17]:
+    - generic [ref=f3e18]: Battle Pass Progress
+    - generic [ref=f3e19]: Level 1
+  - generic [ref=f3e22]:
+    - generic [ref=f3e23]:
+      - generic [ref=f3e24]: Fortnite AI
+      - heading "🦙 Fortnite Expert Is Live!" [level=2] [ref=f3e25]
+      - paragraph [ref=f3e26]: Ask anything about skins, emotes, weapons, landing spots, Chapter 5 updates, or Battle Pass strategy. The AI knows it all — just like a cool older cousin who's amazing at Fortnite.
+    - generic [ref=f3e27]:
+      - generic [ref=f3e28]: Mya's Picks
+      - heading "🎨 Favorite Skins" [level=2] [ref=f3e29]
+      - paragraph [ref=f3e30]: Loading Mya's favorite Fortnite skins and cosmetics from the Item Shop...
+    - generic [ref=f3e31]:
+      - generic [ref=f3e32]: Dad's Builds
+      - heading "🏗️ Creative Mode" [level=2] [ref=f3e33]
+      - paragraph [ref=f3e34]: Pete's Fortnite Creative builds and island codes. Engineering meets gaming — structured chaos.
+    - generic [ref=f3e35]:
+      - generic [ref=f3e36]: Live
+      - heading "🎯 Drop Spot" [level=2] [ref=f3e37]
+      - paragraph [ref=f3e38]: Today's featured landing zone. Where we're dropping next match.
+      - generic [ref=f3e39]:
+        - generic [ref=f3e40]: 🗺️
+        - generic [ref=f3e41]: TILTED TOWERS
+    - generic [ref=f3e42]:
+      - generic [ref=f3e43]: Art
+      - heading "🎨 Fan Art Wall" [level=2] [ref=f3e44]
+      - paragraph [ref=f3e45]: Mya's Fortnite drawings and creations. Powered by Stefi's design magic.
+    - generic [ref=f3e46]:
+      - generic [ref=f3e47]: Chat Groups
+      - heading "👥 Your Communities" [level=2] [ref=f3e48]
+      - paragraph [ref=f3e49]: Take the 6-step wizard to find your perfect chat groups!
+  - generic [ref=f3e50]: Loading more awesome stuff...
+  - generic [ref=f3e51]:
+    - paragraph [ref=f3e52]: Mya's World is a Vistamations production © 2026
+    - paragraph [ref=f3e53]: Built with ❤️ by Dad (Big Brother) & Design by Stefi
+    - paragraph [ref=f3e54]:
+      - link "www.vistamations.com" [ref=f3e55] [cursor=pointer]:
+        - /url: https://www.vistamations.com
+  - button "🤖" [ref=f3e56] [cursor=pointer]

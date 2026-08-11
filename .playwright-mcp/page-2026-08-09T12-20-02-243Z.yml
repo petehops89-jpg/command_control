@@ -1,0 +1,246 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: Journey Path
+      - generic [ref=e6]: "Stage 1: Trinity"
+      - generic [ref=e9]: "Stage 2: Crons"
+      - generic [ref=e12]: "Stage 3: Cmd Ctrl"
+      - generic [ref=e15]: "Phase 3.1: Modules"
+      - generic [ref=e18]: "Phase 3.2: Personnel"
+      - generic [ref=e21]: "Phase 3.3: Security"
+    - link "📄 Publications OpenClaw Reports" [ref=e24] [cursor=pointer]:
+      - /url: publications.html
+      - generic [ref=e26]:
+        - generic [ref=e27]: 📄
+        - generic [ref=e28]:
+          - generic [ref=e29]: Publications
+          - generic [ref=e30]: OpenClaw Reports
+    - link "🔗 Links Notes Scraped URLs" [ref=e31] [cursor=pointer]:
+      - /url: links.html
+      - generic [ref=e33]:
+        - generic [ref=e34]: 🔗
+        - generic [ref=e35]:
+          - generic [ref=e36]: Links
+          - generic [ref=e37]: Notes Scraped URLs
+    - generic [ref=e38]:
+      - generic [ref=e39]: Core Agents
+      - generic [ref=e40] [cursor=pointer]:
+        - generic [ref=e41]: G
+        - generic [ref=e42]:
+          - generic [ref=e43]: Gordon
+          - generic [ref=e44]: Chief Hub Agent
+      - generic [ref=e46] [cursor=pointer]:
+        - generic [ref=e47]: T
+        - generic [ref=e48]:
+          - generic [ref=e49]: Trinity
+          - generic [ref=e50]: Apprentice Sys. Eng
+      - generic [ref=e52] [cursor=pointer]:
+        - generic [ref=e53]: M
+        - generic [ref=e54]:
+          - generic [ref=e55]: Merlin V.II
+          - generic [ref=e56]: Wizard Guide
+      - generic [ref=e58] [cursor=pointer]:
+        - generic [ref=e59]: O
+        - generic [ref=e60]:
+          - generic [ref=e61]: Olivia
+          - generic [ref=e62]: Exec. Secretary
+      - generic [ref=e64] [cursor=pointer]:
+        - generic [ref=e65]: B
+        - generic [ref=e66]:
+          - generic [ref=e67]: Big Brother
+          - generic [ref=e68]: Sr. Software Arch.
+      - generic [ref=e70] [cursor=pointer]:
+        - generic [ref=e71]: D
+        - generic [ref=e72]:
+          - generic [ref=e73]: Dee
+          - generic [ref=e74]: Cron & Research
+      - generic [ref=e76] [cursor=pointer]:
+        - generic [ref=e77]: S
+        - generic [ref=e78]:
+          - generic [ref=e79]: Stefi
+          - generic [ref=e80]: Graphics & Design
+      - generic [ref=e82] [cursor=pointer]:
+        - generic [ref=e83]: C
+        - generic [ref=e84]:
+          - generic [ref=e85]: Claw (Dee)
+          - generic [ref=e86]: Legacy MCP Specialist
+  - generic [ref=e88]:
+    - generic [ref=e89]:
+      - generic [ref=e90]: Vistamations Command Control
+      - generic [ref=e91]: System Online
+    - generic [ref=e93]:
+      - generic [ref=e94] [cursor=pointer]:
+        - generic [ref=e95]:
+          - text: Vistamations
+          - emphasis [ref=e96]: Command Control
+        - generic [ref=e97]: Real-time runtime simulator. Docker · Redis · Prometheus · MCP. Base environment orchestration via Trinity.
+        - generic [ref=e98]:
+          - generic [ref=e99]: G
+          - generic [ref=e101]:
+            - generic [ref=e102]: "4"
+            - generic [ref=e103]: Containers
+          - generic [ref=e104]:
+            - generic [ref=e105]: "8"
+            - generic [ref=e106]: Agents
+          - generic [ref=e107]:
+            - generic [ref=e108]: 85%
+            - generic [ref=e109]: Stage 1
+          - generic [ref=e110]:
+            - generic [ref=e111]: ~70%
+            - generic [ref=e112]: Stage 2
+        - generic [ref=e113]:
+          - generic [ref=e114]: docker
+          - generic [ref=e115]: mcp
+          - generic [ref=e116]: localhost
+          - generic [ref=e117]: scheduled
+      - link "Live 🕰 Clock Wagga Wagga, NSW — weather, world clock, 24hr toggle clock-module.html" [ref=e118] [cursor=pointer]:
+        - /url: clock-module.html
+        - generic [ref=e119]:
+          - generic [ref=e120]: Live
+          - generic [ref=e121]: 🕰
+          - generic [ref=e122]: Clock
+          - generic [ref=e123]: Wagga Wagga, NSW — weather, world clock, 24hr toggle
+        - generic [ref=e124]: clock-module.html
+      - generic [ref=e270] [cursor=pointer]:
+        - generic [ref=e271]:
+          - button "⏮" [ref=e272]
+          - button "▶" [ref=e273]
+          - button "⏭" [ref=e274]
+          - generic [ref=e275]: No track
+          - generic [ref=e276]: "--:--"
+        - generic [ref=e278]:
+          - button "OLIVIA" [ref=e279]
+          - button "GORDON" [ref=e280]
+          - button "TRINITY" [ref=e281]
+          - button "MERLIN" [ref=e282]
+          - button "BIG BRO" [ref=e283]
+          - button "DEE" [ref=e284]
+          - button "STEFI" [ref=e285]
+          - button "TERENCE" [ref=e286]
+        - generic [ref=e287]:
+          - button "+ ADD" [ref=e288]
+          - button "SAVE" [ref=e289]
+          - button "−" [ref=e290]
+      - link "Two-Way 📨 Command Portal Olivia — direct comms line olivia/command-portal.html" [ref=e130] [cursor=pointer]:
+        - /url: crons/openclaw/olivia/command-portal.html
+        - generic [ref=e131]:
+          - generic [ref=e132]: Two-Way
+          - generic [ref=e133]: 📨
+          - generic [ref=e134]: Command Portal
+          - generic [ref=e135]: Olivia — direct comms line
+        - generic [ref=e136]: olivia/command-portal.html
+      - link "Legacy 🌙 Moonlight Video.js player" [ref=e137] [cursor=pointer]:
+        - /url: vista-moonlight
+        - generic [ref=e138]:
+          - generic [ref=e139]: Legacy
+          - generic [ref=e140]: 🌙
+          - generic [ref=e141]: Moonlight
+          - generic [ref=e142]: Video.js player
+      - link "Scheduled 📊 Monitor1 Publishing engine · 09/12/15/18 AEST" [ref=e143] [cursor=pointer]:
+        - /url: crons/openclaw/monitor1.html
+        - generic [ref=e144]:
+          - generic [ref=e145]: Scheduled
+          - generic [ref=e146]: 📊
+          - generic [ref=e147]: Monitor1
+          - generic [ref=e148]: Publishing engine · 09/12/15/18 AEST
+      - generic [ref=e149]:
+        - generic [ref=e150]: Infrastructure
+        - generic [ref=e151]:
+          - link "compose" [ref=e152] [cursor=pointer]:
+            - /url: docker-compose.yml
+          - link "docker" [ref=e153] [cursor=pointer]:
+            - /url: Dockerfile
+          - link "nginx" [ref=e154] [cursor=pointer]:
+            - /url: nginx.conf
+          - link "redis" [ref=e155] [cursor=pointer]:
+            - /url: redis.conf
+          - link "prom" [ref=e156] [cursor=pointer]:
+            - /url: prometheus.yml
+          - link "server" [ref=e157] [cursor=pointer]:
+            - /url: server.js
+        - generic [ref=e158]: docker redis:6379 prom:9090 nginx:80
+      - link "🤖 Agents Gordon • AG001 • AG008" [ref=e163] [cursor=pointer]:
+        - /url: agents
+        - generic [ref=e164]:
+          - generic [ref=e165]: 🤖
+          - generic [ref=e166]: Agents
+          - generic [ref=e167]: Gordon • AG001 • AG008
+      - link "📦 Base Env docker|mcp|localhost" [ref=e168] [cursor=pointer]:
+        - /url: base-env
+        - generic [ref=e169]:
+          - generic [ref=e170]: 📦
+          - generic [ref=e171]: Base Env
+          - generic [ref=e172]: docker|mcp|localhost
+      - link "📝 Notes" [ref=e173] [cursor=pointer]:
+        - /url: .vscode/pete/notes-folder/notes
+        - generic [ref=e174]:
+          - generic [ref=e175]: 📝
+          - generic [ref=e176]: Notes
+    - generic [ref=e177]:
+      - generic [ref=e178]:
+        - generic [ref=e179]:
+          - generic [ref=e181]: nginx
+          - generic [ref=e182]: :80 OK
+        - generic [ref=e183]:
+          - generic [ref=e185]: app
+          - generic [ref=e186]: :3000 OK
+        - generic [ref=e187]:
+          - generic [ref=e189]: redis
+          - generic [ref=e190]: :6379 OK
+        - generic [ref=e191]:
+          - generic [ref=e193]: prometheus
+          - generic [ref=e194]: :9090 OK
+        - generic [ref=e195]:
+          - generic [ref=e197]: openclaw
+          - generic [ref=e198]: :18789
+        - generic [ref=e199]:
+          - generic [ref=e201]: publishing
+          - generic [ref=e202]: 09:00 AEST
+        - generic [ref=e203]:
+          - generic [ref=e205]: evidence
+          - generic [ref=e206]: 16 links
+        - generic [ref=e207]:
+          - generic [ref=e209]: olivia-queue
+          - generic [ref=e210]: 7 pending
+      - generic [ref=e211]:
+        - generic [ref=e212]: Alerts
+        - generic [ref=e213]: WARN 7 queue tasks unprocessed
+        - generic [ref=e214]: INFO Publishing engine ready
+        - generic [ref=e215]: "INFO Next run: 09:00 tomorrow"
+  - generic [ref=e217]:
+    - generic [ref=e218] [cursor=pointer]:
+      - generic [ref=e219]: Open PDF
+      - generic [ref=e220]: Toolkit
+      - generic [ref=e221]: Reader · Editor · OCR
+    - generic [ref=e224]:
+      - generic [ref=e225]: Publications
+      - generic [ref=e226]: "4"
+      - generic [ref=e227]: Today • 75% success
+    - generic [ref=e230]:
+      - generic [ref=e231]: Active Agents
+      - generic [ref=e232]: 8 / 8
+      - generic [ref=e233]: All online or idle
+    - generic [ref=e236]:
+      - generic [ref=e237]: Docker Uptime
+      - generic [ref=e238]: 15h
+      - generic [ref=e239]: 4 containers healthy
+    - generic [ref=e242]:
+      - generic [ref=e243]: Queue Depth
+      - generic [ref=e244]: "7"
+      - generic [ref=e245]: Olivia tasks waiting
+    - generic [ref=e248]:
+      - generic [ref=e249]: Evidence Registry
+      - generic [ref=e250]: "16"
+      - generic [ref=e251]: Research links indexed
+    - generic [ref=e254]:
+      - generic [ref=e255]: Knowledge Library
+      - generic [ref=e256]: "4"
+      - generic [ref=e257]: Assets in library
+    - generic [ref=e260]:
+      - generic [ref=e261]: Next Scheduled
+      - generic [ref=e262]: 09:00
+      - generic [ref=e263]: Tomorrow AEST
+    - generic [ref=e264]:
+      - generic [ref=e265]: No-Response
+      - generic [ref=e266]: "1"
+      - generic [ref=e267]: Unanswered 1hr window

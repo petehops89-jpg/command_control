@@ -1,0 +1,57 @@
+- generic [active] [ref=f4e1]:
+  - generic [ref=f4e3]:
+    - generic [ref=f4e4]: 🐝
+    - heading "Mya's World" [level=1] [ref=f4e5]
+    - paragraph [ref=f4e6]: Fortnite Edition • Powered by Vistamations
+    - button "Mya, start here" [ref=f4e7] [cursor=pointer]
+    - generic [ref=f4e8]: 🎤 Bee is listening...
+  - generic:
+    - generic:
+      - generic: 🐝
+      - heading "Mya's World" [level=2]
+      - generic: // Fortnite Edition // Bee AI Guide
+      - generic:
+        - generic: 🐝 Bee online
+        - generic: 🦙 Expert standing by
+        - generic: 🎤 Voice on
+    - generic:
+      - button "🐝 Start Tour"
+      - button "⚙️ Settings"
+      - button "📰 News"
+    - generic:
+      - generic:
+        - generic: Mya's Journey
+        - generic: Level 1
+    - generic:
+      - generic:
+        - generic: Fortnite AI
+        - heading "🦙 Fortnite Expert Is Live!" [level=3]
+        - paragraph: Bee connects you to the Fortnite AI. Ask about skins, weapons, landing spots, Chapter 5. Like a cool older cousin who's amazing at Fortnite.
+      - generic:
+        - generic: My Stuff
+        - heading "🎨 Your Skins & Emotes" [level=3]
+        - paragraph: View your Fortnite locker — skins, emotes, back bling, and pickaxes. Track what you own and what's new.
+      - generic:
+        - generic: Creative Mode
+        - heading "🏗️ Build with Dad" [level=3]
+        - paragraph: Dad's island codes and Creative mode projects. Engineering meets Fortnite.
+      - generic:
+        - generic: Live Drop
+        - heading "🎯 Today's Drop Zone" [level=3]
+        - paragraph: Where we're landing next match. Rotation routes and loot paths.
+        - generic: 🗺️
+        - generic: TILTED TOWERS
+      - generic:
+        - generic: News & Updates
+        - heading "📡 Fortnite News Feed" [level=3]
+        - paragraph: Latest Fortnite headlines, item shop, patch notes. Bee keeps you updated.
+      - generic:
+        - generic: Chat Groups
+        - heading "👥 Your Communities" [level=3]
+        - paragraph: Take the guided tour to discover your chat groups and meet other Fortnite fans!
+    - generic:
+      - button "🐝 Replay Tour"
+    - generic:
+      - paragraph: Mya's World is a Vistamations production © 2026
+      - paragraph: Built with ❤️ by Dad • Bee AI by Cloudflare Workers
+  - button "🐝" [ref=f4e9] [cursor=pointer]

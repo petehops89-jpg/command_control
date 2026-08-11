@@ -1,0 +1,54 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: Vistamations SOAP Pipeline
+    - heading "Handy Mail" [level=1] [ref=e5]
+    - generic [ref=e6]: Secure Document Delivery — QR Encrypted, Digitally Signed, Steganographically Watermarked
+    - generic [ref=e7]: SOAP / XML-RPC Protocol
+  - generic [ref=e8]:
+    - generic [ref=e10]: Ready — Fill customer details to begin
+    - generic [ref=e11]: "Session: cea51474"
+  - generic [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]: "1"
+      - generic [ref=e15]:
+        - generic [ref=e16]: Bento UI
+        - generic [ref=e17]: Customer Information, Website Link, QR Code, Logo
+      - generic [ref=e18]: active
+    - generic [ref=e19]:
+      - generic [ref=e20]: "2"
+      - generic [ref=e21]:
+        - generic [ref=e22]: Signature
+        - generic [ref=e23]: Handwritten Digital Signature Capture
+    - generic [ref=e24]:
+      - generic [ref=e25]: "3"
+      - generic [ref=e26]:
+        - generic [ref=e27]: Encryption
+        - generic [ref=e28]: Scrambled Payload — Legible text becomes cipher text
+    - generic [ref=e29]:
+      - generic [ref=e30]: "4"
+      - generic [ref=e31]:
+        - generic [ref=e32]: Watermark
+        - generic [ref=e33]: 30×30px transparent 'vistamations' hidden under Logo Layer
+  - generic [ref=e34]:
+    - 'heading "// Layer 1: Customer Information & QR Generation" [level=3] [ref=e35]'
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e38]: Full Name
+        - textbox "Customer full legal name" [ref=e39]
+      - generic [ref=e40]:
+        - generic [ref=e41]: Email Address
+        - textbox "customer@example.com" [ref=e42]
+      - generic [ref=e43]:
+        - generic [ref=e44]: Website / Reference Link
+        - textbox "https://www.vistamations.com/..." [ref=e45]
+      - generic [ref=e46]:
+        - generic [ref=e47]: Document ID
+        - textbox [ref=e48]: HM-DOC-0001
+      - generic [ref=e49]:
+        - generic [ref=e50]: Message / Instructions
+        - textbox "Enter the message content to be encrypted and delivered..." [ref=e51]
+    - generic [ref=e54]:
+      - heading "QR Encoded Payload" [level=4] [ref=e55]
+      - paragraph [ref=e56]: Scan to initiate the 5-step authentication & decode workflow
+      - generic [ref=e57]: "Payload: eyJuYW1lIjoiIiwiZW1haWwiOiIiLCJsaW5rIjoiIiwiZG9jSWQiOiJITS1ET0Mt..."
+    - button "✓ Confirm Customer Info" [ref=e59] [cursor=pointer]

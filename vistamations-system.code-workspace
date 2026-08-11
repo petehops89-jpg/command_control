@@ -1,0 +1,38 @@
+{
+  "folders": [
+    {
+      "name": "Vistamations System (local)",
+      "path": "."
+    },
+    {
+      "name": "Cloud Sub-System — Worker: vistamations-agent-memory",
+      "path": "cloudflare"
+    },
+    {
+      "name": "Cloud Sub-System — Worker: mya",
+      "path": "mya"
+    },
+    {
+      "name": "Cloud Sub-System — Worker: vistamations-home-bento",
+      "path": "vistamations-home-bento"
+    }
+  ],
+  "settings": {
+    "cloudcode.project": "vistamations",
+    "cloudcode.activateWithFolderOpen": true,
+    "wrangler.cwd": "${workspaceFolder:vistamations-agent-memory}",
+    "cloudflare-kv-explorer.wranglerConfig": "${workspaceFolder:vistamations-agent-memory}/wrangler.toml"
+  },
+  "extensions": {
+    "recommendations": [
+      "cloudflare.cloudflare-devtools",
+      "swalkerdev.cloudflare-kv-explorer",
+      "googlecloudtools.cloudcode"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [],
+    "compounds": []
+  }
+}

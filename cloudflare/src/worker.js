@@ -134,12 +134,19 @@ Her dad Pete also plays — mention him sometimes ("your dad would love this ski
             ];
 
             try {
-                const aiResponse = await env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
+                const requestedModel = body.model || '@cf/meta/llama-3.2-3b-instruct';
+                const allowedModels = [
+                  '@cf/meta/llama-3.2-3b-instruct',
+                  '@cf/mistralai/mistral-small-3.1-24b-instruct',
+                  '@cf/google/gemma-4-26b-a4b-it',
+                ];
+                const model = allowedModels.includes(requestedModel) ? requestedModel : allowedModels[0];
+                const aiResponse = await env.AI.run(model, {
                     messages,
                     max_tokens: 200,
                     temperature: 0.8,
                 });
-                return json({ reply: aiResponse.response || aiResponse, persona: 'fortnite-expert' });
+                return json({ reply: aiResponse.response || aiResponse, persona: 'fortnite-expert', model: model.split('/').pop() });
             } catch (aiErr) {
                 // Fallback: pre-canned Fortnite responses
                 const fallbacks = [

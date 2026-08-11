@@ -1,0 +1,21 @@
+{
+  "id": "AG011",
+  "name": "Ollama Local LLM Interface",
+  "description": "Provides a standardized interface to interact with LLMs running locally via the Ollama server.",
+  "author": "Gemini Code Assist",
+  "version": "1.0.0",
+  "timeout_seconds": 180,
+  "capabilities": [
+    "local_inference",
+    "text_generation",
+    "code_generation"
+  ],
+  "executable": {
+    "type": "api",
+    "endpoint": "http://localhost:11434/api/generate",
+    "method": "POST"
+  },
+  "schema": {
+    "input": "Defines the payload structure for the Ollama API, including 'model', 'prompt', and 'stream' parameters."
+  }
+}

@@ -3,23 +3,58 @@ const Redis = require('ioredis');
 const fs = require('fs');
 const path = require('path');
 
+// ─── Vistamations Unified Vault ───
+// Resolves secrets from: Credential Manager (local) → process.env (Docker) → defaults
+const VAULT_PATH = path.join(
+  __dirname,
+  '.vscode', 'pete', 'vista-localsub-root', 'vista-localenv-env-root',
+  'vista-sec-water', 'api-key-env-link', 'vault.js'
+);
+let getSecret = null;
+try {
+  if (fs.existsSync(VAULT_PATH)) {
+    getSecret = require(VAULT_PATH).getSecret;
+    console.log('[vault] Unified vault loaded');
+  }
+} catch (e) {
+  console.warn('[vault] Not available:', e.message);
+}
+
+async function resolveSecret(name, fallback) {
+  if (getSecret) {
+    try {
+      const val = await getSecret(name);
+      if (val) return val;
+    } catch (_) {}
+  }
+  return process.env[name] || fallback;
+}
+
 const RESEARCH_LINKS_PATH = path.join(__dirname, 'crons', 'openclaw', 'research', 'inventory', 'links.json');
 const OLIVIA_RESPONSES_PATH = path.join(__dirname, 'crons', 'openclaw', 'olivia', 'responses.json');
 const OLIVIA_QUEUE_PATH = path.join(__dirname, 'crons', 'openclaw', 'olivia', 'queue.json');
 const PUBLICATIONS_PATH = path.join(__dirname, 'crons', 'openclaw', 'publications');
 
+let OLIVIA_NORESP_PATH = null;
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 let redis = null;
-try {
-  redis = new Redis(process.env.REDIS_URL || 'redis://redis:6379', {
-    password: process.env.REDIS_PASSWORD || 'vistamations-redis-2026',
-    lazyConnect: true,
-    retryStrategy: (times) => Math.min(times * 200, 3000),
-  });
-} catch (e) {
-  console.warn('Redis init warning:', e.message);
+
+async function initRedis() {
+  const redisUrl = await resolveSecret('REDIS_URL', 'redis://redis:6379');
+  const redisPassword = await resolveSecret('REDIS_PASSWORD', 'vistamations-redis-2026');
+  try {
+    redis = new Redis(redisUrl, {
+      password: redisPassword,
+      lazyConnect: true,
+      retryStrategy: (times) => Math.min(times * 200, 3000),
+    });
+    console.log('[redis] Initialized');
+  } catch (e) {
+    console.warn('[redis] Init warning:', e.message);
+  }
 }
 
 app.use(express.json());
@@ -352,6 +387,8 @@ app.post('/olivia/clear-messages', (req, res) => {
   }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, '0.0.0.0', async () => {
+  OLIVIA_NORESP_PATH = path.join(__dirname, 'crons', 'openclaw', 'olivia', 'no-response.json');
+  await initRedis();
   console.log('Vistamations App running on port ' + PORT);
 });

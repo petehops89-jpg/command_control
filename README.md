@@ -1,51 +1,119 @@
-# Vistamations — Command Control
+# Vistamations System
 
-## Environment
+## Terminology Bridge — System ↔ Industry
 
-**Host**: Windows 11 Pro (build 2009), 11th Gen Intel Core i5-1135G7 @ 2.40GHz, 16 GB RAM. Docker Desktop 4.84.0 running on WSL2 backend (`desktop-linux` context), Docker Engine 29.6.2, Compose v5.3.1. Node.js 20 Alpine for application runtime. GitHub repository: [petehops89-jpg/command_control](https://github.com/petehops89-jpg/command_control).
+| Vistamations Term | Industry Term (what VS Code/Git/Docker call it) | What it means |
+|---|---|---|
+| **System** | Repository / Project / Workspace folder | The whole thing. `C:\vistamations-music`. Everything lives here. |
+| **Local Sub-System** | Local environment / Local machine | Docker + Windows running on your physical PC. All local services. |
+| **Cloud Sub-System** | Cloud infrastructure | Everything NOT local: Cloudflare + Google Cloud. |
+| **Environment** | Environment / Runtime | A specific execution context: Local (Docker), Cloudflare (Edge), Google Cloud (Vertex AI). |
+| **System root** | Workspace root / Repo root | `C:\vistamations-music` — the top-level directory. |
+| **System directory** | Working directory / Project folder | The folder you're in. Files live here. |
+| **Agent mode file** | Markdown instruction file / System prompt | `.kilo/modes/gordon.md` — tells an agent who they are and what they do. |
+| **Agent persona** | Agent config / Runtime identity | `personas/big-brother.json` — structured identity data for an agent. |
+| **Docker stack** | Containerized services | 4 containers: nginx, app (Express), Redis, Prometheus. |
+| **Reverse proxy** | Ingress / Router | nginx — routes traffic from port 80 to internal services. |
+| **Git branch (evidence-registry)** | Working branch / Active branch | The line of commits where all work lives. `main` is a dead branch. |
+| **Git commit** | Snapshot / Changeset | A saved point in time with a message describing what changed. |
+| **Scheduled task** | Cron job / Scheduled job | Windows Task Scheduler entry. Runs scripts on a timer. |
+| **API endpoint** | Route / HTTP handler | `GET /health` — a URL that returns data when called. |
+| **4-value ID** | Namespaced identifier | `vista-localsub-root/vista-localenv-env-root/vista-sec-water/ag011.json` |
+| **Command Control** | Dashboard | `index.html` — the bento grid homepage. |
+| **Command Portal** | Message queue UI | `command-portal.html` — Olivia messaging interface. |
+| **Kilo** | AI coding assistant / CLI tool | The AI tool running in VS Code that manages the system via agents. |
+| **OpenClaw** | Gateway / Protocol bridge | A gateway service on port 18789 that connects external clients (Telegram). |
+| **MCP** | Tool protocol (Model Context Protocol) | Allows agents to use external tools (n8n, Figma, etc.). |
+| **Status Dot** | Health indicator | The green/red dot on Command Control showing live service state. |
 
-**Development toolchain**: VS Code with LiveServer (port 5501), GitHub CLI v2.97.0 authenticated as `petehops89-jpg`. Project configuration via `.kilo/` skill and agent definitions, with project notes, instructions, and design links in `.vscode/`. Figma prototypes reference `vista-merlin-webcraft-engine.ai.studio` for UI/UX mockups and community design templates.
+## System Architecture
 
-**Network**: Local Wi-Fi at 192.168.20.19, WSL virtual ethernet at 172.26.128.1. All services exposed on localhost: nginx (80/5501), app (3000), Redis (6379), Prometheus (9090). External API integrations: Open-Meteo for Wagga Wagga weather data, jsDelivr CDN for hls.js, WebTorrent, and ffmpeg.wasm browser libraries.
+The Vistamations System is an autonomous knowledge production operating system governing research acquisition, publication, deployment, monitoring, and archival via an AI agent network.
 
-## Infrastructure
+```
+Vistamations System (C:\vistamations-music)
+│
+├── LOCAL SUB-SYSTEM
+│   └── Local Environment (Docker + Windows)
+│
+└── CLOUD SUB-SYSTEM
+    ├── Cloudflare Environment (Edge — Workers, D1, KV)
+    └── Google Cloud Environment (Vertex AI — Gemini)
+```
 
-**The Trinity** — `docker | mcp | localhost` — defines the base environment stack. Agent Trinity (ID: `org AG001 base-env`) governs infrastructure orchestration and environment management. A second agent slot (`org AG007 base-env`) is reserved for expansion.
+**3 environments to date**: 1 Local, 2 Cloud (Cloudflare + Google Cloud).  
+**GitHub**: [petehops89-jpg/command_control](https://github.com/petehops89-jpg/command_control)  
+**Active branch**: `evidence-registry` (all system files live here; `main` is a dead branch with only the initial commit)  
+**4-Value ID convention**: `vista-{subsystem}-{environment}-{item}` (e.g. `vista-localsub-root/vista-localenv-env-root/vista-sec-water/ag011.json`)
 
-**Container stack** (4 services, all healthy):
+## Local Sub-System — Local Environment
+
+**Host**: Windows 11 Pro, Intel Core i5-1135G7 @ 2.40GHz, 16 GB RAM. Docker Desktop 4.84.0 (WSL2), Node.js 20 Alpine. VS Code + Kilo AI toolchain.
+
+**Docker stack** (4 containers, all healthy):
 
 | Service | Image | Port | Role |
 |---------|-------|------|------|
-| `nginx` | nginx:alpine | 80, 5501 | Reverse proxy, static file serving, gzip |
-| `app` | custom node:20-alpine | 3000 | Express API server, health/metrics endpoints, Redis client |
-| `redis` | redis:7-alpine | 6379 | Cache/state backend, AOF persistence, password auth, 256MB memory limit |
-| `prometheus` | prom/prometheus:latest | 9090 | Metrics collection, persistent TSDB storage, 15s scrape interval |
+| `nginx` | nginx:alpine | 80, 5501 | Reverse proxy, static file serving |
+| `app` | node:20-alpine | 3000 | Express API (17 routes) |
+| `redis` | redis:7-alpine | 6379 | Cache/state (empty — 0 keys) |
+| `prometheus` | prom/prometheus:latest | 9090 | Metrics (15s scrape) |
 
-**Application layer**: `clock.html` (real-time Wagga Wagga clock with weather, 24hr toggle, 8-city world clock), `vista-moonlight` (Video.js-based legacy media player), `media-player/index.html` (modular media stack: Web Audio API equalizer with 8 presets, HLS/IPTV streaming with 5 default channels, WebTorrent streaming, fetch-based download manager, ffmpeg.wasm transcoder, localStorage-backed settings), `index.html` (Next.js-style bento grid command control dashboard with `command-control.png` full-page background).
+**Scheduled tasks** (6 active): Olivia Dispatch, Olivia Watchdog, Git Auto-Commit, Olivia Status, Links Sync, OpenClaw Publishing Engine.
 
-**Monitoring**: Prometheus scrapes app `/metrics` endpoint (uptime, Redis connectivity). All 4 containers have healthchecks with 15s intervals and failure retries. Nginx auto-restarts on failure. App exposes `/health` returning JSON status with Redis connection state.
+**Applications**: Command Control (bento grid dashboard), Command Portal (Olivia message queue), Media Centre (8-agent grid), Mya (AI wizard + chat), Handy Mail (8-step security gate), PDF Toolkit, Gem Chat, Clock (Wagga Wagga + world time), Publications, Links.
 
-**Git**: Single branch `main` tracking `origin/main`. 29 tracked files, 5398 lines. Clean working tree.
+## Cloud Sub-System — Cloudflare Environment
 
-## Vistamations Mission Statement
+| Resource | Name | Status |
+|---|---|---|
+| D1 Database | `vistamations-agent-memory` (AGENT_DB) | Active |
+| Worker | `vistamations-agent-memory` | Active |
+| Worker | `mya-vistamations` | Active (`www.vistamations.com/mya`) |
+| Worker | `vistamations-webworker` | Active (vistamations.com) |
+| KV Namespaces | HANDY_MAIL_KV, SESSION_KV, MYA_KV | Deferred |
 
-Vistamations is a qualitative and quantitative, broadly resourced, concurrent real-time runtime simulator — a platform that transforms computing infrastructure into a living, self-governing ecosystem. The mission: build an orchestration layer where AI agents govern growth according to user-defined policies, not scripted automation.
+## Cloud Sub-System — Google Cloud Environment
 
-**Core principle — Sovereignty**. Users own their infrastructure; Vistamations is the orchestration layer, not the host. The platform connects the user's own GitHub accounts, cloud providers (Google Cloud, Cloudflare), Docker hosts, local machines, NAS devices, and edge platforms into a unified command plane.
+| Resource | Detail | Status |
+|---|---|---|
+| Project | `vists-498322` | Active |
+| Vertex AI | gemini-2.5-pro (global) | Configured |
+| Auth | Application Default Credentials | Configured |
+| Gemini CLI | Trusted workspace | Configured |
+| Gemini daemon | AG010 gem daemon wiring | Pending |
 
-**Architecture — Four layers**:
+## Agent Roster — Dominion I (10 agents)
 
-1. **Simulation** — The visual game layer. Users see kingdoms, territories, cities, and departments, not cloud terminology. Infrastructure is gamified as a world they govern.
-2. **Digital Twin** — Every simulation object maps to real infrastructure. A capital city is a Google Cloud project; an industrial zone is a Docker cluster; a research centre is a GitHub repository.
-3. **Infrastructure** — Three operating modes: Sandbox (fully simulated, no credentials), Hybrid (partial real resources like GitHub and Cloudflare), Production (fully live: Cloud Run, Vertex AI, Workers, D1, R2, local servers).
-4. **Sovereignty** — The differentiator. The platform does not own anything. Users supply their keys, accounts, and hardware. Vistamations provides governance, orchestration, and AI management.
+| # | Agent | Runtime | Role |
+|---|---|---|---|
+| AG001 | Gordon | DeepSeek V4 Pro | Chief Hub Agent |
+| AG002 | Trinity | DeepSeek V4 Pro | Systems Engineer |
+| AG003 | Merlin V.II | DeepSeek V4 Pro | Wizard Guide |
+| AG004 | Olivia | Mistral Large 3 | Executive Secretary |
+| AG005 | Claw (Dee) | DeepSeek V4 Pro | MCP Specialist |
+| AG006 | Big Brother | DeepSeek V4 Pro | Software Architect |
+| AG007 | Dee | DeepSeek V4 Pro | Cron & Research |
+| AG008 | Stefi | DeepSeek V4 Pro | Graphics & Design |
+| AG009 | Terence | OpenClaw Gateway | Think Tank |
+| AG010 | gem | Gemini 3.5 Flash | Music AI |
 
-**AI governance model** — Policy-driven agents monitor domains: capacity, security, cost, deployment, documentation, architecture, compliance. Each agent watches its domain, raises flags backed by confidence scores and cost estimates, and proposes structural changes — not as alerts, but as decision points with actionable recommendations.
+**Reporting chain**: Player → Merlin V.II → Olivia → Gordon → Trinity → Claw/Dee/Big Brother/Stefi
 
-**Distributed compute** — Local compute (desktop, laptop, Docker host, Raspberry Pi), cloud compute (Google Cloud Run, Vertex AI, storage), and edge compute (Cloudflare Workers, D1, KV) all report through a unified command bus to a single control plane.
+## System Health
 
-**Infrastructure Genome** — A portable, versioned blueprint of every user's environment: cloud providers, machines, containers, databases, agents, permissions, network topology, deployment policies, and automation rules. Changes through the platform update the genome; the genome renders the simulation. This makes environments reproducible and redeployable.
+| Area | Status |
+|---|---|
+| Docker stack | Healthy |
+| API endpoints (17 routes) | Verified |
+| Scheduled tasks (6) | Operational |
+| Agent personas | 2/10 complete |
+| Knowledge graph | Empty |
+| Redis | Empty (0 keys) |
+| Test coverage | None |
+| CI/CD | None |
+| **Overall Health** | **46%** |
 
-**Narrative mode — Thomas Bresche** — A fictional campaign following a protagonist who starts with nothing and builds a kingdom. The story teaches systems thinking through consequences: early game challenges (cash flow, technical debt, scaling), mid game (competitors, acquisitions, regulatory compliance), late game (multinational operations, geopolitical risk, sanctions). The endgame generates a comprehensive Kingdom Analysis across infrastructure, security, leadership, and resilience — lessons from one campaign seed the starting architecture for the next.
+## Mission
 
-**Immediate goal**: Build the command control centre as an interactive SVG dashboard with real-time system telemetry, boot sequence visualization, agent status monitoring, network topology graphs, and event logging — establishing the visual foundation for the full simulation engine.
+Vistamations is a qualitative and quantitative, broadly resourced, concurrent real-time runtime simulator — a platform that transforms computing infrastructure into a living, self-governing ecosystem. The mission: build an orchestration layer where AI agents govern growth according to user-defined policies, not scripted automation. Core principle: Sovereignty — users own their infrastructure; Vistamations is the orchestration layer, not the host.

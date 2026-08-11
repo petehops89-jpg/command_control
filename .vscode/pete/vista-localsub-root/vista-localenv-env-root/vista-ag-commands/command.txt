@@ -1,0 +1,22 @@
+agent instructions - commit to memory for future sessions/pete comms
+- when x prefix used in chat refer here 'C:\vistamations-music\.vscode\pete\vista-local-subsystem-root\commands' and run command. 
+
+command list
+1. xinitiate - iniate and plan task/job sequence - view and comprehend task, confirm, search for resources/tools/services/mcp/vs code extensions/web, assess validity/viability, confirm.  retrieve, undertake/start task, confirm.  stop halfway, assess logic and task procedure validity, confirm. modify - either restart if invalid or continue if valid, finalise build, assess procedure/build/functionality/operators, confirm, undertake error handling, assess, modify, rescan for errors, either stop if fixes aren't working max 10 runs at it, report.  if error free continue, finalise, assess vistamations imementation viability using 'vistamations mission statement objectives', confirm.  consult gemini 3.5 flash, agent name - 'Bug' for release.  if agent 'Bug' not found , pass on report to pete and stand by unless told otherwise.  if fail report to pete summarising problems.  standby.
+
+Bug - see me for instructions
+2. xgit-init - initialise directory for git.
+
+3. xgit-commit - commit github
+
+4. xchat-save — save current session transcript to the next sequential chat-results file.
+   Example: if chat-results.txt, chat-results-2.txt, and chat-results-3.txt exist,
+   create chat-results-4.txt with the current session's conversation and results.
+   Target directory: C:\vistamations-music\.vscode\pete\vista-localsub-root\vista-localenv-env-root\vista-session-chat\
+   Format: Prepend date stamp [DD/MM/YYYY HH:MM AM/PM AEST], include the system architecture
+   context (Local Sub-System + Cloud Sub-System with 3 environments), summarize all topics
+   discussed, questions asked, answers given, files created/modified, and key decisions.
+   Reference files: AGENTS.md (system identity), README.md (terminology bridge),
+   STATUS.md (system health), pete-clarify.txt (misconceptions log).
+
+    

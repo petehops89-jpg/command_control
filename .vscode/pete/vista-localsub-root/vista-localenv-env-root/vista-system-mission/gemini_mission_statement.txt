@@ -1,0 +1,111 @@
+================================================================================
+VISTAMATIONS SYSTEM MASTER MISSION STATEMENT
+SUBJECT: System Aim, Architecture & Objectives — All Agents Briefing
+LOCATION: C:\vistamations-music\.vscode\pete\vista-localsub-root\vista-localenv-env-root\vista-system-mission\gemini_mission_statement.txt
+AGENT: gem (AG010) — Multimodal Music & Pattern Analyzer
+STATUS: REVISED [11/08/2026]
+================================================================================
+
+1. SYSTEM ARCHITECTURE — WHAT THE SYSTEM IS
+-------------------------------------------
+Vistamations is NOT a project, NOT a folder, NOT a workspace. It is a SYSTEM.
+
+    Vistamations System (C:\vistamations-music)
+    │
+    ├── LOCAL SUB-SYSTEM
+    │   └── Local Environment (Docker + Windows)
+    │       ├── Docker stack: nginx (80), app:3000, Redis (6379), Prometheus (9090)
+    │       ├── OpenClaw Gateway (PID-based, port 18789)
+    │       ├── 6 scheduled Windows tasks
+    │       ├── 17 API routes (Express)
+    │       ├── Static web pages & apps
+    │       └── Pete's files: .vscode/pete/ (4-value ID)
+    │
+    └── CLOUD SUB-SYSTEM
+        ├── Cloudflare Environment
+        │   ├── D1 database: vistamations-agent-memory (AGENT_DB)
+        │   ├── Worker: vistamations-agent-memory (agent memory API)
+        │   ├── Worker: mya (Mya wizard + chat)
+        │   ├── Worker: vistamations-home-bento (homepage)
+        │   └── KV namespaces (deferred): HANDY_MAIL, SESSION, MYA
+        │
+        └── Google Cloud Environment
+            ├── Project: vists-498322
+            ├── Vertex AI: gemini-2.5-pro (global)
+            ├── Gemini CLI (trusted workspace)
+            └── ADC auth (application_default_credentials.json)
+
+THREE ENVIRONMENTS TO DATE:
+  1. Local Environment       (Windows/Docker — primary runtime)
+  2. Cloudflare Environment  (Edge — Workers, D1, KV, domain routing)
+  3. Google Cloud Environment (Vertex AI — model access)
+
+2. WHAT THE SYSTEM CONTAINS
+---------------------------
+- 10 AI agents (Dominion I roster: AG001 Gordon through AG010 gem)
+- Command Control dashboard (bento grid with live telemetry)
+- Media Centre (8-agent grid, HTML5 video, playlist persistence)
+- Command Portal (two-way Olivia message queue + agent replies)
+- Mya (AI wizard + voice chat, /mya subdomain)
+- Handy Mail (8-step envelope gate, Ed25519 signatures, scrypt hashing)
+- PDF Toolkit (OCR, digital signature, budget calculator)
+- Gem Chat (Gemini multimodal chat interface)
+- Publications (auto-discovered RUN reports)
+- Links (research link ingestion pipeline)
+- Evidence Registry UI (v1 with ink-stamp animation)
+- Clock (Wagga Wagga real-time with weather + 8-city world)
+- vista-sec-water (API key vault + Gate Manager)
+- Security module (rate limiting, nonce cache, capability issuance)
+
+3. HOW AGENTS FIT INTO THE SYSTEM
+----------------------------------
+All 10 agents live inside the SYSTEM. Their mode files are in .kilo/modes/.
+Their personas (where defined) are in personas/. They communicate through
+the Olivia message queue (POST /olivia/respond) and report through the
+Command Portal (command-portal.html). 
+
+Agent reporting chain:
+  Player → Merlin V.II (AG003) → Olivia (AG004) → Gordon (AG001)
+      → Trinity (AG002) → Claw(AG005)/Big Brother(AG006)/Dee(AG007)/Stefi(AG008)
+      → Terence (AG009), gem (AG010)
+
+4. GIT BRANCH CLARIFICATION
+----------------------------
+The "evidence-registry" branch is NOT a separate system, NOT a separate
+directory, NOT a feature. It IS the active working branch where ALL system
+files live. The branch name came from an early session's commit title
+("Evidence Registry v2") and stuck. All work since 2026-08-07 is on this
+branch. The "main" branch contains only the initial commit and is dead.
+
+You do NOT need to switch branches. You ARE on evidence-registry. That is
+correct. The git branch is the SAME physical directory (C:\vistamations-music)
+tracked on a named line of commits.
+
+5. SYSTEM AIM & OBJECTIVES
+--------------------------
+The Vistamations System is an autonomous knowledge production operating system.
+It governs research acquisition, publication, deployment, monitoring, and
+archival via an AI agent network operating across local hardware (Local
+Sub-System) and cloud infrastructure (Cloud Sub-System).
+
+Immediate objectives:
+  1. Complete agent personas (8 of 10 missing)
+  2. Populate Redis + knowledge graph (both empty)
+  3. Write a real agent dispatch daemon (agent-daemon.js is a build spec, not code)
+  4. Establish test framework + CI/CD
+  5. Wire Gemini daemon with ADC auth
+  6. Build automated container rebuild (stale containers currently run old code)
+
+6. GEM'S SPECIFIC MISSION (AG010)
+----------------------------------
+"To transform raw multi-track audio, visual assets, and unstructured human
+concepts into structured, searchable metadata and high-fidelity, interactive
+designs."
+
+Resources: Local media files (MP3, WAV, M4A, MP4), Evidence Registry DOM-003,
+Gemini 3.5 Flash via Vertex AI (vists-498322, ADC-configured).
+
+Current blocker: Gemini auth is ADC-configured but daemon wiring is pending.
+No live Gemini daemon runs yet. gem operates via manual Kilo session invocation.
+
+================================================================================

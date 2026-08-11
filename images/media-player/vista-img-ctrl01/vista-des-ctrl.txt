@@ -1,0 +1,78 @@
+running record - fill in as you go
+
+7 earlier to-dos hidden
+
+
+
+
+
+Now wire hash-based routing into App.tsx so the bento page is accessible at #/bento:
+
+Now let me verify the build. I need to check if the CSS part of BentoCanvas has a hover effect for the drag dot (interaction spec mentions "hover state before grabbing: scale + glow"). Let me also add the CSS hover rules:
+
+9 earlier to-dos hidden
+
+
+
+Approved by you
+npx tsc -b 2>&1
+src/components/bento/BentoTile.tsx(1,1): error TS6192: All imports in import declaration are unused.
+Unused imports in BentoTile.tsx — the useRef and useCallback are unused. Let me fix:
+
+Approved by you
+npx tsc -b 2>&1
+(no output)
+TypeScript compiles clean. Now run the Vite build:
+
+Approved by you
+npx vite build 2>&1
+vite v5.4.11 building for production...
+transforming...
+Browserslist: browsers data (caniuse-lite) is 22 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+./public/static.png referenced in ./public/static.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+✓ 128 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.46 kB │ gzip:  0.30 kB
+dist/assets/index-Bs3wqjxh.css   13.04 kB │ gzip:  3.52 kB
+dist/assets/index-CGr7Fbee.js   244.64 kB │ gzip: 73.81 kB
+✓ built in 15.92s
+Build succeeds. Let me verify the final file structure:
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bento geometry engine built. TypeScript compiles clean, Vite production build succeeds. Here's what was created:
+
+Files (9 in src/components/bento/, 1 page, App.tsx routing, index.css hover styles):
+
+File	Purpose
+bento.types.ts	Tile, Layout, SnapMode types
+bento.constants.ts	MASTER_WIDTH=3840, MASTER_HEIGHT=2160, 4x2 grid math, buildDefaultTiles()
+bento.storage.ts	saveLayout/loadLayout/listLayouts — localStorage stub, marked TODO: replace with command_control persistence
+useCanvasScale.ts	scale = min(vw/3840, vh/2160), resize listener with rAF debounce
+useTileDrag.ts	Centre-top dot drag: pointer capture, live math (dx/scale), snap on release
+useTileResize.ts	Bottom-right handle resize: same lifecycle, min 40px clamp, snap on release
+GeoBadge.tsx	Per-tile live X/Y/W/H readout, sub-pixel color coding (odd=amber, even=rust)
+BentoTile.tsx	Tile component: drag dot, resize handle, GeoBadge, label — plain boxes
+BentoCanvas.tsx	Master canvas: tiles state, 3840x2160 scaled wrapper, Snap dropdown, Add/Reset/Save As/Load controls, toast notifications
+BentoPage.tsx	Page shell with header + `< back link
+Routing: #/bento hash-based (no extra deps). Existing app at #/ is preserved.
+
+Interaction: Snap (off/2px/3px) applies on pointerup only. Drag/resize tracks pointer exactly during move (dx/scale), then rounds on release. Hover state on drag dot: scale + glow.
+
+53 t/s
+
+

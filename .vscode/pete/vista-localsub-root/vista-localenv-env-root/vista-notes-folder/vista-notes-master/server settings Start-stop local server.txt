@@ -1,0 +1,4 @@
+Start:  docker compose up -d          (all services: nginx, app, redis, prometheus)
+Stop:   docker compose down           (stop all)
+Logs:   docker compose logs app       (see app logs)
+Status: docker compose ps             (check what's running)

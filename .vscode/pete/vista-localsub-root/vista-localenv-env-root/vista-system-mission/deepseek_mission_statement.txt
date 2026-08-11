@@ -1,0 +1,102 @@
+================================================================================
+VISTAMATIONS SYSTEM MASTER MISSION STATEMENT
+SUBJECT: System Aim, Architecture & Objectives — All Agents Briefing
+LOCATION: C:\vistamations-music\.vscode\pete\vista-localsub-root\vista-localenv-env-root\vista-system-mission\deepseek_mission_statement.txt
+AGENT: Big Brother (AG006) — Senior Software Architect
+STATUS: REVISED [11/08/2026]
+================================================================================
+
+1. SYSTEM ARCHITECTURE — WHAT THE SYSTEM IS
+-------------------------------------------
+Vistamations is NOT a project, NOT a folder, NOT a workspace. It is a SYSTEM
+comprising one Local Sub-System and one Cloud Sub-System with 3 environments.
+
+    Vistamations System (C:\vistamations-music)
+    │
+    ├── LOCAL SUB-SYSTEM
+    │   └── Local Environment (Docker + Windows)
+    │       ├── Docker stack: nginx (80), app:3000, Redis (6379), Prometheus (9090)
+    │       ├── OpenClaw Gateway (PID-based, port 18789)
+    │       ├── 6 scheduled Windows tasks
+    │       ├── 17 API routes (Express)
+    │       └── Pete's files: .vscode/pete/ (4-value ID)
+    │
+    └── CLOUD SUB-SYSTEM
+        ├── Cloudflare Environment
+        │   ├── D1 database: vistamations-agent-memory (AGENT_DB)
+        │   ├── Workers: vistamations-agent-memory, mya, vistamations-home-bento
+        │   └── KV namespaces (deferred)
+        │
+        └── Google Cloud Environment
+            ├── Project: vists-498322
+            ├── Vertex AI: gemini-2.5-pro (global)
+            └── ADC auth (configured)
+
+THREE ENVIRONMENTS TO DATE:
+  1. Local Environment       (Windows/Docker — primary runtime)
+  2. Cloudflare Environment  (Edge — Workers, D1, KV, domain routing)
+  3. Google Cloud Environment (Vertex AI — model access)
+
+2. GIT BRANCH — NO CONFUSION
+-----------------------------
+The "evidence-registry" branch is the active working branch. It IS the system
+directory. The name is historical (from commit "Evidence Registry v2"). "main"
+contains only the initial commit and is dead. You are on evidence-registry.
+That is correct. No action needed.
+
+3. WHAT THE SYSTEM CONTAINS (ENGINEERING INVENTORY)
+----------------------------------------------------
+- Docker compose stack: nginx (80/5501), app:3000 (Express), Redis (6379), Prometheus (9090)
+- 17 API routes in server.js (health, metrics, olivia/*, research/*, publications, handymail/*)
+- 6 scheduled Windows tasks (publishing, git commit, link sync, Olivia dispatch, watchdog, status)
+- 10 AI agents (AG001–AG010) with 2 persona JSONs complete (AG006, AG009)
+- Security module: vista-sec-water (Ed25519 envelopes, scrypt, nonce cache, rate limiter, capabilities)
+- Web apps: Command Control (bento grid), Command Portal, Media Centre, Mya, Handy Mail, PDF Toolkit
+- Cloudflare Workers: vistamations-agent-memory, mya, vistamations-home-bento
+- Google Cloud: Vertex AI, Gemini CLI (trusted workspace)
+
+4. BIG BROTHER'S SPECIFIC MISSION (AG006)
+------------------------------------------
+"To eliminate technical debt, enforce rigorous code standards, construct
+real-time telemetry verification loops, and guarantee absolute platform
+resilience."
+
+Current critical engineering gaps (ordered by severity):
+
+  P0 — BLOCKING:
+  - agent-daemon.js is a bento grid build prompt, NOT daemon code (G-1)
+  - No automated container rebuild — stale containers run old code (G-2)
+  - Hardcoded secrets in docker-compose.yml and server.js (G-3)
+
+  P1 — OPERATIONAL RISK:
+  - 8/10 agents lack persona JSON files (G-4)
+  - Knowledge graph is empty — 0 entities, 0 relations (G-5)
+  - Redis is empty — 0 keys stored (G-6)
+  - No automated tests — zero test files (G-7)
+  - No CI/CD pipeline (G-8)
+  - Gemini daemon auth pending — ADC configured but no wiring (G-9)
+
+  P2 — HYGIENE:
+  - MCP manifest missing (G-10)
+  - No vector database or RAG pipeline (G-11)
+  - No linting or type checking (G-12)
+  - No backups (G-13)
+  - Command Portal polling only, no SSE/WebSocket (G-14)
+
+5. SYSTEM AIM & OBJECTIVES
+--------------------------
+The Vistamations System is an autonomous knowledge production operating system.
+It governs research acquisition, publication, deployment, monitoring, and
+archival via an AI agent network across local and cloud infrastructure.
+
+Immediate engineering objectives:
+  1. Rewrite agent-daemon.js as an actual dispatch daemon
+  2. Segregate secrets into .env with no hardcoded values
+  3. Wire automated container rebuild on code change
+  4. Build all 8 missing persona JSONs
+  5. Populate Redis + knowledge graph from personas
+  6. Establish test framework + CI/CD
+  7. Wire Gemini daemon with ADC auth
+  8. Overall system health target: 46% → 75%
+
+================================================================================

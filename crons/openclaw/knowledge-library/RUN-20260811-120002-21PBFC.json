@@ -1,0 +1,26 @@
+{
+  "assetId": "ASSET-RESEARCH-012",
+  "runId": "RUN-20260811-120002-21PBFC",
+  "projectId": "RESEARCH-002",
+  "title": "Research Article: Cyber Security — 11 August 2026",
+  "type": "Research Article",
+  "dominion": "DOM-002",
+  "domain": "Cyber Security",
+  "timestamp": "2026-08-11T02:00:02.529Z",
+  "url": "/crons/openclaw/publications/RUN-20260811-120002-21PBFC.html",
+  "valueScore": {
+    "composite": 82,
+    "confidence": 72,
+    "breakdown": {
+      "businessValue": 91,
+      "originality": 78,
+      "depth": 79,
+      "relevance": 85,
+      "utility": 78
+    },
+    "estimatedCommercialValue": "$10,162",
+    "reviewStatus": "Automated Review"
+  },
+  "lifecycleState": "versioned",
+  "version": "1.0.0"
+}

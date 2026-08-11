@@ -1,0 +1,100 @@
+========================================
+VISTAMATIONS-MUSIC — SESSION CHAT RESULTS
+chat-results-3.txt
+========================================
+Date: 2026-08-11 03:38 AEST
+Branch: evidence-registry (50029cb)
+Workspace: C:\vistamations-music
+
+----------------------------------------
+SESSION 1 — 2026-08-11 00:22 AEST
+----------------------------------------
+
+1. GIT WORKTREE CLEANUP
+   - Identified olivine-cabinet worktree created by Agent Manager on 2026-08-08
+   - 8 nested worktrees under olivine-cabinet (big-brother-olivia-fix, claw-chat-api, 
+     dee-cron-research, gordon-personas, merlin-coordinate, olivia-agent-chat,
+     rare-gerbil, spicy-pufferfish, stefi-bento-chassis, trinity-memory)
+   - All were at commit 1a44669, diverging from olivine-cabinet which was at 50029cb
+   - evidence-registry and olivine-cabinet: ZERO diff (same commit 50029cb)
+   
+   ACTIONS TAKEN:
+   - Deleted all 10 nested feature branches
+   - Pruned git worktree metadata
+   - Removed torpid-snipe worktree (also at 50029cb)
+   - Removed olivine-cabinet worktree from git tracking
+   - Deleted olivine-cabinet and torpid-snipe branches
+   - RESULT: 1 worktree, 1 active branch, clean state
+
+2. OLIVIA DISPATCH — FLASHING TERMINAL FIX
+   - Scheduled Task Vistamations-OliviaDispatch spawning pwsh.exe every 5 minutes
+   - Stopped/disabled Vistamations-OliviaDispatch and Vistamations-OliviaWatchdog
+   - Started olivia-dispatch.ps1 as Kilo background process (bgp_fec096b1)
+
+----------------------------------------
+SESSION 2 — 2026-08-11 01:29 AEST
+----------------------------------------
+
+3. API KEY VAULT — FOUR-RUN ROLLOUT
+
+   RUN 1: PIN-PROTECTED VAULT CORE
+   - Created pin-vault.js — scrypt-hashed 4-digit PIN, 3-attempt lockout, 3-min auto-lock
+   - PIN stored in Windows Credential Manager (Vistamations:VaultPIN)
+   - CLI: node pin-vault.js enroll | verify | change | audit | lock | state
+   - Files: .vscode/pete/vista-localsub-root/vista-localenv-env-root/vista-sec-water/api-key-env-link/pin-vault.js
+
+   RUN 2: SECRETS ENROLLED INTO CREDENTIAL MANAGER
+   - Mistral API key enrolled (from .env)
+   - Cloudflare account ID, Olivia URL, D1 Worker URL, GCloud config enrolled
+   - Ed25519 GATE_SIGNING_KEY auto-generated and stored
+   - 10 of 13 secrets resolved in Credential Manager
+   - Missing: DEEPSEEK_API_KEY (Kilo Gateway), GEMINI_API_KEY (Vertex ADC), CLOUDFLARE_API_TOKEN
+   - Resolution chain reordered: Credential Manager > process.env on Windows
+
+   RUN 3: VAULT WIRED INTO RUNTIME
+   - server.js: resolveSecret() tries vault → process.env → hardcoded fallback
+   - docker-compose.yml: DOCKER_RUNNING=true flag for system-mode bypass
+   - Dockerfile: copies vault.js and gate-vault-bridge.js into container
+   - Cloudflare/src/vault-shim.js: worker secret mapping for wrangler secrets
+
+   RUN 4: THREE-ENVIRONMENT ENV-ROOTS
+   - Populated env-root.json manifests for: local, gcloud, cloudflare
+   - Cloudflare scripts/enroll-secrets.ps1 ready for production enrollment
+   - Cross-environment audit script (audit-all.js) created
+
+----------------------------------------
+SESSION 3 — 2026-08-11 02:29 AEST
+----------------------------------------
+
+4. MYA'S WORLD — CLOUDFLARE DEPLOYMENT
+   - wrangler authenticated: hops1010@gmail.com, account a3cfe4297f6a3fedf411ba7e7d6f2751
+   - Worker deployed: vistamations-agent-memory.hops1010.workers.dev (10 agents, health OK)
+   - Mya Pages project created: mya-world.pages.dev
+   - Mya worker deployed: mya-vistamations.hops1010.workers.dev
+   - Worker route added: www.vistamations.com/mya/* → mya-vistamations worker
+   - Mya AI uses @cf/meta/llama-3.2-3b-instruct (Cloudflare Workers AI), not Mistral
+   - Wrangler AI agent skills installed for 8 agents
+
+5. MYA'S WORLD v3 — FULL REDESIGN
+   - ENTRY: Blurred homepage with single "Mya, start here" button
+   - BEE: AI guide agent with floating button, Web Speech API voice, wobble animation
+   - WIZARD: 6-step camera-guided tutorial with spotlight zoom/unblur per card
+   - VOICE: Voice recognition on by default — voice commands ("start tour", "news", "settings")
+   - SETTINGS: 3 colour schemes, voice toggle, RSS feed config
+   - NEWS: RSS feed popup with preloaded Fortnite links, custom URL support
+   - MOBILE: Responsive mobile-first layout, max-width 600px, gesture-friendly
+   - Deployed live at https://www.vistamations.com/mya/
+
+----------------------------------------
+SESSION 4 — 2026-08-11 03:38 AEST
+----------------------------------------
+
+6. LOCAL SERVER — DOCKER COMPOSE SERVICES
+   - NGINX: Reverse proxy (80/5501), static file server, /api/* → Node app
+   - APP (Node): server.js — Olivia gate, research, publications, Redis, vault integration
+   - REDIS: Session store, playlist persistence, 256MB with LRU eviction
+   - PROMETHEUS: Metrics collection (uptime, Redis status), port 9090
+   - STARTUP: redis → app → nginx (chain dependency)
+   - OLIVIA DISPATCH: Kilo background process (bgp_fec096b1), not Docker
+
+========================================

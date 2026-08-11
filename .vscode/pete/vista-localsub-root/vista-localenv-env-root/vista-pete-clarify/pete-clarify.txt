@@ -1,0 +1,333 @@
+================================================================================
+VISTAMATIONS SYSTEM RECONCILIATION & CLARIFICATIONS LOG
+SUBJECT: Running Record of Pete/Agent Misunderstandings & Preconceptions
+LOCATION: C:\vistamations-music\.vscode\pete\vista-localsub-root\vista-localenv-env-root\vista-pete-clarify\pete-clarify.txt
+DATE STAMP: [11/08/2026 1:47 PM]
+================================================================================
+
+[11/08/2026 1:47 PM] - SESSION CLARIFICATION — HEALTH, COMMITS, BRANCHES, GITHUB, AGENTS.MD
+================================================================================
+
+This entry addresses Pete's confusion about what is committed vs uncommitted,
+how branches (main / evidence-registry) relate to the system, what GitHub
+repos and pull requests mean, how agent memory works, what AGENTS.md is, and
+why the system is in its current state.
+
+---
+
+SECTION 1: COMMITTED vs UNCOMMITTED — WHAT IS HAPPENING RIGHT NOW
+------------------------------------------------------------------
+
+* CURRENT STATE (11/08/2026 1:47 PM AEST):
+  - Git reports: 96 files changed (1200 lines added, 14844 lines deleted)
+  - These changes are UNCOMMITTED. They exist only on your local disk.
+  - The last COMMIT was 50029cb ("vista-sec-water: API key vault bridge"),
+    made 2026-08-10 23:04 AEST. That is the last permanent snapshot.
+
+* WHAT "COMMITTED" MEANS (plain English):
+  - A commit = a permanent saved checkpoint in git's history. Once committed,
+    git remembers that exact state forever.
+  - "NOT committed" = the file exists on your disk but git has no record of
+    it. If you delete the file or your drive fails, it's gone.
+  - "STAGED" = files marked as "ready to commit next time." A pre-commit
+    checklist. No files are currently staged in this system.
+
+* WHAT IS CHANGED BUT NOT SAVED (the 96 files):
+  These fall into THREE categories:
+
+  CATEGORY A — DIRECTORY RENAME (old path → new 4-value path):
+  The directory `vista-local-subsystem-root` was renamed to `vista-localsub-root`
+  (part of the 4-value ID reform). Git sees the old path files as DELETED and
+  the new path files as UNTRACKED (new). The files still exist — they just moved.
+  Git does NOT track directory renames automatically. This accounts for ~80 of
+  the 96 "changed" files. The files are SAFE — they exist under the new path.
+  
+  Old: .vscode/pete/vista-local-subsystem-root/*     (deleted in git's view)
+  New: .vscode/pete/vista-localsub-root/*             (untracked in git's view)
+
+  CATEGORY B — FILES MODIFIED IN PLACE:
+  These files were edited directly and exist at the same location:
+    - README.md (rewritten with system architecture + terminology bridge)
+    - cloudflare/src/worker.js (vault shim added)
+    - crons/openclaw/logs/monitor1.json (auto-updated by scheduler)
+    - crons/openclaw/projects.json (auto-updated by scheduler)
+    - crons/openclaw/registry/assets.json (auto-updated by scheduler)
+    - docker-compose.yml (DOCKER_RUNNING flag added)
+    - docs/handbook/handbook-01-setup-installation.md (handbook edits)
+    - images/Dockerfile (container config updated)
+    - mya/index.html (Mya page revisions)
+    - scripts/adc-login.py (ADC login script updated)
+    - server.js (vault-bridge wiring added)
+
+  CATEGORY C — BRAND NEW FILES (never tracked by git):
+    - AGENTS.md (agent briefing + terminology bridge)
+    - vistamations-system.code-workspace (VS Code workspace)
+    - .vscode/pete/vista-cloudsub-root/* (Cloudflare + GCloud env roots)
+    - .vscode/pete/vista-localsub-root/* (4-value ID restructure)
+    - .vscode/pete/vista-localsub-root/vista-localenv-env-root/vista-pete-clarify/pete-clarify.txt (this file)
+    - .vscode/pete/vista-localsub-root/vista-localenv-env-root/vista-session-chat/chat-results-4.txt
+    - .playwright-mcp/* (browser test snapshots)
+    - crons/openclaw/archive/* (published RUN reports)
+    - crons/openclaw/knowledge-library/* (research extracts)
+    - crons/openclaw/olivia/agent-chat/* (agent chat history)
+    - mya/src/* (Mya Cloudflare Worker source)
+    - mya/wrangler.toml (Mya Worker config)
+    - olivia/* (Olivia dispatch module)
+    - cloudflare/src/vault-shim.js (worker secret mapper)
+    - and others...
+
+* A note about "commits ahead":
+  - Git reports nothing "ahead" right now because evidence-registry has already
+    been pushed to GitHub (remote origin/evidence-registry is at the same commit).
+  - The "ahead" counter appears when your local branch has commits that haven't
+    been pushed to GitHub yet. Example: if you commit 3 times locally but never
+    push, it says "3 ahead." Right now: 0 ahead — everything on GitHub matches.
+
+* THE SCHEDULED AUTO-COMMIT (Vistamations-GitCommit):
+  - Runs every 2 days at 18:00 AEST. Last ran: 2026-08-10 18:00.
+  - Next run: 2026-08-12 18:00.
+  - When it runs, it auto-commits any changed files AND pushes to GitHub.
+  - IT DOES NOT RUN ON MANUAL COMMITS — only the scheduled task triggers it.
+  - If you NEVER want auto-commits, disable the task in Windows Task Scheduler.
+  - Currently: NO files have been committed since 2026-08-10 23:04.
+
+---
+
+SECTION 2: WHAT IS "MAIN"? WHAT IS "EVIDENCE-REGISTRY"? HOW DO THEY RELATE?
+----------------------------------------------------------------------------
+
+* THE SYSTEM HAS ONE GITHUB REPOSITORY: `petehops89-jpg/command_control`
+  - Repository URL: https://github.com/petehops89-jpg/command_control
+  - This repo contains ALL branches. Branches are lines of commits within
+    the SAME repository. They are NOT separate repos, NOT separate folders
+    (except git worktrees, which are temporary working copies).
+
+* TWO BRANCHES EXIST LOCALLY:
+
+  BRANCH: "main" (1 commit)
+  ├── Created: 2026-08-07 04:22 AEST
+  ├── Contains: ONLY the initial commit (1a44669) — clock, media player, Docker env
+  ├── Status: DEAD. Nothing has been built on main since day 1.
+  └── GitHub: pushed to origin/main
+
+  BRANCH: "evidence-registry" (18 commits after main)
+  ├── Created: 2026-08-09 02:08 AEST (auto-commit)
+  ├── Contains: EVERYTHING. All features, all files, all work.
+  │   Command Portal, Olivia Gate, Media Centre, Mya, Cloudflare D1,
+  │   Workers, security modules, 4-value ID restructure, all Pete files.
+  ├── Status: ACTIVE. This is where you are. This is where all work lives.
+  │   git checkout evidence-registry = switch here. You are here now.
+  └── GitHub: pushed to origin/evidence-registry
+
+  BRANCH: "publishing-engine-v2" (1 commit after main)
+  ├── Contains: Monitor1 dashboard, 5-dominion classification, value scoring
+  └── Status: Stale/separate. Not merged into evidence-registry.
+
+* THE RELATIONSHIP:
+  - main and evidence-registry share the same "ancestor" — the initial commit.
+  - After that, they diverged. main stayed frozen. evidence-registry kept growing.
+  - "Merging" would bring main up to date with evidence-registry, but that has
+    never been done because main is not used.
+
+* YOU ARE ON: evidence-registry. That is correct. Do not switch to main.
+  If you switch to main (via VS Code or `git checkout main`), your directory
+  would revert to the initial commit — losing all files built after that.
+
+---
+
+SECTION 3: GITHUB REPOSITORIES, BRANCHES, AND THE SYSTEM RELATIONSHIP
+---------------------------------------------------------------------
+
+* THE SYSTEM RELATIONSHIP (plain English):
+
+    GitHub (https://github.com/petehops89-jpg/command_control)
+    └── Repository: "command_control" (ONE repo, not multiple)
+        ├── Branch: "main"          ← pushed to GitHub (origin/main)
+        ├── Branch: "evidence-registry"  ← pushed to GitHub (origin/evidence-registry)
+        └── Branch: "publishing-engine-v2"  ← pushed to GitHub
+
+    Your computer (C:\vistamations-music)
+    └── Local clone of the "command_control" repo
+        ├── Currently on branch: evidence-registry
+        └── Files reflect that branch
+
+    Cloud Sub-System (Cloudflare Workers + GCP Vertex AI)
+    └── Separate from GitHub — deployed separately via wrangler / gcloud CLI
+
+* GITHUB vs YOUR COMPUTER:
+  - GitHub is the REMOTE copy. It's on the internet.
+  - Your computer is the LOCAL copy. C:\vistamations-music.
+  - `git push` = send your local commits to GitHub.
+  - `git pull` = download new commits from GitHub to your computer.
+  - Auto-commit pushes to GitHub. Manual work stays local until pushed.
+
+* WHAT "ORIGIN" MEANS:
+  - "origin" = the GitHub remote URL (https://github.com/petehops89-jpg/command_control)
+  - "origin/main" = the main branch AS IT EXISTS ON GITHUB
+  - "origin/evidence-registry" = the evidence-registry branch AS IT EXISTS ON GITHUB
+  - These are read-only mirrors. They update when you push or pull.
+
+---
+
+SECTION 4: WHAT ARE PULL REQUESTS? ARE THEY APPLICABLE TO THE SYSTEM?
+---------------------------------------------------------------------
+
+* WHAT A PULL REQUEST (PR) IS:
+  - A pull request is a formal request on GitHub saying: "Please merge branch A
+    into branch B." It's the standard way teams collaborate on GitHub.
+  - Example: "Merge the new Media Centre feature (my branch) into evidence-registry
+    (the main development branch)."
+  - PRs allow code review — another person looks at your changes before they merge.
+  - PRs can trigger automated tests (CI/CD) before allowing a merge.
+
+* ARE PULL REQUESTS APPLICABLE TO THIS SYSTEM?
+  - YES, but NOT YET. PRs are useful when:
+    a) Multiple people work on the same repo (not applicable — only Pete works here)
+    b) Automated tests exist to validate changes before merging (not applicable —
+       zero tests, zero CI/CD)
+    c) You want to review changes before merging them into a stable branch (the
+       intended workflow once the system matures)
+
+  - What WOULD make sense for Vistamations:
+    * evidence-registry → merge into main (when main is reactivated as a stable
+      "production" branch)
+    * Feature branches → pull requests into evidence-registry (when distinct
+      features are developed in isolation by different agents)
+    * Pull requests with required checks (once tests + CI exist)
+
+  - CURRENTLY: PRs are NOT being used. You are working directly on evidence-registry
+    without branching for individual features. This is fine for a solo developer at
+    the current stage. PRs become necessary when the system has:
+    - Multiple contributors
+    - Stable vs development branch separation
+    - Automated test gates (CI/CD pipeline)
+
+---
+
+SECTION 5: AGENT INSTRUCTIONS, MEMORY, AND AGENTS.MD
+-----------------------------------------------------
+
+* WHAT AGENTS.MD IS:
+  - AGENTS.md (created this session, 11/08/2026) is the system-level agent briefing
+    file at C:\vistamations-music\AGENTS.md.
+  - It is read by Kilo (the AI tool) at the START of every session. Every agent
+    (regardless of mode/role) sees this file first.
+  - It replaces the old `.vscode/instructions.txt` which was a single-line note.
+    AGENTS.md is the comprehensive version.
+
+* WHAT AGENTS.MD CONTAINS:
+  - System identity (what Vistamations is and what it builds)
+  - Terminology bridge (Vistamations terms ↔ industry terms)
+  - Full system architecture diagram (Local Sub-System + Cloud Sub-System)
+  - Agent roster (10 agents, roles, runtime, reporting chain)
+  - Command list (xinitiate, xstatus, xtelemetry, xsync, xclear, xpair, xchat-save)
+  - Git branch clarification (evidence-registry is the active branch)
+  - System health status (46%)
+
+* WHERE AGENTS.MD FITS IN THE AGENT INSTRUCTION HIERARCHY:
+
+  LAYER 1: AGENTS.md (system root)
+    → Read by ALL agents. Defines what the system IS.
+    
+  LAYER 2: .kilo/modes/*.md (per-agent mode files)
+    → Read by individual agents. Defines what each agent DOES.
+    → Gordon: .kilo/modes/gordon.md (Docker orchestration)
+    → Big Brother: .kilo/modes/big-brother.md (architecture + code review)
+    → etc.
+
+  LAYER 3: personas/*.json (per-agent identity data)
+    → Structured data: reporting chain, capabilities, active projects.
+    → Currently: only 2 of 10 exist (Big Brother AG006, Terence AG009)
+
+  LAYER 4: .vscode/instructions.txt (legacy 1-line note)
+    → The old instruction file. Now superseded by AGENTS.md.
+    → Can be deleted or kept as historical reference.
+
+  LAYER 5: Project memory (.kilo/memory/ + Kilo knowledge graph)
+    → Persistent memory across sessions (decisions, facts, corrections).
+    → Read by agents during task execution.
+    → Also: .memory-bank/*.md (productContext, decisionLog, etc.)
+
+* THE AGENTS.MD QUESTION:
+  - Pete asked: "I created a separate file. Is it OK to transfer and consolidate
+    to .md? Is that what agents prefer?"
+  - ANSWER: YES. AGENTS.md is the standard convention. Kilo (the AI tool) 
+    automatically reads AGENTS.md at session startup. Agents do not need to be
+    told to read it — it's injected into their context automatically.
+  - The old .vscode/instructions.txt was a single-line note. AGENTS.md replaces
+    it with a comprehensive document.
+  - All system directives have been MERGED into AGENTS.md. Nothing was lost.
+  - .vscode/instructions.txt still exists and can be deleted — AGENTS.md is the
+    canonical source.
+
+* AGENT MEMORY SYSTEMS (OVERVIEW):
+  - Kilo project memory (.kilo/memory/) — durable facts, decisions, corrections
+  - Knowledge graph — entity-relation graph (currently EMPTY)
+  - Redis — key-value cache (currently EMPTY)
+  - Memory bank (.memory-bank/) — 5 markdown docs (stale)
+  - File stores — JSON on disk (Olivia queue, projects, assets)
+  - AGENTS.md — session-injected briefing (does not persist between sessions —
+    it's read fresh each time)
+
+---
+
+SECTION 6: SYSTEM HEALTH — WHAT THE "46%" MEANS
+------------------------------------------------
+
+* The 46% is NOT a live health check — it's a STATIC AUDIT SCORE calculated by
+  Merlin V.II (AG003) on 2026-08-10. It does not update automatically.
+
+* BREAKDOWN:
+  | Category          | Score | Why                                    |
+  |-------------------|-------|----------------------------------------|
+  | Docker Stack      | 100%  | 4 containers healthy                   |
+  | API Endpoints     | 100%  | 17 routes verified                     |
+  | Scheduled Tasks   | 100%  | 6 tasks operational                    |
+  | Agent Personas    | 20%   | 2/10 agents have persona JSONs         |
+  | Memory Systems    | 10%   | Knowledge graph empty, Redis empty     |
+  | Test Coverage     | 0%    | Zero tests exist                       |
+  | CI/CD             | 0%    | No pipeline                            |
+  | Agent Auto-Dispatch | 30% | Simple patterns only, no daemon        |
+  | Documentation     | 60%   | Memory bank exists but stale           |
+  | Security          | 40%   | Hardcoded secrets, no audit            |
+  | AVERAGE           | 46%   | Health is infrastructure OK, logic WIP |
+
+* Command Control Status Dots (the green dots on index.html):
+  - These ARE live — they poll API endpoints every 10 seconds.
+  - /api/health, /api/olivia/queue, /api/research/links, /api/publications, /api/metrics
+  - A green dot means the endpoint returned a valid response. It does NOT mean
+    the system is "46% healthy" — it means that specific service is responding.
+  - The 46% figure is a human audit. The Status Dots are machine-level health probes.
+    They answer different questions.
+
+---
+
+SECTION 7: WHY PETE IS CONFUSED — AGENT ACCOUNTABILITY
+-------------------------------------------------------
+
+* WHAT WENT WRONG:
+  1. A branch named "evidence-registry" was created by an automated task without
+     Pete's knowledge or consent. The name was semantically wrong for what the
+     branch actually contains.
+  2. No agent ever explained: "evidence-registry is your working branch. main is
+     abandoned. You are on evidence-registry and that's where everything lives."
+  3. Industry terms (repo, branch, workspace, commit, push, pull, PR) were thrown
+     around with no bridge to Pete's system terminology.
+  4. The 4-value ID directory rename (vista-local-subsystem-root → vista-localsub-root)
+     created 80+ "deleted" files in git status — making it look like massive data
+     loss when it was actually a rename.
+  5. Auto-commits happen silently every 2 days. Pete had no visibility into what
+     was being committed or when.
+  6. No single document explained the system architecture in Pete's terms — until
+     this session, when AGENTS.md and the terminology bridge were created.
+
+* WHAT HAS BEEN FIXED (this session, 11/08/2026):
+  - AGENTS.md created — every agent now knows the system architecture in Pete's terms
+  - Terminology bridge table added to AGENTS.md and README.md
+  - Mission statements updated (all 3) with correct system architecture
+  - vistamations-system.code-workspace created — VS Code extensions will now activate
+  - chat-results-4.txt saved with full session transcript
+  - xchat-save command added to command.txt
+  - This clarification file (pete-clarify.txt) updated with comprehensive explanations
+
+================================================================================

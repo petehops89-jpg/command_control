@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dominion I - 8-Way Agent Comms</title>
+    <style>
+        :root {
+            --bg-base: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-glow: rgba(96, 165, 250, 0.3);
+            
+            /* Agent Colors */
+            --color-gordon: #4FD1C5;
+            --color-trinity: #60A5FA;
+            --color-merlin: #A78BFA;
+            --color-olivia: #E8A33D;
+            --color-claw: #34D399;
+            --color-bigbrother: #F472B6;
+            --color-dee: #818CF8;
+            --color-stefi: #F87171;
+        }
+
+        body {
+            margin: 0;
+            padding: 10px;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            height: 100vh;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            padding: 5px 0 15px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 10px;
+            flex-grow: 1;
+            min-height: 0;
+        }
+
+        .agent-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: border-color 0.3s;
+        }
+
+        .agent-header {
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.2);
+        }
+
+        .agent-status {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .chat-history {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.85rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
+        }
+
+        .chat-history::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-history::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+        }
+
+        .message {
+            padding: 6px 10px;
+            border-radius: 6px;
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+
+        .msg-pete {
+            background: rgba(255,255,255,0.1);
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+
+        .msg-agent {
+            background: rgba(0,0,0,0.3);
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+
+        .chat-input-area {
+            padding: 10px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            gap: 6px;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+        
+        .chat-input:focus {
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .chat-send {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            cursor: pointer;
+            padding: 0 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .chat-send:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Dynamically colored headers */
+        #card-gordon .agent-header { color: var(--color-gordon); border-top: 2px solid var(--color-gordon); }
+        #card-trinity .agent-header { color: var(--color-trinity); border-top: 2px solid var(--color-trinity); }
+        #card-merlin .agent-header { color: var(--color-merlin); border-top: 2px solid var(--color-merlin); }
+        #card-olivia .agent-header { color: var(--color-olivia); border-top: 2px solid var(--color-olivia); }
+        #card-claw .agent-header { color: var(--color-claw); border-top: 2px solid var(--color-claw); }
+        #card-bigbrother .agent-header { color: var(--color-bigbrother); border-top: 2px solid var(--color-bigbrother); }
+        #card-dee .agent-header { color: var(--color-dee); border-top: 2px solid var(--color-dee); }
+        #card-stefi .agent-header { color: var(--color-stefi); border-top: 2px solid var(--color-stefi); }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">Dominion I &mdash; 8-Way Live Comm Ports</div>
+
+    <div class="grid-container" id="grid">
+        <!-- Cells generated via JS -->
+    </div>
+
+    <script>
+        const agents = [
+            { id: 'gordon', name: 'Gordon (AG001)' },
+            { id: 'trinity', name: 'Trinity (AG002)' },
+            { id: 'merlin', name: 'Merlin (AG003)' },
+            { id: 'olivia', name: 'Olivia (AG004)' },
+            { id: 'claw', name: 'Claw (AG005)' },
+            { id: 'bigbrother', name: 'Big Brother (AG006)' },
+            { id: 'dee', name: 'Dee (AG007)' },
+            { id: 'stefi', name: 'Stefi (AG008)' }
+        ];
+
+        const grid = document.getElementById('grid');
+
+        function createCard(agent) {
+            const html = `
+                <div class="agent-card" id="card-${agent.id}">
+                    <div class="agent-header">
+                        <span>${agent.name}</span>
+                        <span class="agent-status" id="status-${agent.id}">Connecting...</span>
+                    </div>
+                    <div class="chat-history" id="chat-${agent.id}"></div>
+                    <form class="chat-input-area" onsubmit="sendMessage(event, '${agent.id}')">
+                        <input type="text" class="chat-input" id="input-${agent.id}" placeholder="Command ${agent.name}..." autocomplete="off">
+                        <button type="submit" class="chat-send">Send</button>
+                    </form>
+                </div>
+            `;
+            grid.insertAdjacentHTML('beforeend', html);
+        }
+
+        agents.forEach(createCard);
+
+        function appendMessage(agentId, text, isPete) {
+            const history = document.getElementById(`chat-${agentId}`);
+            const div = document.createElement('div');
+            div.className = `message ${isPete ? 'msg-pete' : 'msg-agent'}`;
+            div.textContent = text;
+            history.appendChild(div);
+            history.scrollTop = history.scrollHeight;
+        }
+
+        async function fetchMessages(agentId) {
+            try {
+                const res = await fetch(`/api/agent-chat/${agentId}/messages`);
+                if (!res.ok) return;
+                const data = await res.json();
+                
+                const history = document.getElementById(`chat-${agentId}`);
+                history.innerHTML = ''; // clear 
+                
+                if (data.messages) {
+                    data.messages.forEach(msg => {
+                        appendMessage(agentId, msg.message, msg.from.toLowerCase() === 'pete');
+                        if (msg.reply) {
+                            appendMessage(agentId, msg.reply, false);
+                        }
+                    });
+                }
+                document.getElementById(`status-${agentId}`).textContent = 'Online';
+                document.getElementById(`status-${agentId}`).style.color = '#34D399';
+            } catch (e) {
+                document.getElementById(`status-${agentId}`).textContent = 'Offline';
+                document.getElementById(`status-${agentId}`).style.color = '#F87171';
+            }
+        }
+
+        async function sendMessage(e, agentId) {
+            e.preventDefault();
+            const input = document.getElementById(`input-${agentId}`);
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+            input.disabled = true;
+            appendMessage(agentId, text, true);
+
+            try {
+                await fetch(`/api/agent-chat/${agentId}/messages`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ from: 'Pete', message: text })
+                });
+                // Optimistically poll for reply
+                setTimeout(() => fetchMessages(agentId), 1000);
+                setTimeout(() => fetchMessages(agentId), 3000);
+                setTimeout(() => fetchMessages(agentId), 5000);
+            } catch (err) {
+                appendMessage(agentId, 'Error: Could not reach gateway.', false);
+            } finally {
+                input.disabled = false;
+                input.focus();
+            }
+        }
+
+        // Initial load
+        agents.forEach(a => fetchMessages(a.id));
+        
+        // Poll every 5s
+        setInterval(() => {
+            agents.forEach(a => fetchMessages(a.id));
+        }, 5000);
+
+    </script>
+</body>
+</html>

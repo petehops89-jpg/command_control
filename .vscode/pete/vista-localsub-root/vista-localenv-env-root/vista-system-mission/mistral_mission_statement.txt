@@ -1,0 +1,107 @@
+================================================================================
+VISTAMATIONS SYSTEM MASTER MISSION STATEMENT
+SUBJECT: System Aim, Architecture & Objectives — All Agents Briefing
+LOCATION: C:\vistamations-music\.vscode\pete\vista-localsub-root\vista-localenv-env-root\vista-system-mission\mistral_mission_statement.txt
+AGENT: Olivia (AG004) — Executive Secretary & Operational Coordinator
+STATUS: REVISED [11/08/2026]
+================================================================================
+
+1. SYSTEM ARCHITECTURE — WHAT THE SYSTEM IS
+-------------------------------------------
+Vistamations is NOT a project, NOT a folder, NOT a workspace. It is a SYSTEM.
+
+    Vistamations System (C:\vistamations-music)
+    │
+    ├── LOCAL SUB-SYSTEM
+    │   └── Local Environment (Docker + Windows)
+    │       ├── Docker stack: nginx (80), app:3000, Redis (6379), Prometheus (9090)
+    │       ├── OpenClaw Gateway (port 18789)
+    │       ├── 6 scheduled Windows tasks
+    │       ├── 17 API routes (Express in server.js)
+    │       ├── All static web pages & applications
+    │       └── Pete's files: .vscode/pete/ (4-value ID structure)
+    │
+    └── CLOUD SUB-SYSTEM
+        ├── Cloudflare Environment
+        │   ├── D1 database: vistamations-agent-memory (AGENT_DB)
+        │   ├── Workers: vistamations-agent-memory, mya, vistamations-home-bento
+        │   └── KV namespaces (deferred): HANDY_MAIL_KV, SESSION_KV, MYA_KV
+        │
+        └── Google Cloud Environment
+            ├── Project: vists-498322
+            ├── Vertex AI: gemini-2.5-pro (global)
+            └── ADC auth (configured, daemon wiring pending)
+
+THREE ENVIRONMENTS TO DATE:
+  1. Local Environment       (Windows/Docker — primary runtime)
+  2. Cloudflare Environment  (Edge — Workers, D1, KV, domain routing)
+  3. Google Cloud Environment (Vertex AI — AI model access)
+
+2. GIT BRANCH — NO CONFUSION
+-----------------------------
+"evidence-registry" is the active working branch where ALL system files live.
+It was auto-created by the Vistamations-GitCommit task on 2026-08-09. The name
+came from the title of an early commit ("Evidence Registry v2"). The "main"
+branch contains only the initial commit and is effectively abandoned (19 commits
+behind). You are on evidence-registry. That is the correct branch. Switch to
+"main" and you lose everything.
+
+3. WHAT THE SYSTEM CONTAINS
+---------------------------
+- 10 AI agents (Dominion I: AG001 Gordon through AG010 gem)
+- Command Control dashboard (bento grid, live telemetry, Status Dots)
+- Command Portal (two-way message queue with agent reply routing)
+- Media Centre (8-agent grid, HTML5 video player, localStorage playlists)
+- Mya (AI wizard + voice chat at www.vistamations.com/mya)
+- Handy Mail (8-step envelope gate with Ed25519 signatures)
+- PDF Toolkit (OCR, digital signature, budget calculator)
+- Gem Chat (Gemini 3.5 Flash chat interface)
+- Publications (auto-discovered RUN reports)
+- Clock (Wagga Wagga real-time with weather + world time)
+- vista-sec-water (API key vault, Gate Manager, rate limiter, capability system)
+- Cloudflare Workers: vistamations-agent-memory, mya, vistamations-home-bento
+- Google Cloud: Gemini 2.5 Pro via Vertex AI
+
+4. OLIVIA'S SPECIFIC MISSION (AG004)
+-------------------------------------
+"To enforce absolute order, guarantee message routing fidelity, monitor
+system-wide bottlenecks, and coordinate team-wide remediation workflows."
+
+Olivia is the operational nerve centre. All messages from Pete route through
+the Olivia gate (POST /olivia/respond). All agent replies route back through
+POST /olivia/agent-reply. The queue lives in crons/openclaw/olivia/queue.json.
+
+Current operational state:
+  - Message queue: Operational (manual trigger required for complex tasks)
+  - Agent replies: Simple auto-reply patterns only (health, confirm, standby)
+  - Dispatch daemon: MISSING (agent-daemon.js is a build spec, not daemon code)
+  - Watchdog: Operational (checks process every 5 min, restarts if missing)
+  - Dispatch: Operational (daily + 5-min repetition)
+  - Status: Operational (daily 18:30)
+  - No Google Docs connector: Planned but not wired
+
+BLOCKER (G-1): The server writes messages to queue.json but no background
+daemon processes them for complex agent delegation. Only simple pattern-matching
+replies work. All complex tasks require manual /olivia-process invocation.
+
+5. OPERATIONAL REPORTING CHAIN
+-------------------------------
+  Player → Merlin V.II (AG003) → Olivia (AG004)
+      → Gordon (AG001) → Trinity (AG002)
+          → Claw/Dee (AG005), Big Brother (AG006), Dee (AG007), Stefi (AG008)
+      → Terence (AG009), gem (AG010)
+
+6. SYSTEM AIM & OBJECTIVES
+--------------------------
+The Vistamations System is an autonomous knowledge production operating system
+governing research acquisition, publication, deployment, monitoring, and archival
+via an AI agent network across local and cloud infrastructure.
+
+Olivia's coordination priorities:
+  1. Resolve G-1 (agent dispatch daemon) — highest priority
+  2. Complete all 8 missing agent persona files (Gordon assigned, incomplete)
+  3. Populate knowledge graph + Redis from completed personas
+  4. Schedule: 6 tasks active, all verified operational
+  5. Regular system health audits (STATUS.md, current: 46%)
+
+================================================================================
