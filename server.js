@@ -492,6 +492,148 @@ app.get('/email/inbox/:account', async (req, res) => {
   }
 });
 
+// ─── GAccounts — PIN-protected vault for Google Account secrets ───
+
+const crypto = require('crypto');
+const VAULT_DATA_PATH = path.join(__dirname, '.vault-data.json');
+const VAULT_PIN_PATH = path.join(__dirname, '.vault-pin.hash');
+
+let vaultTokens = {};       // active session tokens
+let vaultPinHash = null;    // scrypt hash of the PIN
+let vaultSecrets = {};      // { target: { key, value, notes, storedAt, iv, tag } }
+
+function loadVaultData() {
+  try {
+    if (fs.existsSync(VAULT_DATA_PATH)) {
+      const raw = fs.readFileSync(VAULT_DATA_PATH, 'utf8');
+      vaultSecrets = JSON.parse(raw);
+    }
+  } catch (_) { vaultSecrets = {}; }
+  try {
+    if (fs.existsSync(VAULT_PIN_PATH)) {
+      vaultPinHash = fs.readFileSync(VAULT_PIN_PATH, 'utf8').trim();
+    }
+  } catch (_) { vaultPinHash = null; }
+}
+
+function saveVaultData() {
+  fs.writeFileSync(VAULT_DATA_PATH, JSON.stringify(vaultSecrets, null, 2), 'utf8');
+}
+
+function hashPin(pin) {
+  const salt = crypto.randomBytes(16);
+  return new Promise((resolve) => {
+    crypto.scrypt(pin, salt, 64, (err, derivedKey) => {
+      if (err) resolve(null);
+      resolve(salt.toString('hex') + ':' + derivedKey.toString('hex'));
+    });
+  });
+}
+
+function verifyPinHash(pin, storedHash) {
+  return new Promise((resolve) => {
+    const parts = storedHash.split(':');
+    if (parts.length !== 2) return resolve(false);
+    const salt = Buffer.from(parts[0], 'hex');
+    crypto.scrypt(pin, salt, 64, (err, derivedKey) => {
+      if (err) return resolve(false);
+      resolve(derivedKey.toString('hex') === parts[1]);
+    });
+  });
+}
+
+function generateToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+function encrypt(value, pin) {
+  const key = crypto.scryptSync(pin, 'vault-salt', 32);
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+  let encrypted = cipher.update(value, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  const tag = cipher.getAuthTag().toString('hex');
+  return { encrypted, iv: iv.toString('hex'), tag };
+}
+
+function decrypt(encrypted, iv, tag, pin) {
+  const key = crypto.scryptSync(pin, 'vault-salt', 32);
+  const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(iv, 'hex'));
+  decipher.setAuthTag(Buffer.from(tag, 'hex'));
+  let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+  return decrypted;
+}
+
+loadVaultData();
+
+app.get('/accounts/vault-status', (_req, res) => {
+  res.json({ enrolled: !!vaultPinHash, configured: Object.keys(vaultSecrets).length > 0 });
+});
+
+app.post('/accounts/vault-enroll', async (req, res) => {
+  const { pin } = req.body || {};
+  if (!pin || !/^\d{4}$/.test(pin)) return res.json({ ok: false, error: 'PIN must be exactly 4 digits' });
+  if (vaultPinHash) return res.json({ ok: false, error: 'PIN already enrolled. Reset not supported via web.' });
+  vaultPinHash = await hashPin(pin);
+  fs.writeFileSync(VAULT_PIN_PATH, vaultPinHash, 'utf8');
+  res.json({ ok: true });
+});
+
+app.post('/accounts/vault-unlock', async (req, res) => {
+  const { pin } = req.body || {};
+  if (!pin || !/^\d{4}$/.test(pin)) return res.json({ ok: false, reason: 'PIN must be 4 digits' });
+  if (!vaultPinHash) return res.json({ ok: false, reason: 'PIN not enrolled' });
+  const valid = await verifyPinHash(pin, vaultPinHash);
+  if (!valid) return res.json({ ok: false, reason: 'Wrong PIN' });
+  const token = generateToken();
+  vaultTokens[token] = { pin, createdAt: Date.now() };
+  // Auto-expire token after 3 minutes
+  setTimeout(() => { delete vaultTokens[token]; }, 180000);
+  res.json({ ok: true, token });
+});
+
+app.post('/accounts/vault-store', (req, res) => {
+  const { token, target, key, value, notes } = req.body || {};
+  const authToken = req.headers['x-vault-token'] || token;
+  if (!authToken || !vaultTokens[authToken]) return res.json({ ok: false, error: 'Vault locked. Enter PIN first.' });
+  if (!target || !key || !value) return res.json({ ok: false, error: 'Target, key, and value are required' });
+
+  const session = vaultTokens[authToken];
+  const { encrypted, iv, tag } = encrypt(value, session.pin);
+
+  vaultSecrets[key] = {
+    target, key, value: encrypted, iv, tag,
+    notes: notes || '', storedAt: new Date().toISOString()
+  };
+  saveVaultData();
+  res.json({ ok: true, stored: key });
+});
+
+app.get('/accounts/vault-list', (req, res) => {
+  const authToken = req.headers['x-vault-token'];
+  if (!authToken || !vaultTokens[authToken]) return res.status(403).json({ error: 'Vault locked' });
+  const items = Object.values(vaultSecrets).map(s => ({
+    key: s.key, target: s.target, notes: s.notes, storedAt: s.storedAt
+  }));
+  items.sort((a, b) => new Date(b.storedAt) - new Date(a.storedAt));
+  res.json({ items });
+});
+
+app.post('/accounts/vault-reveal', (req, res) => {
+  const authToken = req.headers['x-vault-token'];
+  if (!authToken || !vaultTokens[authToken]) return res.status(403).json({ error: 'Vault locked' });
+  const { key } = req.body || {};
+  if (!key || !vaultSecrets[key]) return res.json({ error: 'Not found' });
+  const s = vaultSecrets[key];
+  try {
+    const decrypted = decrypt(s.value, s.iv, s.tag, vaultTokens[authToken].pin);
+    res.json({ value: decrypted });
+  } catch (_) {
+    res.json({ error: 'Decrypt failed' });
+  }
+});
+
 app.listen(PORT, '0.0.0.0', async () => {
   OLIVIA_NORESP_PATH = path.join(__dirname, 'crons', 'openclaw', 'olivia', 'no-response.json');
   await initRedis();

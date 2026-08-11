@@ -74,8 +74,13 @@ Vistamations System (C:\vistamations-music)
 │       │   ├── Strategy Department — Merlin V.II (AG003)
 │       │   │   Architecture pathfinding, tutorials, system philosophy, STATUS.md
 │       │   │
-│       │   └── Think Tank Department — Terence (AG009)
-│       │       Metacognition, vector mapping, idea synthesis, cluster formation
+│       │   ├── Think Tank Department — Terence (AG009)
+│       │   │   Metacognition, vector mapping, idea synthesis, cluster formation
+│       │   │
+│       │   └── Accounts Department (GAccounts)
+│       │       Google account monitoring, PIN-protected vault, conflict-free
+│       │       email zone. Pete only — no agent access. Separate from GCloud
+│       │       ecosystem (vista-gcloud-env-root). Agents must request permission.
 │       │
 │       └── PUBLIC DIVISION (faces outward)
 │           ├── Marketing Department
@@ -107,7 +112,7 @@ Vistamations System (C:\vistamations-music)
                 Gemini CLI, agent experiments, prompt engineering
 ```
 
-**3 Environments, 5 Divisions, 14 Departments:**
+**3 Environments, 6 Divisions, 15 Departments:**
 
 | Sub-System | Environment | Division | Department | Lead |
 |---|---|---|---|---|
@@ -120,6 +125,7 @@ Vistamations System (C:\vistamations-music)
 | Local | Local | Executive | Administration | Olivia |
 | Local | Local | Executive | Strategy | Merlin V.II |
 | Local | Local | Executive | Think Tank | Terence |
+| Local | Local | Executive | Accounts (GAccounts) | Pete only |
 | Local | Local | Public | Marketing | — |
 | Local | Local | Public | Sales | — |
 | Local | Local | Public | Committee | Pete |

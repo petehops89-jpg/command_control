@@ -16,7 +16,12 @@ Bug - see me for instructions
    Format: Prepend date stamp [DD/MM/YYYY HH:MM AM/PM AEST], include the system architecture
    context (Local Sub-System + Cloud Sub-System with 3 environments), summarize all topics
    discussed, questions asked, answers given, files created/modified, and key decisions.
-   Reference files: AGENTS.md (system identity), README.md (terminology bridge),
-   STATUS.md (system health), pete-clarify.txt (misconceptions log).
+    Reference files: AGENTS.md (system identity), README.md (terminology bridge),
+    STATUS.md (system health), pete-clarify.txt (misconceptions log).
+
+5. xlist — show list of all x-prefix commands and their descriptions. User-friendly summary
+   of every command available in this file, formatted for quick reference.
+   Output: numbered list with command name, one-line description, and syntax example.
 
     
+
