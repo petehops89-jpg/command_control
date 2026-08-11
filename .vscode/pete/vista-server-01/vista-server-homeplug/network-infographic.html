@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Network Map — Vistamations</title>
+<style>
+  :root { --bg:#06060d; --text:#d4d4e8; --dim:rgba(212,212,232,0.5); --border:rgba(255,255,255,0.06); --accent:#00e5ff; --amber:#E8A33D; --rust:#C44536; }
+  body { font-family:'JetBrains Mono',monospace; background:var(--bg); color:var(--text); display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px; }
+  .infographic { max-width:900px; width:100%; }
+  .header { text-align:center; margin-bottom:28px; }
+  .header h1 { font-size:20px; font-weight:400; color:#fff; letter-spacing:1px; }
+  .header .sub { font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:2px; }
+  .network-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .node { background:rgba(15,15,28,0.85); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center; position:relative; }
+  .node.gateway { grid-column:1/-1; border-color:rgba(0,229,255,0.3); background:rgba(0,229,255,0.03); }
+  .node.self { border-color:rgba(232,163,61,0.3); background:rgba(232,163,61,0.03); }
+  .node .icon { font-size:28px; margin-bottom:6px; }
+  .node .name { font-size:12px; color:#fff; font-weight:500; }
+  .node .ip { font-size:10px; color:var(--accent); margin-top:2px; }
+  .node .mac { font-size:8px; color:var(--dim); margin-top:2px; }
+  .node .label { font-size:7px; color:var(--amber); text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+  .node .dot { position:absolute; top:10px; right:10px; width:8px; height:8px; border-radius:50%; background:var(--accent); }
+  .node .dot.self-dot { background:var(--amber); }
+  .cloud-line { text-align:center; padding:12px; font-size:9px; color:var(--dim); }
+  .footer { text-align:center; margin-top:24px; font-size:8px; color:var(--dim); }
+  .wsl-box { background:rgba(15,15,28,0.5); border:1px dashed var(--border); border-radius:12px; padding:12px; margin-top:16px; text-align:center; }
+  .wsl-box .wsl-title { font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  .wsl-box .containers { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+  .wsl-box .cont { font-size:8px; color:var(--accent); padding:4px 10px; background:rgba(0,229,255,0.05); border:1px solid rgba(0,229,255,0.1); border-radius:6px; }
+</style>
+</head>
+<body>
+<div class="infographic">
+
+  <div class="header">
+    <h1>Vistamations Home Network</h1>
+    <div class="sub">vista-server-01 · vista-server-homeplug · 12/08/2026 04:05 AEST</div>
+  </div>
+
+  <div class="cloud-line">☁️ DODO ISP (FTTN/VDSL) ☁️</div>
+
+  <div class="network-grid">
+    <div class="node gateway">
+      <div class="dot"></div>
+      <div class="icon">📡</div>
+      <div class="name">NF10WV.Home</div>
+      <div class="ip">192.168.20.1</div>
+      <div class="mac">18:f1:45:a8:8b:fc</div>
+      <div class="label">Gateway · DHCP · DNS · NAT · Wi-Fi 2.4/5GHz</div>
+    </div>
+
+    <div class="node">
+      <div class="dot"></div>
+      <div class="icon">💻</div>
+      <div class="name">CO-PC</div>
+      <div class="ip">192.168.20.5</div>
+      <div class="mac">dc:4b:a1:34:21:bb</div>
+      <div class="label">Desktop</div>
+    </div>
+
+    <div class="node">
+      <div class="dot"></div>
+      <div class="icon">💻</div>
+      <div class="name">HO-PC</div>
+      <div class="ip">192.168.20.6</div>
+      <div class="mac">aa:0c:a0:e3:90:3e</div>
+      <div class="label">Desktop (randomized MAC)</div>
+    </div>
+
+    <div class="node">
+      <div class="dot"></div>
+      <div class="icon">📱</div>
+      <div class="name">Mobile</div>
+      <div class="ip">192.168.20.14</div>
+      <div class="mac">a8:47:4a:61:b7:0f</div>
+      <div class="label">Samsung Device</div>
+    </div>
+
+    <div class="node">
+      <div class="dot"></div>
+      <div class="icon">💻</div>
+      <div class="name">Laptop-02</div>
+      <div class="ip">192.168.20.18</div>
+      <div class="mac">e8:f4:08:bb:8c:a3</div>
+      <div class="label">Intel Wi-Fi Device</div>
+    </div>
+
+    <div class="node self">
+      <div class="dot self-dot"></div>
+      <div class="icon">🖥️</div>
+      <div class="name">VISTA-PRIME-I5</div>
+      <div class="ip">192.168.20.19</div>
+      <div class="mac">e8:f4:08:ba:c1:7e</div>
+      <div class="label">THIS COMPUTER · HP ProBook 430 G8 · Win 11 Pro</div>
+    </div>
+  </div>
+
+  <div class="node" style="margin-top:10px;text-align:center;opacity:0.6">
+    <div class="icon">📺</div>
+    <div class="name">Sony TV</div>
+    <div class="ip">DHCP (awaiting ARP)</div>
+    <div class="label">Television · Not currently in ARP cache</div>
+  </div>
+
+  <div class="wsl-box">
+    <div class="wsl-title">🐳 WSL / Docker Virtual Network (172.26.128.0/20)</div>
+    <div class="containers">
+      <div class="cont">nginx :80</div>
+      <div class="cont">app :3000</div>
+      <div class="cont">redis :6379</div>
+      <div class="cont">prometheus :9090</div>
+      <div class="cont" style="border-color:rgba(232,163,61,0.2);color:var(--amber)">agent-daemon PID 9</div>
+      <div class="cont" style="border-color:rgba(196,69,54,0.2);color:var(--rust)">openclaw :18789</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Subnet: 192.168.20.0/24 · 254 addresses · 7 active · Gateway: 2ms · DNS: NF10WV.Home + 8.8.8.8<br>
+    Vistamations Legacy Series Server · vista-server-01 · vista-server-homeplug<br>
+    Scanned: 12/08/2026 04:05 AEST · Node Type: Hybrid · DHCP Lease expires 13-Aug-2026
+  </div>
+
+</div>
+</body>
+</html>

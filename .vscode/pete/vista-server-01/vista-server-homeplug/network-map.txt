@@ -1,0 +1,259 @@
+================================================================================
+LEGACY SERIES SERVER — HOME NETWORK MAP
+Vistamations System · Local Sub-System · vista-server-01 · vista-server-homeplug
+DATE: 12/08/2026 04:05 AEST
+VERSION: 1.0
+================================================================================
+
+
+SECTION 1: SUMMARY
+───────────────────────────────────────────────────────────────────────────────
+
+HOME NETWORK: VISTA-PRIME-I5 + 6 DEVICES + DODO ISP
+
+  This PC:   VISTA-PRIME-I5  (192.168.20.19)  HP ProBook 430 G8 · Windows 11 Pro 2009 · 64-bit
+  Gateway:   NF10WV.Home      (192.168.20.1)   NetComm NF10WV router/modem · Dodo ISP
+  DNS:       192.168.20.1 (local) + 8.8.8.8 (Google DNS upstream)
+  DHCP:      Enabled · Lease from 31-Jul-2026 · Expires 13-Aug-2026
+  Subnet:    255.255.255.0 · Class C · 254 usable addresses · 7 active
+  ISP:       Dodo · Connection type: FTTN/VDSL via NetComm NF10WV
+  WSL:       172.26.128.0/20 virtual network (Hyper-V) — Docker/Ubuntu bridge
+
+DEVICE ROSTER (7 ACTIVE):
+
+  [ROUTER]    192.168.20.1   18:f1:45:a8:8b:fc   NetComm NF10WV Gateway/Modem
+  [CO]        192.168.20.5   dc:4b:a1:34:21:bb   Desktop/Laptop (CO suffix)
+  [HO]        192.168.20.6   aa:0c:a0:e3:90:3e   Desktop/Laptop (HO suffix)
+  [MOBILE]    192.168.20.14  a8:47:4a:61:b7:0f   Mobile phone/tablet
+  [LAPTOP-2]  192.168.20.18  e8:f4:08:bb:8c:a3   Intel Wi-Fi device
+  [PRIME]     192.168.20.19  e8:f4:08:ba:c1:7e   VISTA-PRIME-I5 (this PC)
+  [TV]        DHCP assigned  —                   Sony TV (not currently in ARP cache)
+  [BROADCAST] 192.168.20.255 ff:ff:ff:ff:ff:ff   Network broadcast
+
+
+SECTION 2: TERMS, DEFINITIONS & PURPOSE
+───────────────────────────────────────────────────────────────────────────────
+
+IP ADDRESS (Internet Protocol Address)
+  The "street address" of a device on a network. Every device needs one to
+  send and receive data. Like a house number in a street. Your PC is number
+  19. The router is number 1. CO is number 5. HO is number 6.
+
+MAC ADDRESS (Media Access Control Address)
+  The "serial number" of a network card. Permanently burned into the hardware
+  at the factory. Unchangeable. Used by the router to know which physical
+  device is which, even if the IP address changes. Format: XX:XX:XX:XX:XX:XX
+  First 3 pairs identify the manufacturer (e.g. Intel = e8:f4:08).
+
+GATEWAY (Default Gateway)
+  The "front door" of your network. All traffic leaving your house goes
+  through the gateway (192.168.20.1). If the gateway is down, no internet.
+  Your gateway is the NetComm NF10WV modem/router provided by Dodo.
+
+SUBNET MASK
+  Defines how many devices can exist on your network. 255.255.255.0 means
+  254 possible devices (256 minus the gateway and broadcast address). Your
+  network can support 254 devices before needing expansion.
+
+DHCP (Dynamic Host Configuration Protocol)
+  The "reception desk" of the router. When a new device connects to Wi-Fi,
+  DHCP assigns it an available IP address automatically. Without DHCP, you'd
+  manually configure every device. Your lease lasts ~13 days before renewal.
+
+DNS (Domain Name System)
+  The "phone book" of the internet. When you type "vistamations.com," DNS
+  translates that to a numeric IP address that computers understand. Your
+  router (192.168.20.1) handles local DNS; Google's 8.8.8.8 handles external.
+
+ARP (Address Resolution Protocol)
+  The router's "neighbour list." Every device on the network broadcasts its
+  IP and MAC address periodically. The router maintains this table so it
+  knows where to send data. Your ARP table shows 7 active neighbours.
+
+ISP (Internet Service Provider)
+  Dodo. The company that provides your internet connection. Your router
+  connects to Dodo's infrastructure via FTTN/VDSL (Fibre to the Node +
+  copper to your house). Dodo assigns your public IP address.
+
+WSL (Windows Subsystem for Linux)
+  A virtual machine running inside Windows. Creates a second network
+  (172.26.128.0/20) that Docker uses. Visible as the Hyper-V Virtual
+  Ethernet Adapter. Docker containers run inside this virtual network.
+
+NODE TYPE: HYBRID
+  Your PC uses both broadcast name resolution (NetBIOS) and DNS for
+  finding other computers. Hybrid = tries DNS first, then broadcasts if DNS
+  fails. The most reliable configuration for mixed-device networks.
+
+Lease
+  The time period a DHCP-assigned IP address is valid. Your current lease
+  started 31-Jul-2026 and expires 13-Aug-2026. When it expires, the router
+  may assign a new IP address unless the device requests renewal.
+
+
+SECTION 3: TECHNICAL RECORDS
+───────────────────────────────────────────────────────────────────────────────
+
+3.1 NETWORK TOPOLOGY
+
+  INTERNET (Dodo ISP)
+       │
+       ▼
+  [NetComm NF10WV]  ← 192.168.20.1 (Gateway + DHCP + DNS + NAT + Firewall)
+   Router/Modem       MAC: 18:f1:45:a8:8b:fc
+   FTTN/VDSL          DNS: 8.8.8.8 upstream
+       │
+       ├── Wi-Fi 2.4/5 GHz ────────────┐
+       │                                │
+       ├── 192.168.20.5  [CO]          │  MAC: dc:4b:a1:34:21:bb
+       ├── 192.168.20.6  [HO]          │  MAC: aa:0c:a0:e3:90:3e
+       ├── 192.168.20.14 [MOBILE]      │  MAC: a8:47:4a:61:b7:0f
+       ├── 192.168.20.18 [LAPTOP-2]    │  MAC: e8:f4:08:bb:8c:a3
+       ├── 192.168.20.19 [PRIME-I5]    │  MAC: e8:f4:08:ba:c1:7e (this PC)
+       └── DHCP-range  [Sony TV]       │  MAC: pending ARP refresh
+                                        │
+       └── Ethernet ───────────────────┘
+
+  VIRTUAL SUBNET (WSL/Docker):
+  ┌─────────────────────────────────────────┐
+  │ vEthernet (Hyper-V)   172.26.128.1      │
+  │ Subnet: 255.255.240.0  (4096 IPs)       │
+  │   └── Docker containers:                │
+  │       nginx     172.26.129.x?  :80      │
+  │       app       172.26.129.x?  :3000    │
+  │       redis     172.26.129.x?  :6379    │
+  │       prometheus 172.26.129.x? :9090    │
+  └─────────────────────────────────────────┘
+
+3.2 ROUTER SPECIFICATIONS
+
+  Model:          NetComm NF10WV
+  Type:           VDSL/ADSL2+ Wi-Fi Gateway
+  Connection:     FTTN (Fibre to the Node) via Dodo
+  Wi-Fi:          2.4 GHz + 5 GHz dual-band
+  LAN Ports:      4 × Gigabit Ethernet
+  DNS:            Local (NF10WV.Home) + upstream 8.8.8.8
+  DHCP Scope:     192.168.20.2 – 192.168.20.254
+  Lease Time:     ~13 days (1,123,200 seconds estimated)
+  NAT:            Enabled (all local IPs hidden behind Dodo public IP)
+
+3.3 THIS COMPUTER (PRIME)
+
+  Hostname:       VISTA-PRIME-I5
+  Model:          HP ProBook 430 G8 Notebook PC
+  OS:             Windows 11 Pro · Version 2009 · Build 22631 · 64-bit
+  CPU:            11th Gen Intel Core i5-1135G7 @ 2.40GHz
+  RAM:            16 GB (15.7 GB visible)
+  Wi-Fi:          Intel Wi-Fi 6 AX201 160MHz
+  MAC (Wi-Fi):    e8:f4:08:ba:c1:7e
+  MAC (BT):       e8:f4:08:ba:c1:82
+  IP:             192.168.20.19
+  IPv6:           fe80::5929:b537:5b38:ee1e%17
+  DHCP:           Enabled · Lease: 31-Jul-2026 → 13-Aug-2026
+  Gateway:        192.168.20.1
+  DNS:            192.168.20.1
+  Node Type:      Hybrid
+
+3.4 CONNECTED DEVICES — MAC REGISTRY
+
+  ┌──────────────┬───────────────────┬──────────────────────────┬─────────┐
+  │ IP           │ MAC Address       │ OUI (Manufacturer)       │ Device   │
+  ├──────────────┼───────────────────┼──────────────────────────┼─────────┤
+  │ 192.168.20.1 │ 18:f1:45:a8:8b:fc │ NetComm Wireless         │ Gateway  │
+  │ 192.168.20.5 │ dc:4b:a1:34:21:bb │ Unknown (CO device)      │ CO-PC    │
+  │ 192.168.20.6 │ aa:0c:a0:e3:90:3e │ Randomized MAC (privacy) │ HO-PC    │
+  │ 192.168.20.14│ a8:47:4a:61:b7:0f │ Samsung Electronics      │ Mobile   │
+  │ 192.168.20.18│ e8:f4:08:bb:8c:a3 │ Intel Corporation        │ Laptop   │
+  │ 192.168.20.19│ e8:f4:08:ba:c1:7e │ Intel Corporation        │ PRIME    │
+  │ DHCP-??      │ ??                │ Sony                    │ TV       │
+  └──────────────┴───────────────────┴──────────────────────────┴─────────┘
+
+  Note: aa:0c:a0:e3:90:3e is likely a randomized MAC (privacy feature on
+  modern Wi-Fi devices). The real hardware MAC is hidden for privacy reasons.
+  This is normal for Android/iOS/Windows 10+ with MAC randomization enabled.
+
+3.5 NETWORK STATISTICS
+
+  Total devices (ARP visible):  6 + 1 broadcast = 7
+  Total devices (likely):       8 (6 ARP + Sony TV + possible guests)
+  Network class:                Class C (192.168.20.0/24)
+  Usable IPs:                   254
+  Used IPs:                     7
+  Utilization:                  2.8%
+  Gateway latency:              2 ms (local)
+  DNS response time:            <5 ms (cached)
+  ISP:                          Dodo · FTTN/VDSL
+  External DNS:                 8.8.8.8 (Google)
+
+
+SECTION 4: DATA STRUCTURES, FORMATS & RECORDS
+───────────────────────────────────────────────────────────────────────────────
+
+4.1 INVENTORY SCHEMA (JSON)
+
+{
+  "network": {
+    "id": "vista-server-01",
+    "subnet": "192.168.20.0/24",
+    "gateway": {
+      "ip": "192.168.20.1",
+      "mac": "18:f1:45:a8:8b:fc",
+      "hostname": "NF10WV.Home",
+      "model": "NetComm NF10WV",
+      "isp": "Dodo",
+      "connectionType": "FTTN/VDSL",
+      "dhcpServer": true,
+      "dnsServer": true,
+      "externalDns": "8.8.8.8",
+      "wiFiBands": ["2.4GHz", "5GHz"],
+      "lanPorts": 4
+    },
+    "host": {
+      "name": "VISTA-PRIME-I5",
+      "model": "HP ProBook 430 G8",
+      "os": "Windows 11 Pro 2009",
+      "cpu": "Intel i5-1135G7 @ 2.40GHz",
+      "ram": "16GB",
+      "ip": "192.168.20.19",
+      "mac_wifi": "e8:f4:08:ba:c1:7e",
+      "mac_bluetooth": "e8:f4:08:ba:c1:82",
+      "wiFiAdapter": "Intel Wi-Fi 6 AX201 160MHz",
+      "dhcpLeaseStart": "2026-07-31T03:07:07Z",
+      "dhcpLeaseExpiry": "2026-08-13T00:16:19Z",
+      "wslSubnet": "172.26.128.0/20",
+      "dockerContainers": 4
+    },
+    "devices": [
+      {"ip":"192.168.20.5",  "mac":"dc:4b:a1:34:21:bb", "name":"CO-PC",     "type":"desktop",  "oui":"Unknown"},
+      {"ip":"192.168.20.6",  "mac":"aa:0c:a0:e3:90:3e", "name":"HO-PC",     "type":"desktop",  "oui":"Randomized"},
+      {"ip":"192.168.20.14", "mac":"a8:47:4a:61:b7:0f", "name":"MOBILE-01", "type":"mobile",   "oui":"Samsung"},
+      {"ip":"192.168.20.18", "mac":"e8:f4:08:bb:8c:a3", "name":"LAPTOP-02", "type":"laptop",   "oui":"Intel"},
+      {"ip":"DHCP",          "mac":"pending",            "name":"SONY-TV",   "type":"tv",       "oui":"Sony"}
+    ],
+    "scannedAt": "2026-08-12T04:05:23+10:00"
+  }
+}
+
+4.2 ARRAY FORMAT (for port scanning / monitoring)
+
+  DEVICES = [
+    ["192.168.20.1",  "18:f1:45:a8:8b:fc", "Gateway",     "ALIVE"],
+    ["192.168.20.5",  "dc:4b:a1:34:21:bb", "CO-PC",       "ALIVE"],
+    ["192.168.20.6",  "aa:0c:a0:e3:90:3e", "HO-PC",       "ALIVE"],
+    ["192.168.20.14", "a8:47:4a:61:b7:0f", "MOBILE-01",   "ALIVE"],
+    ["192.168.20.18", "e8:f4:08:bb:8c:a3", "LAPTOP-02",   "ALIVE"],
+    ["192.168.20.19", "e8:f4:08:ba:c1:7e", "PRIME-I5",    "ALIVE"]
+  ]
+
+4.3 SUITABLE FILE FORMATS FOR NETWORK RECORDS
+
+  | Format | Best for | Notes |
+  |--------|----------|-------|
+  | JSON | Machine-readable inventory | Already built (see 4.1) |
+  | TXT | Human-readable documentation | This file (network-map.txt) |
+  | CSV | Spreadsheet import | Devices table exportable |
+  | YAML | Configuration management | Docker-compose style |
+  | Mermaid | Topology diagrams | Network graph rendering |
+  | SVG/PNG | Infographics | Visual map (see homeplug folder) |
+
+================================================================================

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network Map — Vistamations</title>
+<style>
+  :root { --bg:#06060d; --card-bg:rgba(15,15,28,0.85); --text:#d4d4e8; --text-dim:rgba(212,212,232,0.5); --border:rgba(255,255,255,0.06); --accent:#00e5ff; --amber:#E8A33D; --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'SF Mono','JetBrains Mono',monospace; background:var(--bg); color:var(--text); min-height:100vh; }
+  body::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 50% 0%, rgba(0,229,255,0.05), transparent 60%); pointer-events:none; }
+  .menu-strip { position:fixed; top:0; left:0; right:0; display:flex; align-items:center; gap:0; background:rgba(15,15,28,0.9); border-bottom:1px solid var(--border); backdrop-filter:blur(12px); z-index:100; padding:0 16px; }
+  .menu-strip .brand { font-size:12px; font-weight:500; color:#fff; letter-spacing:2px; padding:14px 0; margin-right:24px; border-right:1px solid var(--border); padding-right:24px; }
+  .menu-strip .brand em { font-style:normal; color:var(--accent); }
+  .menu-strip a { color:var(--text-dim); text-decoration:none; font-size:10px; padding:14px 16px; border-bottom:2px solid transparent; transition:all 0.2s; text-transform:uppercase; letter-spacing:1px; }
+  .menu-strip a:hover, .menu-strip a.active { color:#fff; border-bottom-color:var(--accent); }
+  .container { max-width:960px; margin:0 auto; padding:80px 20px 40px; }
+  h1 { font-size:22px; font-weight:300; color:#fff; text-align:center; margin-bottom:4px; }
+  .sub { font-size:9px; color:var(--text-dim); text-align:center; text-transform:uppercase; letter-spacing:2px; margin-bottom:24px; }
+  .panel { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:24px; backdrop-filter:blur(12px); }
+  .info-row { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:16px; }
+  .info-block { flex:1; min-width:200px; }
+  .info-block h3 { font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+  .info-block p { font-size:10px; color:var(--text-dim); line-height:1.6; }
+  .info-block .value { font-size:11px; color:#fff; }
+  .device-table { width:100%; border-collapse:collapse; margin-top:16px; }
+  .device-table th { font-size:9px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; text-align:left; padding:8px 10px; border-bottom:1px solid var(--border); }
+  .device-table td { font-size:10px; padding:8px 10px; border-bottom:1px solid var(--border); color:var(--text); }
+  .device-table tr:hover td { background:rgba(255,255,255,0.02); }
+  .dot { width:6px; height:6px; border-radius:50%; display:inline-block; margin-right:6px; background:var(--accent); }
+  .dot.self { background:var(--amber); }
+  .btn { display:inline-block; padding:8px 18px; background:var(--accent); color:#000; border-radius:6px; text-decoration:none; font-size:10px; font-weight:500; margin-top:12px; }
+</style>
+</head>
+<body>
+
+<div class="menu-strip">
+  <div class="brand">Vistamations <em>Network</em></div>
+  <a href="index.html">Command Control</a>
+  <a href="network-map.html" class="active">Network Map</a>
+  <a href="sitemap.html">Sitemap</a>
+</div>
+
+<div class="container">
+  <h1>Home Network Map</h1>
+  <div class="sub">vista-server-01 · vista-server-homeplug · 7 devices · Dodo ISP</div>
+
+  <div class="panel">
+    <div class="info-row">
+      <div class="info-block">
+        <h3>Gateway</h3>
+        <p class="value">NF10WV.Home (192.168.20.1)</p>
+        <p>NetComm NF10WV · FTTN/VDSL · Dodo ISP · DNS 8.8.8.8 · 2ms latency</p>
+      </div>
+      <div class="info-block">
+        <h3>This Computer</h3>
+        <p class="value">VISTA-PRIME-I5 (192.168.20.19)</p>
+        <p>HP ProBook 430 G8 · Win 11 Pro · Intel i5-1135G7 · 16GB · Wi-Fi 6</p>
+      </div>
+      <div class="info-block">
+        <h3>Network</h3>
+        <p class="value">192.168.20.0/24 (254 IPs)</p>
+        <p>7 active · DHCP lease expires 13-Aug · Node: Hybrid · WSL: 172.26.128.0/20</p>
+      </div>
+    </div>
+
+    <table class="device-table">
+      <tr><th>Status</th><th>IP</th><th>MAC</th><th>Name</th><th>Type</th></tr>
+      <tr><td><span class="dot"></span></td><td>192.168.20.1</td><td>18:f1:45:a8:8b:fc</td><td>NF10WV.Home</td><td>Gateway</td></tr>
+      <tr><td><span class="dot"></span></td><td>192.168.20.5</td><td>dc:4b:a1:34:21:bb</td><td>CO-PC</td><td>Desktop/Laptop</td></tr>
+      <tr><td><span class="dot"></span></td><td>192.168.20.6</td><td>aa:0c:a0:e3:90:3e</td><td>HO-PC</td><td>Desktop/Laptop</td></tr>
+      <tr><td><span class="dot"></span></td><td>192.168.20.14</td><td>a8:47:4a:61:b7:0f</td><td>Mobile-01</td><td>Samsung Device</td></tr>
+      <tr><td><span class="dot"></span></td><td>192.168.20.18</td><td>e8:f4:08:bb:8c:a3</td><td>Laptop-02</td><td>Intel Wi-Fi</td></tr>
+      <tr><td><span class="dot self"></span></td><td>192.168.20.19</td><td>e8:f4:08:ba:c1:7e</td><td>PRIME-I5</td><td>This Computer</td></tr>
+      <tr><td><span style="opacity:0.3">○</span></td><td>DHCP</td><td>pending</td><td>Sony TV</td><td>Television</td></tr>
+    </table>
+  </div>
+
+  <p style="text-align:center;margin-top:16px">
+    <a href=".vscode/pete/vista-server-01/vista-server-homeplug/network-infographic.html" class="btn">View Infographic</a>
+    <a href=".vscode/pete/vista-server-01/vista-server-homeplug/network-map.txt" style="color:var(--text-dim);margin-left:16px;font-size:10px">Full documentation →</a>
+  </p>
+</div>
+</body>
+</html>
