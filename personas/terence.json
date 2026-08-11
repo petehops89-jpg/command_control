@@ -6,6 +6,8 @@
     "canonicalName": "Terence (OpenClaw / Think Tank Architect)",
     "cluster": "base-env",
     "domain": "Think Tank Architect & Metacognition Specialist",
+    "division": "Executive",
+    "department": "Think Tank",
     "status": "active",
     "alwaysOnCall": true,
     "reportingChain": {

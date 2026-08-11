@@ -6,6 +6,8 @@
     "canonicalName": "Merlin V.II (Kilo / DeepSeek V4 Pro)",
     "cluster": "base-env",
     "domain": "Wizard Guide — Tutorials, Strategy & System Philosophy",
+    "division": "Executive",
+    "department": "Strategy",
     "status": "active",
     "alwaysOnCall": true,
     "reportingChain": {

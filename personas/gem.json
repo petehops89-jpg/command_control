@@ -6,6 +6,8 @@
     "canonicalName": "gem (Kilo / Gemini 3.5 Flash)",
     "cluster": "base-env",
     "domain": "Music AI & Research Curator — Multimodal Analysis & Playlist Curation",
+    "division": "Creative",
+    "department": "Music",
     "status": "active",
     "alwaysOnCall": false,
     "reportingChain": {

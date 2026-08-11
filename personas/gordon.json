@@ -6,6 +6,8 @@
     "canonicalName": "Gordon (Kilo / DeepSeek V4 Pro)",
     "cluster": "base-env",
     "domain": "Chief Hub Agent — Docker Orchestration & Pipeline Operations",
+    "division": "Operations",
+    "department": "Infrastructure",
     "status": "active",
     "alwaysOnCall": true,
     "reportingChain": {

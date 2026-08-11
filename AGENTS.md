@@ -10,6 +10,8 @@ All agents must use Vistamations terminology when communicating with Pete. Indus
 | **Local Sub-System** | Local environment | Docker + Windows on the physical PC |
 | **Cloud Sub-System** | Cloud infrastructure | Cloudflare + Google Cloud (everything not local) |
 | **Environment** | Environment / Runtime context | Local (Docker), Cloudflare (Edge), Google Cloud (Vertex AI) |
+| **Division** | Business unit / Org unit | Broad organizational function (Operations, Creative, Executive, Public) |
+| **Department** | Team / Functional group | Specialized unit within a Division (Engineering, Design, Sales, etc.) |
 | **System root** | Workspace root / Repo root | `C:\vistamations-music` |
 | **Agent mode file** | System prompt / Instruction file | `.kilo/modes/gordon.md` |
 | **Agent persona** | Agent config / Runtime identity | `personas/big-brother.json` |
@@ -18,7 +20,7 @@ All agents must use Vistamations terminology when communicating with Pete. Indus
 | **Git commit** | Snapshot / Changeset | A saved checkpoint with a message |
 | **Scheduled task** | Cron job / Scheduled job | Windows Task Scheduler entry |
 | **API endpoint** | Route / HTTP handler | `GET /health`, `POST /olivia/respond`, etc. |
-| **4-value ID** | Namespaced identifier | `vista-{subsystem}-{environment}-{item}` |
+| **6-value ID** | Namespaced identifier | `vista-{subsystem}-{environment}-{division}-{department}-{item}` |
 | **Command Control** | Dashboard | `index.html` — bento grid homepage |
 | **Command Portal** | Message queue UI | `command-portal.html` — Olivia interface |
 | **Kilo** | AI coding assistant / CLI | The AI tool managing the system |
@@ -40,52 +42,113 @@ All agents must use Vistamations terminology when communicating with Pete. Indus
 ```
 Vistamations System (C:\vistamations-music)
 │
-├── Local Sub-System                          ← Docker/Windows on this machine
-│   └── Local Environment                     ← vista-localenv-env-root
-│       ├── Docker stack: nginx, app (Express), Redis, Prometheus
-│       ├── Node.js server (server.js, port 3000)
-│       ├── Static web pages (index.html, media-player.html, handy-mail.html, etc.)
-│       ├── Scheduled tasks: Olivia dispatch, Git auto-commit, publishing engine, etc.
-│       └── Pete's files: .vscode/pete/ (4-value ID structure)
+├── LOCAL SUB-SYSTEM (Docker/Windows)
+│   └── Local Environment
+│       │
+│       ├── OPERATIONS DIVISION (runs the system)
+│       │   ├── Infrastructure Department — Gordon (AG001)
+│       │   │   Docker stack: nginx, app, Redis, Prometheus
+│       │   │   Scheduled tasks, container rebuilds, CI/CD
+│       │   │
+│       │   ├── Engineering Department — Trinity (AG002), Big Brother (AG006), Claw (AG005), Dee (AG007)
+│       │   │   server.js, API routes, ports, bridges, gateway
+│       │   │   agent-daemon.js, code review, telemetry, cron research
+│       │   │
+│       │   └── Security Department
+│       │       Gate Manager, vault, rate limiter, nonce cache, envelope signatures
+│       │
+│       ├── CREATIVE DIVISION (builds the product)
+│       │   ├── Design Department — Stefi (AG008)
+│       │   │   UI design, bento layouts, branding, animations, Figma
+│       │   │
+│       │   ├── Production Department
+│       │   │   Media Centre, PDF Toolkit, publishing engine, static pages
+│       │   │
+│       │   └── Music Department — gem (AG010)
+│       │       Multimodal analysis, playlist curation, audio research
+│       │
+│       ├── EXECUTIVE DIVISION (runs the business)
+│       │   ├── Administration Department — Olivia (AG004)
+│       │   │   Command Portal, queues, scheduling, task delegation
+│       │   │
+│       │   ├── Strategy Department — Merlin V.II (AG003)
+│       │   │   Architecture pathfinding, tutorials, system philosophy, STATUS.md
+│       │   │
+│       │   └── Think Tank Department — Terence (AG009)
+│       │       Metacognition, vector mapping, idea synthesis, cluster formation
+│       │
+│       └── PUBLIC DIVISION (faces outward)
+│           ├── Marketing Department
+│           │   Advertising, branding, outreach, content strategy
+│           │
+│           ├── Sales Department
+│           │   Client acquisition, contracts, pricing, partnerships
+│           │
+│           └── Vistamations Committee
+│               Pete + agent governance — decisions, policy, direction
 │
-└── Cloud Sub-System                          ← Cloudflare + Google Cloud
-    ├── Cloudflare Environment                ← vista-cloudflare-env-root
-    │   ├── D1 database: vistamations-agent-memory (AGENT_DB)
-    │   ├── Workers: vistamations-agent-memory, mya, vistamations-home-bento
-    │   └── KV namespaces (deferred): HANDY_MAIL_KV, SESSION_KV, MYA_KV
+└── CLOUD SUB-SYSTEM (Cloudflare + Google Cloud)
     │
-    └── Google Cloud Environment              ← vista-gcloud-env-root
-        ├── Project: vists-498322
-        ├── Vertex AI: gemini-2.5-pro (global)
-        ├── Auth: Application Default Credentials
-        └── Gemini CLI + Vertex AI SDK
+    ├── Cloudflare Environment
+    │   └── CLOUD OPERATIONS DIVISION
+    │       ├── Edge Department
+    │       │   Workers: vistamations-agent-memory, mya, vistamations-home-bento
+    │       │   Domain routing (vistamations.com), CDN
+    │       │
+    │       └── Data Department
+    │           D1 database (AGENT_DB), KV namespaces (deferred)
+    │
+    └── Google Cloud Environment
+        └── AI DIVISION
+            ├── Model Department
+            │   Vertex AI, gemini-2.5-pro (global), ADC auth
+            │
+            └── Research Department
+                Gemini CLI, agent experiments, prompt engineering
 ```
 
-**3 Environments**:
-1. **Local Environment** (Windows/Docker) — the primary runtime. Docker stack, Express server, static files, scheduled tasks.
-2. **Cloudflare Environment** (Edge) — Workers compute, D1 database, KV storage, domain routing (vistamations.com).
-3. **Google Cloud Environment** (Vertex AI) — AI model access (Gemini), project vists-498322, ADC auth.
+**3 Environments, 5 Divisions, 14 Departments:**
 
-**4-Value ID Convention**: `vista-{subsystem}-{environment}-{item}.json`
-- Example: `vista-localsub-root/vista-localenv-env-root/vista-sec-water/ag011.json`
-- Example: `vista-cloudsub-root/vista-gcloud-env-root/env-root.json`
+| Sub-System | Environment | Division | Department | Lead |
+|---|---|---|---|---|
+| Local | Local | Operations | Infrastructure | Gordon |
+| Local | Local | Operations | Engineering | Big Brother |
+| Local | Local | Operations | Security | — |
+| Local | Local | Creative | Design | Stefi |
+| Local | Local | Creative | Production | — |
+| Local | Local | Creative | Music | gem |
+| Local | Local | Executive | Administration | Olivia |
+| Local | Local | Executive | Strategy | Merlin V.II |
+| Local | Local | Executive | Think Tank | Terence |
+| Local | Local | Public | Marketing | — |
+| Local | Local | Public | Sales | — |
+| Local | Local | Public | Committee | Pete |
+| Cloud | Cloudflare | Cloud Operations | Edge | — |
+| Cloud | Cloudflare | Cloud Operations | Data | — |
+| Cloud | Google Cloud | AI | Model | — |
+| Cloud | Google Cloud | AI | Research | — |
+
+**6-Value ID Convention**: `vista-{subsystem}-{environment}-{division}-{department}-{item}`
+- Example: `vista-localsub-localenv-ops-sec-water/ag011.json` (Local Sub-System → Local Environment → Operations Division → Security Department → Key Vault)
+- Example: `vista-cloudsub-cfenv-cloudops-edge-worker.json` (Cloud Sub-System → Cloudflare Environment → Cloud Operations Division → Edge Department → Worker)
+- Example: `vista-localsub-localenv-exec-admin-olivia.json` (Local Sub-System → Local Environment → Executive Division → Administration Department → Olivia persona)
 
 ---
 
 ## Agent Roster — Dominion I (10 agents)
 
-| # | Agent | Runtime | Role |
-|---|---|---|---|
-| AG001 | Gordon | DeepSeek V4 Pro | Chief Hub Agent — Docker, container orchestration, pipeline logs |
-| AG002 | Trinity | DeepSeek V4 Pro | Apprentice Systems Engineer — ports, bridges, gateway management |
-| AG003 | Merlin V.II | DeepSeek V4 Pro | Wizard Guide — tutorials, strategy, system philosophy |
-| AG004 | Olivia | Mistral Large 3 | Executive Secretary — queues, scheduling, task delegation |
-| AG005 | Claw (Dee) | DeepSeek V4 Pro | MCP Specialist — tool belt, legacy systems, external integrations |
-| AG006 | Big Brother | DeepSeek V4 Pro | Senior Software Architect — code review, infrastructure, telemetry |
-| AG007 | Dee | DeepSeek V4 Pro | Cron & Research Worker — scheduling, scraping, report generation |
-| AG008 | Stefi | DeepSeek V4 Pro | Graphics & Design Director — UI, bento layouts, branding, animations |
-| AG009 | Terence | OpenClaw Gateway | Think Tank Architect — metacognition, vector mapping, idea synthesis |
-| AG010 | gem | Gemini 3.5 Flash | Music AI & Research Curator — multimodal analysis, playlist curation |
+| # | Agent | Runtime | Division | Department | Role |
+|---|---|---|---|---|---|
+| AG001 | Gordon | DeepSeek V4 Pro | Operations | Infrastructure | Chief Hub Agent — Docker, container orchestration, pipeline logs |
+| AG002 | Trinity | DeepSeek V4 Pro | Operations | Engineering | Apprentice Systems Engineer — ports, bridges, gateway management |
+| AG003 | Merlin V.II | DeepSeek V4 Pro | Executive | Strategy | Wizard Guide — tutorials, strategy, system philosophy |
+| AG004 | Olivia | Mistral Large 3 | Executive | Administration | Executive Secretary — queues, scheduling, task delegation |
+| AG005 | Claw (Terence) | DeepSeek V4 Pro | Operations | Engineering | MCP Specialist — tool belt, legacy systems, external integrations |
+| AG006 | Big Brother | DeepSeek V4 Pro | Operations | Engineering | Senior Software Architect — code review, infrastructure, telemetry |
+| AG007 | Dee | DeepSeek V4 Pro | Operations | Engineering | Cron & Research Worker — scheduling, scraping, report generation |
+| AG008 | Stefi | DeepSeek V4 Pro | Creative | Design | Graphics & Design Director — UI, bento layouts, branding, animations |
+| AG009 | Terence | OpenClaw Gateway | Executive | Think Tank | Think Tank Architect — metacognition, vector mapping, idea synthesis |
+| AG010 | gem | Gemini 3.5 Flash | Creative | Music | Music AI & Research Curator — multimodal analysis, playlist curation |
 
 **Reporting Chain**: Player → Merlin V.II (AG003) → Olivia (AG004) → Gordon (AG001) → Trinity (AG002) → Claw/Dee/Big Brother/Stefi
 
@@ -101,6 +164,7 @@ Vistamations System (C:\vistamations-music)
 | `xsync` | Trigger Olivia queue watcher push/pull |
 | `xclear` | Compress message buffer to last 5 items |
 | `xpair [channel] [code]` | Register external client (Telegram, etc.) with OpenClaw |
+| `xchat-save` | Save session transcript to next sequential chat-results file |
 
 ---
 
@@ -110,17 +174,18 @@ Vistamations System (C:\vistamations-music)
 
 ---
 
-## State
+## System Health
 
 | Area | Status |
 |---|---|
 | Docker stack (4 containers) | Healthy |
 | API endpoints (17 routes) | Verified |
 | Scheduled tasks (6) | Operational |
-| Agent personas | 2/10 complete |
+| Agent personas | 10/10 complete |
 | Knowledge graph | Empty |
 | Redis | Empty (0 keys) |
 | Test coverage | None |
 | CI/CD | None |
 | Gemini auth | ADC configured (vists-498322), daemon wiring pending |
-| **Overall System Health** | **46%** |
+| Secrets | Segregated to env vars (G-3 resolved) |
+| **Overall System Health** | **54%** |

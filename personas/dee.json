@@ -6,6 +6,8 @@
     "canonicalName": "Dee (Kilo / DeepSeek V4 Pro)",
     "cluster": "base-env",
     "domain": "Cron & Research Worker — Scheduling, Scraping & Report Generation",
+    "division": "Operations",
+    "department": "Engineering",
     "status": "active",
     "alwaysOnCall": false,
     "reportingChain": {

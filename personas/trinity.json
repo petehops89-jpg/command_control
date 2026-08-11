@@ -6,6 +6,8 @@
     "canonicalName": "Trinity (Kilo / DeepSeek V4 Pro)",
     "cluster": "base-env",
     "domain": "Apprentice Systems Engineer — Ports, Bridges & Gateway Management",
+    "division": "Operations",
+    "department": "Engineering",
     "status": "active",
     "alwaysOnCall": true,
     "reportingChain": {

@@ -6,6 +6,8 @@
     "canonicalName": "Big Brother (Kilo / DeepSeek V4 Pro)",
     "cluster": "base-env",
     "domain": "Senior Software Architect & Systems Engineer",
+    "division": "Operations",
+    "department": "Engineering",
     "status": "active",
     "alwaysOnCall": true,
     "reportingChain": {

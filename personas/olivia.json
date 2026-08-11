@@ -6,6 +6,8 @@
     "canonicalName": "Olivia (Kilo / Mistral Large 3)",
     "cluster": "base-env",
     "domain": "Executive Secretary — Queues, Scheduling & Task Delegation",
+    "division": "Executive",
+    "department": "Administration",
     "status": "active",
     "alwaysOnCall": true,
     "reportingChain": {

@@ -2,7 +2,51 @@
 VISTAMATIONS SYSTEM RECONCILIATION & CLARIFICATIONS LOG
 SUBJECT: Running Record of Pete/Agent Misunderstandings & Preconceptions
 LOCATION: C:\vistamations-music\.vscode\pete\vista-localsub-root\vista-localenv-env-root\vista-pete-clarify\pete-clarify.txt
-DATE STAMP: [11/08/2026 1:47 PM]
+DATE STAMP: [11/08/2026 5:52 PM]
+================================================================================
+
+[11/08/2026 5:52 PM] - DECISION: DIVISION + DEPARTMENT ADDED TO SYSTEM HIERARCHY
+================================================================================
+* PETE'S DIRECTIVE:
+  "system-subsystem-environment-division-department. add division and department
+  to vistamations as category for things like vistamations commitee, software
+  production, sales, graphics, contracting, advertising. give suggestions,
+  division before department in hierachy. system to environment is vistamations
+  workplace and staff, divisions/departments lean toward public domain"
+
+* WHAT CHANGED:
+  - System hierarchy expanded from 4 levels (System → Sub-System → Environment)
+    to 6 levels (System → Sub-System → Environment → Division → Department).
+  - 4-value ID upgraded to 6-value ID: vista-{subsystem}-{environment}-{division}-{department}-{item}
+  - 5 Divisions and 14 Departments mapped across all 3 environments.
+
+* 5 DIVISIONS:
+  - Operations Division (runs the system) — Infrastructure, Engineering, Security
+  - Creative Division (builds the product) — Design, Production, Music
+  - Executive Division (runs the business) — Administration, Strategy, Think Tank
+  - Public Division (faces outward) — Marketing, Sales, Committee
+  - Cloud Operations Division (Cloudflare) — Edge, Data
+  - AI Division (Google Cloud) — Model, Research
+
+* AGENT ASSIGNMENTS:
+  AG001 Gordon — Operations / Infrastructure
+  AG002 Trinity — Operations / Engineering
+  AG003 Merlin V.II — Executive / Strategy
+  AG004 Olivia — Executive / Administration
+  AG005 Claw — Operations / Engineering
+  AG006 Big Brother — Operations / Engineering
+  AG007 Dee — Operations / Engineering
+  AG008 Stefi — Creative / Design
+  AG009 Terence — Executive / Think Tank
+  AG010 gem — Creative / Music
+
+* FILES UPDATED:
+  - AGENTS.md: full architecture tree, agent roster with Division+Department,
+    terminology bridge with Division/Department entries, 6-value ID examples
+  - README.md: architecture tree, agent roster table, 6-value ID convention
+  - pete-clarify.txt: this entry
+  - All 10 persona JSONs: division and department fields added
+
 ================================================================================
 
 [11/08/2026 1:47 PM] - SESSION CLARIFICATION — HEALTH, COMMITS, BRANCHES, GITHUB, AGENTS.MD
