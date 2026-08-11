@@ -1,5 +1,7 @@
 const express = require('express');
 const Redis = require('ioredis');
+const Imap = require('imap');
+const { simpleParser } = require('mailparser');
 const fs = require('fs');
 const path = require('path');
 
@@ -384,6 +386,109 @@ app.post('/olivia/clear-messages', (req, res) => {
     res.json({ cleared: toClear.length, remaining: toKeep.length, savedTo: filename });
   } catch (e) {
     res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── Email Hub — IMAP inboxes for 3 Gmail accounts ───
+
+const EMAIL_ACCOUNTS = {
+  hops:  { label: 'Hops',  user: 'hops1010@gmail.com',                 color: '#4285F4' },
+  pete:  { label: 'Pete',  user: 'petehops89@gmail.com',               color: '#E8A33D' },
+  james: { label: 'James', user: 'james.hooper@vistamations.com',      color: '#C44536' },
+};
+
+function fetchInbox(accountKey, limit) {
+  return new Promise((resolve, reject) => {
+    const acct = EMAIL_ACCOUNTS[accountKey];
+    if (!acct) return reject(new Error('Unknown account: ' + accountKey));
+
+    const password = process.env['EMAIL_PASSWORD_' + accountKey.toUpperCase()];
+    if (!password) return reject(new Error('No app password for ' + accountKey + '. Set EMAIL_PASSWORD_' + accountKey.toUpperCase() + ' in .env'));
+    if (password === 'your-app-password') return resolve([]);
+
+    const imap = new Imap({
+      user: acct.user,
+      password: password,
+      host: 'imap.gmail.com',
+      port: 993,
+      tls: true,
+      tlsOptions: { rejectUnauthorized: false },
+    });
+
+    const messages = [];
+
+    imap.once('ready', () => {
+      imap.openBox('INBOX', false, (err) => {
+        if (err) { imap.end(); return reject(err); }
+
+        imap.search(['ALL'], (err, results) => {
+          if (err || !results.length) { imap.end(); return resolve([]); }
+
+          const ids = results.slice(-limit);
+          if (ids.length === 0) { imap.end(); return resolve([]); }
+
+          const fetch = imap.fetch(ids, { bodies: '', struct: true });
+          let fetched = 0;
+
+          fetch.on('message', (msg) => {
+            let body = '';
+            msg.on('body', (stream) => { stream.on('data', (chunk) => { body += chunk.toString('utf8'); }); });
+            msg.once('attributes', (attrs) => {
+              messages.push({ uid: attrs.uid, date: attrs.date, raw: body });
+            });
+            msg.once('end', () => {
+              fetched++;
+              if (fetched === ids.length) processMessages();
+            });
+          });
+
+          fetch.once('error', (err) => { imap.end(); reject(err); });
+          fetch.once('end', () => { if (fetched === 0) { imap.end(); resolve([]); } });
+
+          function processMessages() {
+            Promise.all(messages.map(async (m) => {
+              try {
+                const parsed = await simpleParser(m.raw);
+                return {
+                  uid: m.uid,
+                  date: parsed.date || m.date,
+                  from: parsed.from ? parsed.from.text : 'Unknown',
+                  subject: parsed.subject || '(no subject)',
+                  snippet: (parsed.text || '').substring(0, 150),
+                };
+              } catch (_) {
+                return { uid: m.uid, date: m.date, from: 'Unknown', subject: '(parse error)', snippet: '' };
+              }
+            })).then((processed) => {
+              imap.end();
+              resolve(processed.sort((a, b) => new Date(b.date) - new Date(a.date)));
+            }).catch(() => { imap.end(); resolve([]); });
+          }
+        });
+      });
+    });
+
+    imap.once('error', (err) => { reject(err); });
+    imap.connect();
+  });
+}
+
+app.get('/email/accounts', (_req, res) => {
+  const accounts = Object.entries(EMAIL_ACCOUNTS).map(([key, acct]) => ({
+    key, label: acct.label, user: acct.user, color: acct.color,
+    configured: !!(process.env['EMAIL_PASSWORD_' + key.toUpperCase()]),
+  }));
+  res.json(accounts);
+});
+
+app.get('/email/inbox/:account', async (req, res) => {
+  const accountKey = req.params.account;
+  const limit = parseInt(req.query.limit) || 20;
+  try {
+    const messages = await fetchInbox(accountKey, limit);
+    res.json({ account: accountKey, count: messages.length, messages });
+  } catch (e) {
+    res.status(500).json({ error: e.message, account: accountKey });
   }
 });
 
