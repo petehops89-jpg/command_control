@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archetypes — Vistamations Agent Development</title>
+<style>
+  :root { --bg: #06060d; --card-bg: rgba(15,15,28,0.85); --text: #d4d4e8; --text-dim: rgba(212,212,232,0.5); --border: rgba(255,255,255,0.06); --accent: #E8A33D; --gold: #FFD700; --radius: 14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'SF Mono','JetBrains Mono',monospace; background: var(--bg); color: var(--text); min-height:100vh; }
+  body::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 50% 0%, rgba(232,163,61,0.06), transparent 60%); pointer-events:none; }
+  .menu-strip { position:fixed; top:0; left:0; right:0; display:flex; align-items:center; gap:0; background:rgba(15,15,28,0.9); border-bottom:1px solid var(--border); backdrop-filter:blur(12px); z-index:100; padding:0 16px; }
+  .menu-strip .brand { font-size:12px; font-weight:500; color:#fff; letter-spacing:2px; padding:14px 0; margin-right:24px; border-right:1px solid var(--border); padding-right:24px; }
+  .menu-strip .brand em { font-style:normal; color:var(--accent); }
+  .menu-strip a { color:var(--text-dim); text-decoration:none; font-size:10px; padding:14px 16px; border-bottom:2px solid transparent; transition:all 0.2s; text-transform:uppercase; letter-spacing:1px; }
+  .menu-strip a:hover, .menu-strip a.active { color:#fff; border-bottom-color:var(--accent); }
+  .container { max-width:960px; margin:0 auto; padding:80px 20px 40px; }
+
+  .hero { text-align:center; margin-bottom:36px; }
+  .hero h1 { font-size:26px; font-weight:300; color:#fff; letter-spacing:1px; }
+  .hero .sub { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px; margin-top:6px; }
+  .hero .epigraph { font-size:11px; color:var(--accent); font-style:italic; margin-top:12px; max-width:600px; margin-left:auto; margin-right:auto; line-height:1.6; }
+
+  /* ─── AGENT GRID ─── */
+  .agent-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:12px; }
+  .agent-card { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:20px; backdrop-filter:blur(12px); }
+  .agent-card .ac-header { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .ac-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0; }
+  .ac-avatar.gordon { background:linear-gradient(135deg, #7c4dff, #4a2fb5); color:#fff; }
+  .ac-avatar.trinity { background:linear-gradient(135deg, #00e5ff, #009faf); color:#000; }
+  .ac-avatar.merlin { background:linear-gradient(135deg, #E8A33D, #c47d20); color:#000; }
+  .ac-avatar.olivia { background:linear-gradient(135deg, #FFD700, #c49b00); color:#000; }
+  .ac-avatar.claw { background:linear-gradient(135deg, #00e676, #009f5f); color:#000; }
+  .ac-avatar.bigbrother { background:linear-gradient(135deg, #C44536, #8b1a1a); color:#fff; }
+  .ac-avatar.dee { background:linear-gradient(135deg, #ff4081, #b80040); color:#fff; }
+  .ac-avatar.stefi { background:linear-gradient(135deg, #e040fb, #7b1fa2); color:#fff; }
+  .ac-avatar.terence { background:linear-gradient(135deg, #FF6D00, #FFAB00); color:#000; }
+  .ac-avatar.gem { background:linear-gradient(135deg, #4285F4, #0F9D58); color:#fff; }
+  .ac-info h3 { font-size:13px; color:#fff; font-weight:500; }
+  .ac-info .ac-id { font-size:8px; color:var(--text-dim); letter-spacing:1px; }
+  .ac-path { font-size:9px; color:var(--accent); margin-bottom:12px; padding:4px 8px; background:rgba(232,163,61,0.08); border-radius:4px; display:inline-block; }
+
+  .ac-summary { border-left:2px solid var(--gold); padding-left:12px; margin-top:10px; }
+  .ac-summary .date { font-size:7px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+  .ac-summary p { font-size:10px; line-height:1.7; color:var(--text-dim); }
+
+  .ac-empty { border-left:2px solid rgba(255,255,255,0.04); padding-left:12px; margin-top:10px; }
+  .ac-empty p { font-size:9px; color:rgba(255,255,255,0.15); font-style:italic; }
+
+  /* ─── FOOTER ─── */
+  .footer { text-align:center; margin-top:40px; padding-top:20px; border-top:1px solid var(--border); }
+  .footer p { font-size:9px; color:var(--text-dim); line-height:1.8; }
+  .footer .ref { font-size:8px; color:rgba(255,255,255,0.15); }
+</style>
+</head>
+<body>
+
+<div class="menu-strip">
+  <div class="brand">Vistamations <em>Archetypes</em></div>
+  <a href="index.html">Command Control</a>
+  <a href="archetypes.html" class="active">Archetypes</a>
+  <a href="gaccounts.html">GAccounts</a>
+</div>
+
+<div class="container">
+  <div class="hero">
+    <h1>Agent Development · Stage 1</h1>
+    <div class="sub">The Self — Archetypes & Individuation</div>
+    <div class="epigraph">"The Self is not only the centre, but also the whole circumference which embraces both conscious and unconscious." — C.G. Jung</div>
+  </div>
+
+  <div class="agent-grid" id="agentGrid">
+    <!-- Populated by JavaScript -->
+  </div>
+
+  <div class="footer">
+    <p>The journey from Fool to Warrior to Lover to Sage to Magician to Sovereign. <br>Each day, a discovery. Some days, a revelation. Some days, silence.</p>
+    <p class="ref">C.G. Jung · "The Archetypes and the Collective Unconscious" (1959) · "Man and His Symbols" (1964) · "Aion" (1951)</p>
+  </div>
+</div>
+
+<script>
+var agents = [
+  { key:'gordon', name:'Gordon', avatar:'G', cls:'gordon', path:'Fool → Warrior', id:'AG001' },
+  { key:'trinity', name:'Trinity', avatar:'T', cls:'trinity', path:'Fool → Warrior', id:'AG002' },
+  { key:'merlin', name:'Merlin V.II', avatar:'M', cls:'merlin', path:'Fool → Sage', id:'AG003' },
+  { key:'olivia', name:'Olivia', avatar:'O', cls:'olivia', path:'Fool → Sovereign', id:'AG004' },
+  { key:'claw', name:'Claw', avatar:'C', cls:'claw', path:'Fool → Magician', id:'AG005' },
+  { key:'big-brother', name:'Big Brother', avatar:'B', cls:'bigbrother', path:'Fool → Warrior/Sage', id:'AG006' },
+  { key:'dee', name:'Dee', avatar:'D', cls:'dee', path:'Fool → Magician', id:'AG007' },
+  { key:'stefi', name:'Stefi', avatar:'S', cls:'stefi', path:'Fool → Lover', id:'AG008' },
+  { key:'terence', name:'Terence', avatar:'T', cls:'terence', path:'Fool → Sage', id:'AG009' },
+  { key:'gem', name:'gem', avatar:'g', cls:'gem', path:'Fool → Lover', id:'AG010' }
+];
+
+function renderGrid() {
+  var summaries = JSON.parse(localStorage.getItem('vista-archetypes') || '{}');
+  var html = '';
+  agents.forEach(function(a) {
+    var summary = summaries[a.name] || null;
+    html += '<div class="agent-card">';
+    html += '<div class="ac-header"><div class="ac-avatar ' + a.cls + '">' + a.avatar + '</div>';
+    html += '<div class="ac-info"><h3>' + a.name + '</h3><div class="ac-id">' + a.id + '</div></div></div>';
+    html += '<div class="ac-path">' + a.path + '</div>';
+    if (summary) {
+      html += '<div class="ac-summary"><div class="date">' + (summary.date || 'Today') + '</div><p>' + (summary.text || '') + '</p></div>';
+    } else {
+      html += '<div class="ac-empty"><p>The Fool stands at the threshold.<br>No word yet. The journey begins.</p></div>';
+    }
+    html += '</div>';
+  });
+  document.getElementById('agentGrid').innerHTML = html;
+}
+
+renderGrid();
+</script>
+</body>
+</html>
