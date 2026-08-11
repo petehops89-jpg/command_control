@@ -198,6 +198,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--body)}
 </head>
 <body>
 
+<!-- LAUNCH BUTTON (if opened directly) -->
+<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px" id="launchScreen">
+  <div style="font-size:48px">📄</div>
+  <h1 style="font-family:var(--mono);font-size:1.2rem;color:#fff;font-weight:400">Vistamations PDF Toolkit</h1>
+  <p style="font-family:var(--mono);font-size:0.7rem;color:var(--dim)">Reader · Editor · OCR · Signature · Budget Guardrails</p>
+  <button onclick="openToolkit('untitled.pdf')" style="padding:12px 32px;background:var(--accent);color:var(--bg);border:none;border-radius:8px;font-family:var(--mono);font-size:0.8rem;cursor:pointer;font-weight:600">Launch PDF Toolkit</button>
+  <div style="font-family:var(--mono);font-size:0.55rem;color:var(--dim);margin-top:12px">
+    <a href="index.html" style="color:var(--accent);text-decoration:none">← Command Control</a>
+  </div>
+</div>
+
 <!-- ════════════════════════════════════════════════════ -->
 <!-- FULL-SCREEN OVERLAY -->
 <!-- ════════════════════════════════════════════════════ -->
@@ -367,6 +378,7 @@ function openToolkit(filename) {
   if (filename) state.docName = filename;
   document.getElementById('docTitle').textContent = state.docName;
   document.getElementById('pdfOverlay').classList.add('active');
+  var ls = document.getElementById('launchScreen'); if (ls) ls.style.display = 'none';
   initSignatureCanvas();
 }
 

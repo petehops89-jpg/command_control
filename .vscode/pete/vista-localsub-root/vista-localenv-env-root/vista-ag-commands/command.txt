@@ -26,8 +26,60 @@ Bug - see me for instructions
 6. xtasklist — print all queued Olivia tasks to screen with task ID, agent, status, and
    message snippet. Reads from C:\vistamations-music\crons\openclaw\olivia\queue.json.
    Format: table with columns [TaskID] [Agent] [Status] [ResponseID] [Message Preview]
-   Shows all tasks sorted by task ID. Pending tasks highlighted. Total count at bottom.
+    Shows all tasks sorted by task ID. Pending tasks highlighted. Total count at bottom.
+
+7. xnow — rapid response protocol. Agent receives message → thinks → responds with answer.
+   Then offers 3 paths:
+     a) "go ahead" — Pete confirms, start task/process immediately
+     b) "standby" — Pete has follow-up questions, wait for next instruction
+     c) "was there something else?" — Pete reconsiders, agent stays until Pete gives signal
+    When gate signal received, agent executes: run system health /100, process next 10
+    queued tasks, report system health after completion.
+
+8. xhealth — run full system health scan and report score out of 100. Checks: Docker
+   container status (all 4), daemon process (PID 9), API endpoint liveness (/health,
+   /olivia/queue, /research/links, /publications, /metrics), git status (clean/dirty,
+   commits ahead/behind), uncommitted changes, disk usage, RAM. Reports as category
+   breakdown with per-category scores and overall percentage. Flags any service that
+   fails healthcheck with red/amber/green indicator.
+
+9. xhealthpriority — run xhealth, then isolate the single lowest-scoring item or
+   most critical gap (G-1 through G-15) and highlight it. Output: one-line health
+   score, then the priority item with severity (P0/P1/P2), gap ID, description of
+   the problem, recommended fix, and estimated effort (low/medium/high). Intended
+    as a fast "what should I do next?" command.
+
+10. xadd — add a new x-prefix command to this file. Agent prompts Pete for:
+      Step 1: Command name (e.g. xvistalist, xbackup, xrestart)
+      Step 2: Command description — what it does, what it touches, how it reports
+    Once Pete supplies both, agent appends the new command to this file with the
+    next available number, including name, description, usage notes, and any
+    relevant file paths or endpoints it should interact with.
+
+11. xaddpersist — enable persistent xadd mode. Instead of prompting Pete for
+    a single command and stopping, xadd stays active. The agent continuously
+    asks: "Next command name?" → Pete provides → "Description?" → Pete
+    provides → command saved → "Next command name?" stays open until Pete
+    says "done" or types xpersistoff. Allows rapid-fire command registration
+    without re-invoking xadd every time.
+    Mode indicator: [xadd ON] shown in agent responses while active.
+
+12. xpersistoff — disable persistent xadd mode. Exits the xaddpersist loop.
+    Agent confirms: "xadd mode off. N commands registered." with count
+    of commands added during the session.
+
+13. xtxtsnipcopy — capture and store text snippets for memory/context reuse.
+    When Pete pastes a text block (e.g. system status, agent reports, log
+    output), agent saves it to .vscode/pete/vista-localsub-root/vista-localenv-
+    env-root/vista-session-chat/snips.txt with date stamp. Purpose: persistent
+    memory anchor — agents reference these snips for context across sessions.
+    Also suggests whether the snippet is suitable for: knowledge graph entity,
+    Redis cache, AGENTS.md update, or project memory. Typescript-compatible
+    format with JSON export option for integration.
 
     
+
+
+
 
 
