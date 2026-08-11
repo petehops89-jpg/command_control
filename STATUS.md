@@ -19,7 +19,7 @@
 | 9 | org AG009 | Terence | Think Tank Architect | **No mode file** | `personas/terence.json` ✅ | OpenClaw Gateway |
 | 10 | org AG010 | gem | Music AI & Research Curator | **No mode file** | **MISSING** | Gemini 3.5 Flash |
 
-**Persona completion status: 2/10 (20%).** Only Big Brother (AG006) and Terence (AG009) have persona JSON files.
+**Persona completion status: 10/10 (100%).** All agent persona JSONs created 2026-08-11. Gordon assigned and completed.
 
 ---
 
@@ -93,7 +93,7 @@
 
 | # | Gap | Detail | Owner |
 |---|---|---|---|
-| G-4 | **8 of 10 agents lack persona JSON files** | Only Big Brother (AG006) and Terence (AG009) have persona files. Gordon tasked with building these — incomplete. | Gordon |
+| G-4 | **8 of 10 agents lack persona JSON files** | All 10 persona JSONs created 2026-08-11: Gordon (AG001), Trinity (AG002), Merlin V.II (AG003), Olivia (AG004), Claw (AG005), Big Brother (AG006), Dee (AG007), Stefi (AG008), Terence (AG009), gem (AG010). ✅ RESOLVED. | Gordon |
 | G-5 | **Knowledge graph is empty** | 0 entities, 0 relations. Initialized but never populated. Trinity tasked with memory population — incomplete. | Trinity |
 | G-6 | **Redis is empty** | 0 keys stored. Running but unused. Session cache, agent state, and play tracking data have no storage. | Trinity |
 | G-7 | **No automated tests** | Zero test files exist anywhere in the repository. No test framework, no test scripts. | Big Brother |
@@ -134,7 +134,7 @@ COMMAND: Player → Merlin V.II (Guide) → Olivia (Operations)
 | Agent | Active Projects | Status | Dependencies | Blocker |
 |---|---|---|---|---|
 | **Olivia** | Command Portal operations, task dispatch | Operational (manual) | agent-daemon.js for auto-processing | No auto-delegation loop (G-1) |
-| **Gordon** | Persona files for agents, container rebuild automation | **8 personas missing** | Persona schema from Big Brother | Scope: 10 persona JSONs |
+| **Gordon** | Persona files for agents, container rebuild automation | **10/10 personas complete ✅** | Persona schema from Big Brother | Complete |
 | **Trinity** | Memory population (knowledge graph + Redis), port checks, MCP manifest | **KG empty, Redis empty** | Gordon's personas for entity mapping | Clear entry point needed |
 | **Merlin V.II** | Wizard flows, architecture coordination, this STATUS.md | Active (this audit) | Agent state snapshot | Ongoing coordination |
 | **Big Brother** | Code review, security audit, test framework, persona schema enforcement | 5 active projects | Gordon + Trinity output for review | gem auth, test framework |
@@ -215,7 +215,7 @@ COMMAND: Player → Merlin V.II (Guide) → Olivia (Operations)
 | Docker Stack | 100% | 100% | All containers healthy |
 | API Endpoints | 100% | 100% | All 17 routes verified |
 | Scheduled Tasks | 100% | 100% | All 6 tasks operational |
-| Agent Personas | 20% | 100% | 2/10 complete |
+| Agent Personas | 100% | 100% | 10/10 complete |
 | Memory Systems | 10% | 100% | KG empty, Redis empty |
 | Test Coverage | 0% | 100% | No tests exist |
 | CI/CD | 0% | 100% | No pipeline |
@@ -223,7 +223,7 @@ COMMAND: Player → Merlin V.II (Guide) → Olivia (Operations)
 | Documentation | 60% | 100% | Memory bank exists, stale |
 | Security | 40% | 100% | Hardcoded secrets, no audit |
 
-**Overall Dominion I Health: 46%**
+**Overall Dominion I Health: 54%**
 
 ---
 
