@@ -181,6 +181,8 @@
   .agent-card.bigbrother .ac-avatar { background: linear-gradient(135deg, var(--rust), #8b1a1a); color: #fff; }
   .agent-card.dee .ac-avatar { background: linear-gradient(135deg, var(--accent3), #b80040); color: #fff; }
   .agent-card.stefi .ac-avatar { background: linear-gradient(135deg, #e040fb, #7b1fa2); color: #fff; }
+  .agent-card.gem .ac-avatar { background: linear-gradient(135deg, #4285F4, #0F9D58); color: #fff; }
+  .agent-card.terence .ac-avatar { background: linear-gradient(135deg, #FF6D00, #FFAB00); color: #000; }
 
   /* ─── CENTER ─── */
   .center-col {
@@ -453,6 +455,18 @@
       <div class="ac-info"><div class="ac-name">Claw (Dee)</div><div class="ac-role">Legacy MCP Specialist</div></div>
       <span class="ac-status idle"></span>
     </div>
+
+    <div class="agent-card gem">
+      <div class="ac-avatar">g</div>
+      <div class="ac-info"><div class="ac-name">gem</div><div class="ac-role">Music AI Curator</div></div>
+      <span class="ac-status idle"></span>
+    </div>
+
+    <div class="agent-card terence">
+      <div class="ac-avatar">T</div>
+      <div class="ac-info"><div class="ac-name">Terence</div><div class="ac-role">Think Tank Architect</div></div>
+      <span class="ac-status idle"></span>
+    </div>
   </div>
 </div>
 
@@ -671,6 +685,35 @@
     let h = 15;
     setInterval(function () { h++; uptimeEl.textContent = h + 'h'; }, 3600000);
   }
+
+  // ─── Agent Direct Messaging ───
+  // Click any agent card in the Core Agents sidebar to send a direct message
+  // via the Olivia daemon. Uses POST /api/olivia/respond with agent-specific routing.
+  var agentCards = document.querySelectorAll('.agent-card');
+  agentCards.forEach(function (card) {
+    card.addEventListener('click', function () {
+      var agentClass = card.className.match(/agent-card\s+(\S+)/);
+      if (!agentClass) return;
+      var agentKey = agentClass[1];
+      
+      // Olivia still routes to Command Portal (she handles synthesis)
+      if (agentKey === 'olivia') {
+        window.location.href = 'crons/openclaw/olivia/command-portal.html';
+        return;
+      }
+
+      // Map CSS class to daemon agent key
+      var agentMap = {
+        gordon: 'gordon', trinity: 'trinity', merlin: 'merlin',
+        claw: 'claw', bigbrother: 'big-brother', dee: 'dee',
+        stefi: 'stefi', gem: 'gem', terence: 'terence'
+      };
+      var daemonKey = agentMap[agentKey] || agentKey;
+
+      // Open the agent's standalone page
+      window.location.href = daemonKey + '.html';
+    });
+  });
 })();
 </script>
 

@@ -1,160 +1,160 @@
 {
-  "currentRunId": "RUN-20260811-150002-8UEVOY",
-  "totalExecutions": 19,
+  "currentRunId": "RUN-20260811-180002-XNEO6W",
+  "totalExecutions": 20,
   "totalPublications": 3,
-  "totalAssets": 13,
-  "successRate": "16%",
-  "knowledgeLibraryCount": 19,
+  "totalAssets": 14,
+  "successRate": "15%",
+  "knowledgeLibraryCount": 20,
   "recentLogs": [
     {
-      "timestamp": "12:00:02.706",
+      "timestamp": "15:00:02.896",
       "level": "info",
       "message": "Lifecycle: 4/9 — REVIEW"
     },
     {
-      "timestamp": "12:00:02.706",
+      "timestamp": "15:00:02.896",
       "level": "info",
       "message": "Performing editorial review..."
     },
     {
-      "timestamp": "12:00:02.706",
+      "timestamp": "15:00:02.896",
       "level": "info",
       "message": "Review: Consistency=PASS Grammar=PASS Technical=PASS Citations=PASS BusinessValue=PASS"
     },
     {
-      "timestamp": "12:00:02.706",
+      "timestamp": "15:00:02.896",
       "level": "info",
       "message": "STAGE END: Editorial Review — complete (0ms)"
     },
     {
-      "timestamp": "12:00:02.706",
+      "timestamp": "15:00:02.896",
       "level": "info",
       "message": "STAGE START: Approval Queue"
     },
     {
-      "timestamp": "12:00:02.706",
+      "timestamp": "15:00:02.896",
       "level": "info",
       "message": "Lifecycle: 5/9 — APPROVED"
     },
     {
-      "timestamp": "12:00:02.706",
+      "timestamp": "15:00:02.896",
       "level": "info",
       "message": "Publication approved for deployment."
     },
     {
-      "timestamp": "12:00:02.707",
+      "timestamp": "15:00:02.896",
       "level": "info",
-      "message": "STAGE END: Approval Queue — complete (1ms)"
+      "message": "STAGE END: Approval Queue — complete (0ms)"
     },
     {
-      "timestamp": "12:00:02.707",
+      "timestamp": "15:00:02.896",
       "level": "info",
       "message": "STAGE START: Deployment"
     },
     {
-      "timestamp": "12:00:02.707",
+      "timestamp": "15:00:02.896",
       "level": "info",
       "message": "Lifecycle: 6/9 — PUBLISHED"
     },
     {
-      "timestamp": "12:00:02.710",
+      "timestamp": "15:00:02.899",
       "level": "info",
-      "message": "Publication written to C:\\vistamations-music\\crons\\openclaw\\publications\\RUN-20260811-120002-21PBFC.html"
+      "message": "Publication written to C:\\vistamations-music\\crons\\openclaw\\publications\\RUN-20260811-150002-8UEVOY.html"
     },
     {
-      "timestamp": "12:00:02.710",
+      "timestamp": "15:00:02.899",
       "level": "info",
-      "message": "Value Score: 82/100 (Business: 91, Originality: 78, Depth: 79, Relevance: 85, Utility: 78)"
+      "message": "Value Score: 80/100 (Business: 86, Originality: 82, Depth: 75, Relevance: 80, Utility: 76)"
     },
     {
-      "timestamp": "12:00:02.710",
+      "timestamp": "15:00:02.899",
       "level": "info",
-      "message": "Confidence: 72% | Estimated: $10,162"
+      "message": "Confidence: 75% | Estimated: $6,603"
     },
     {
-      "timestamp": "12:00:02.710",
+      "timestamp": "15:00:02.900",
       "level": "info",
       "message": "STAGE END: Deployment — complete (3ms)"
     },
     {
-      "timestamp": "12:00:02.710",
+      "timestamp": "15:00:02.900",
       "level": "info",
       "message": "STAGE START: Asset Registration"
     },
     {
-      "timestamp": "12:00:02.711",
+      "timestamp": "15:00:02.900",
       "level": "info",
       "message": "Lifecycle: 7/9 — INDEXED"
     },
     {
-      "timestamp": "12:00:02.712",
+      "timestamp": "15:00:02.902",
       "level": "info",
-      "message": "Asset registered: ASSET-RESEARCH-012 (v1.0.0)"
+      "message": "Asset registered: ASSET-FOUNDATION-013 (v1.0.0)"
     },
     {
-      "timestamp": "12:00:02.712",
+      "timestamp": "15:00:02.902",
       "level": "info",
       "message": "STAGE END: Asset Registration — complete (2ms)"
     },
     {
-      "timestamp": "12:00:02.712",
+      "timestamp": "15:00:02.902",
       "level": "info",
       "message": "STAGE START: Monitor1 Update"
     },
     {
-      "timestamp": "12:00:02.826",
+      "timestamp": "15:00:03.026",
       "level": "info",
-      "message": "STAGE END: Monitor1 Update — complete (114ms)"
+      "message": "STAGE END: Monitor1 Update — complete (124ms)"
     },
     {
-      "timestamp": "12:00:02.826",
+      "timestamp": "15:00:03.026",
       "level": "info",
       "message": "STAGE START: Knowledge Library Index"
     },
     {
-      "timestamp": "12:00:02.827",
+      "timestamp": "15:00:03.026",
       "level": "info",
       "message": "Lifecycle: 8/9 — VERSIONED"
     },
     {
-      "timestamp": "12:00:02.828",
+      "timestamp": "15:00:03.027",
       "level": "info",
-      "message": "Indexed to knowledge library: C:\\vistamations-music\\crons\\openclaw\\knowledge-library\\RUN-20260811-120002-21PBFC.json"
+      "message": "Indexed to knowledge library: C:\\vistamations-music\\crons\\openclaw\\knowledge-library\\RUN-20260811-150002-8UEVOY.json"
     },
     {
-      "timestamp": "12:00:02.828",
+      "timestamp": "15:00:03.028",
       "level": "info",
       "message": "STAGE END: Knowledge Library Index — complete (2ms)"
     },
     {
-      "timestamp": "12:00:02.828",
+      "timestamp": "15:00:03.028",
       "level": "info",
       "message": "STAGE START: Archive"
     },
     {
-      "timestamp": "12:00:02.828",
+      "timestamp": "15:00:03.028",
       "level": "info",
       "message": "Lifecycle: 9/9 — ARCHIVED"
     },
     {
-      "timestamp": "12:00:02.829",
+      "timestamp": "15:00:03.029",
       "level": "info",
-      "message": "Run archived to C:\\vistamations-music\\crons\\openclaw\\archive\\RUN-20260811-120002-21PBFC.json"
+      "message": "Run archived to C:\\vistamations-music\\crons\\openclaw\\archive\\RUN-20260811-150002-8UEVOY.json"
     },
     {
-      "timestamp": "12:00:02.829",
+      "timestamp": "15:00:03.029",
       "level": "info",
       "message": "STAGE END: Archive — complete (1ms)"
     },
     {
-      "timestamp": "12:00:02.829",
+      "timestamp": "15:00:03.029",
       "level": "info",
-      "message": "Execution complete. ASSET_ID: ASSET-RESEARCH-012 | PROJECT_ID: RESEARCH-002"
+      "message": "Execution complete. ASSET_ID: ASSET-FOUNDATION-013 | PROJECT_ID: FOUNDATION-001"
     },
     {
-      "timestamp": "12:00:02.829",
+      "timestamp": "15:00:03.029",
       "level": "info",
-      "message": "Value Score: 82/100 | Confidence: 72%"
+      "message": "Value Score: 80/100 | Confidence: 75%"
     }
   ],
   "publications": [
@@ -653,6 +653,33 @@
   ],
   "assets": [
     {
+      "assetId": "ASSET-CORP-014",
+      "projectId": "CORP-001",
+      "runId": "RUN-20260811-180002-XNEO6W",
+      "dominion": "DOM-005",
+      "type": "Business Analysis",
+      "title": "Business Analysis: AI Investment — 11 August 2026",
+      "url": "/crons/openclaw/publications/RUN-20260811-180002-XNEO6W.html",
+      "version": "1.0.0",
+      "status": "published",
+      "lifecycleState": "indexed",
+      "valueScore": {
+        "composite": 79,
+        "confidence": 80,
+        "breakdown": {
+          "businessValue": 91,
+          "originality": 83,
+          "depth": 69,
+          "relevance": 78,
+          "utility": 75
+        },
+        "estimatedCommercialValue": "$10,169",
+        "reviewStatus": "Automated Review"
+      },
+      "timestamp": "2026-08-11T08:00:02.415Z",
+      "revisions": []
+    },
+    {
       "assetId": "ASSET-FOUNDATION-013",
       "projectId": "FOUNDATION-001",
       "runId": "RUN-20260811-150002-8UEVOY",
@@ -1010,12 +1037,12 @@
       "name": "OpenClaw Infrastructure",
       "dominion": "DOM-001",
       "stats": {
-        "totalRuns": 56,
-        "publications": 5,
-        "published": 5,
-        "valueScore": 78,
-        "accumulatedValue": 44805,
-        "lastRun": "2026-08-10T23:00:02.456Z"
+        "totalRuns": 57,
+        "publications": 6,
+        "published": 6,
+        "valueScore": 79,
+        "accumulatedValue": 51408,
+        "lastRun": "2026-08-11T05:00:02.817Z"
       }
     },
     {
@@ -1158,12 +1185,12 @@
     },
     "DOM-005": {
       "name": "Corporation",
-      "totalAssets": 2,
-      "totalValue": 8572,
+      "totalAssets": 3,
+      "totalValue": 18741,
       "avgScore": 79
     }
   },
   "engineVersion": "2.0.0",
-  "lastUpdated": "2026-08-11 05:00:03 AEST",
+  "lastUpdated": "2026-08-11 08:00:02 AEST",
   "engineStatus": "running"
 }

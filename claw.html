@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claw — Vistamations Command Control</title>
+<style>
+  :root { --bg: #06060d; --card-bg: rgba(15,15,28,0.85); --text: #d4d4e8; --text-dim: rgba(212,212,232,0.5); --accent: #00e676; --glow: rgba(0,230,118,0.15); }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'SF Mono','JetBrains Mono',monospace; background: var(--bg); color: var(--text); min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
+  body::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 50% 0%, var(--glow), transparent 60%); pointer-events:none; }
+  .container { width:100%; max-width:680px; z-index:1; }
+  .header { display:flex; align-items:center; gap:14px; margin-bottom:24px; }
+  .avatar { width:48px; height:48px; border-radius:50%; background: linear-gradient(135deg, var(--accent), #009f5f); display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; color:#000; flex-shrink:0; }
+  .info h1 { font-size:20px; font-weight:500; color:#fff; letter-spacing:0.5px; }
+  .info .meta { font-size:11px; color: var(--text-dim); margin-top:2px; }
+  .info .org { font-size:9px; text-transform:uppercase; letter-spacing:1.5px; color: var(--accent); opacity:0.7; margin-top:4px; }
+  .chat-area { background: var(--card-bg); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:20px; backdrop-filter:blur(12px); }
+  .replies { min-height:120px; max-height:400px; overflow-y:auto; margin-bottom:16px; font-size:12px; line-height:1.6; }
+  .reply { padding:10px 12px; margin-bottom:8px; background:rgba(255,255,255,0.03); border-radius:8px; border-left:2px solid var(--accent); }
+  .reply .agent-label { font-size:9px; text-transform:uppercase; letter-spacing:1px; color: var(--accent); margin-bottom:4px; }
+  .input-row { display:flex; gap:8px; }
+  .input-row input { flex:1; background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px; color:var(--text); font-family:inherit; font-size:12px; outline:none; }
+  .input-row input:focus { border-color: var(--accent); }
+  .input-row button { background: var(--accent); color:#000; border:none; border-radius:8px; padding:10px 20px; font-family:inherit; font-size:12px; font-weight:500; cursor:pointer; transition:opacity 0.2s; }
+  .input-row button:hover { opacity:0.85; }
+  .input-row button:disabled { opacity:0.4; cursor:default; }
+  .back { display:inline-block; margin-bottom:16px; color: var(--text-dim); text-decoration:none; font-size:11px; }
+  .back:hover { color: var(--accent); }
+  .status-bar { margin-top:12px; font-size:9px; color: var(--text-dim); text-align:center; }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back">← Command Control</a>
+  <div class="header">
+    <div class="avatar">C</div>
+    <div class="info">
+      <h1>Claw</h1>
+      <div class="meta">AG005 · Operations / Engineering · MCP Specialist (callsign: Terence, 19 ♂)</div>
+      <div class="org">Tool belt · Legacy systems · n8n-mcp · External integrations</div>
+    </div>
+  </div>
+  <div class="chat-area">
+    <div class="replies" id="replies"><div class="reply" id="initial"><div class="agent-label">Claw</div>MCP tool belt active: n8n-mcp (525 nodes, 263 AI tools), figma-dev-mode on port 3845, openclaw-gateway on 18789. What connector do you need?</div></div>
+    <div class="input-row">
+      <input type="text" id="msgInput" placeholder="Message Claw directly..." autocomplete="off">
+      <button onclick="sendMsg()">Send</button>
+    </div>
+  </div>
+  <div class="status-bar" id="status"></div>
+</div>
+<script>
+var msgInput = document.getElementById('msgInput');
+msgInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendMsg(); });
+var responseCounter = 5000;
+function sendMsg() {
+  var msg = msgInput.value.trim();
+  if (!msg) return;
+  msgInput.value = '';
+  responseCounter++;
+  var respId = 'DIRECT-' + responseCounter;
+  var repliesEl = document.getElementById('replies');
+  var userDiv = document.createElement('div');
+  userDiv.className = 'reply';
+  userDiv.style.borderLeftColor = 'var(--accent)';
+  userDiv.style.opacity = '0.6';
+  userDiv.innerHTML = '<div class="agent-label">You</div>' + msg;
+  repliesEl.appendChild(userDiv);
+  document.getElementById('status').textContent = 'Sending...';
+  fetch('/api/olivia/respond', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from: 'Pete', message: msg, agent: 'claw', responseId: respId })
+  }).then(function() {
+    document.getElementById('status').textContent = 'Sent. Waiting for Claw to respond...';
+    setTimeout(pollReply, 2000);
+  }).catch(function(e) {
+    document.getElementById('status').textContent = 'Error: ' + e.message;
+  });
+}
+function pollReply() {
+  fetch('/api/olivia/responses')
+    .then(function(r) { return r.json(); })
+    .then(function(responses) {
+      var found = false;
+      for (var i = responses.length - 1; i >= 0; i--) {
+        var r = responses[i];
+        if (r.agentReply && r.agentReply.from === 'claw' && !r._displayedClaw) {
+          r._displayedClaw = true;
+          var replyDiv = document.createElement('div');
+          replyDiv.className = 'reply';
+          replyDiv.innerHTML = '<div class="agent-label">Claw</div>' + r.agentReply.message.replace(/\n/g, '<br>');
+          document.getElementById('replies').appendChild(replyDiv);
+          document.getElementById('status').textContent = '';
+          found = true;
+          break;
+        }
+      }
+      if (!found) setTimeout(pollReply, 2000);
+    })
+    .catch(function() { setTimeout(pollReply, 2000); });
+}
+</script>
+</body>
+</html>

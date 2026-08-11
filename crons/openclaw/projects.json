@@ -81,12 +81,12 @@
     "name": "Corporate Governance",
     "dominion": "DOM-005",
     "stats": {
-      "totalRuns": 1,
-      "publications": 2,
-      "published": 2,
+      "totalRuns": 2,
+      "publications": 3,
+      "published": 3,
       "valueScore": 79,
-      "accumulatedValue": 8572,
-      "lastRun": "2026-08-08T08:00:06.820Z"
+      "accumulatedValue": 18741,
+      "lastRun": "2026-08-11T08:00:02.415Z"
     }
   }
 ]
