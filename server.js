@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 // ─── Vistamations Unified Vault ───
+// G-2: auto-rebuild watcher active — changes to this file trigger docker compose up -d --build app
 // Resolves secrets from: Credential Manager (local) → process.env (Docker) → defaults
 const VAULT_PATH = path.join(
   __dirname,
