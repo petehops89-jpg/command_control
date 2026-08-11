@@ -87,7 +87,7 @@
 |---|---|---|---|
 | G-1 | **agent-daemon.js is a bento build prompt** | `agent-daemon.js` contains a Next.js bento grid geometry engine spec. It is NOT agent daemon code. No process polls queue.json to dispatch agent work. The Olivia pipeline terminates at the write — messages are queued but never auto-processed. Requires manual `/olivia-process` invocation in Kilo. | Claw / Big Brother |
 | G-2 | **No automated container rebuild** | Any change to `server.js`, `Dockerfile`, or `package.json` requires manual `docker compose up -d --build app`. Stale containers run old code silently — endpoints return 404. | Gordon |
-| G-3 | **Hardcoded secrets** | Redis password (`vistamations-redis-2026`) hardcoded in `docker-compose.yml:30` and `server.js:17`. No `.env` segregation. | Trinity |
+| G-3 | **Hardcoded secrets** | Redis password moved to `${REDIS_PASSWORD}` env var with safe fallback in `docker-compose.yml`. `server.js` uses vault → process.env → empty fallback. `.env` cleaned (MISTRAL_API_KEY removed, project ID corrected to vists-498322). `.env.example` template created. | Trinity |
 
 ### 🟠 P1 — Operational Risk
 

@@ -322,5 +322,32 @@
     },
     "timestamp": "2026-08-11T02:00:02.529Z",
     "revisions": []
+  },
+  {
+    "assetId": "ASSET-FOUNDATION-013",
+    "projectId": "FOUNDATION-001",
+    "runId": "RUN-20260811-150002-8UEVOY",
+    "dominion": "DOM-001",
+    "type": "Education Tutorial",
+    "title": "Education Tutorial: Automation — 11 August 2026",
+    "url": "/crons/openclaw/publications/RUN-20260811-150002-8UEVOY.html",
+    "version": "1.0.0",
+    "status": "published",
+    "lifecycleState": "indexed",
+    "valueScore": {
+      "composite": 80,
+      "confidence": 75,
+      "breakdown": {
+        "businessValue": 86,
+        "originality": 82,
+        "depth": 75,
+        "relevance": 80,
+        "utility": 76
+      },
+      "estimatedCommercialValue": "$6,603",
+      "reviewStatus": "Automated Review"
+    },
+    "timestamp": "2026-08-11T05:00:02.817Z",
+    "revisions": []
   }
 ]

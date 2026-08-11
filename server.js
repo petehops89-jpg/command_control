@@ -44,7 +44,7 @@ let redis = null;
 
 async function initRedis() {
   const redisUrl = await resolveSecret('REDIS_URL', 'redis://redis:6379');
-  const redisPassword = await resolveSecret('REDIS_PASSWORD', 'vistamations-redis-2026');
+  const redisPassword = await resolveSecret('REDIS_PASSWORD', '');
   try {
     redis = new Redis(redisUrl, {
       password: redisPassword,
