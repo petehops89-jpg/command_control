@@ -3,6 +3,8 @@ const Redis = require('ioredis');
 const Imap = require('imap');
 const { simpleParser } = require('mailparser');
 const fs = require('fs');
+const multer = require('multer');
+const { Storage } = require('@google-cloud/storage');
 const path = require('path');
 
 // ─── Vistamations Unified Vault ───
@@ -632,6 +634,42 @@ app.post('/accounts/vault-reveal', (req, res) => {
     res.json({ value: decrypted });
   } catch (_) {
     res.json({ error: 'Decrypt failed' });
+  }
+});
+
+// ─── Cloud Storage Upload — GCS bucket with local delete ───
+
+const upload = multer({ dest: path.join(__dirname, 'tmp', 'uploads') });
+const storage = new Storage();
+
+app.post('/cloud/upload', upload.single('file'), async (req, res) => {
+  try {
+    const file = req.file;
+    if (!file) return res.status(400).json({ ok: false, error: 'No file uploaded' });
+
+    const bucketName = req.body.bucket || 'vistamations-storage';
+    const deleteAfter = req.body.deleteAfter === 'true';
+    const destination = file.originalname;
+
+    const bucket = storage.bucket(bucketName);
+    await bucket.upload(file.path, { destination });
+
+    // Clean up temp file
+    fs.unlinkSync(file.path);
+
+    // Delete original from disk if requested
+    let deleted = false;
+    if (deleteAfter) {
+      const originalPath = path.join(__dirname, file.originalname);
+      if (fs.existsSync(originalPath)) {
+        try { fs.unlinkSync(originalPath); deleted = true; } catch (_) {}
+      }
+    }
+
+    res.json({ ok: true, file: destination, bucket: bucketName, size: file.size, deleted });
+  } catch (e) {
+    if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+    res.status(500).json({ ok: false, error: e.message });
   }
 });
 
