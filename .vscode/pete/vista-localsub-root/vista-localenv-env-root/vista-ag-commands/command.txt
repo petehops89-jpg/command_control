@@ -21,7 +21,13 @@ Bug - see me for instructions
 
 5. xlist — show list of all x-prefix commands and their descriptions. User-friendly summary
    of every command available in this file, formatted for quick reference.
-   Output: numbered list with command name, one-line description, and syntax example.
+    Output: numbered list with command name, one-line description, and syntax example.
+
+6. xtasklist — print all queued Olivia tasks to screen with task ID, agent, status, and
+   message snippet. Reads from C:\vistamations-music\crons\openclaw\olivia\queue.json.
+   Format: table with columns [TaskID] [Agent] [Status] [ResponseID] [Message Preview]
+   Shows all tasks sorted by task ID. Pending tasks highlighted. Total count at bottom.
 
     
+
 

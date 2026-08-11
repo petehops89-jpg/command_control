@@ -131,11 +131,11 @@ app.get('/research/links', (_req, res) => {
 
 app.post('/olivia/respond', (req, res) => {
   try {
-    const { from, message, timestamp } = req.body;
+    const { from, message, timestamp, agent } = req.body;
     if (!message) return res.status(400).json({ error: 'message required' });
 
-    // Everything routes through Olivia — she delegates internally
-    const routes = ['olivia'];
+    // Route to specific agent if provided, otherwise Olivia delegates
+    const routes = agent && agent !== 'olivia' ? [agent] : ['olivia'];
 
     let responses = [];
     try { responses = JSON.parse(fs.readFileSync(OLIVIA_RESPONSES_PATH, 'utf8')); }
