@@ -89,6 +89,11 @@ Vistamations System (C:\vistamations-music)
 │           ├── Sales Department
 │           │   Client acquisition, contracts, pricing, partnerships
 │           │
+│           ├── Literature Department (Bookstore)
+│           │   Book collection, audiobooks, podcasts, PDF/EPUB reader
+│           │   Non-fiction categories: Bios, Manuals, Recipes, DIY
+│           │   Coming: shopping baskets, payment systems
+│           │
 │           └── Vistamations Committee
 │               Pete + agent governance — decisions, policy, direction
 │
@@ -128,6 +133,7 @@ Vistamations System (C:\vistamations-music)
 | Local | Local | Executive | Accounts (GAccounts) | Pete only |
 | Local | Local | Public | Marketing | — |
 | Local | Local | Public | Sales | — |
+| Local | Local | Public | Literature (Bookstore) | — |
 | Local | Local | Public | Committee | Pete |
 | Cloud | Cloudflare | Cloud Operations | Edge | — |
 | Cloud | Cloudflare | Cloud Operations | Data | — |

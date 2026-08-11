@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bookstore — Vistamations Literature</title>
+<style>
+  :root { --bg: #06060d; --card-bg: rgba(15,15,28,0.85); --text: #d4d4e8; --text-dim: rgba(212,212,232,0.5); --border: rgba(255,255,255,0.06); --accent: #00e676; --gold: #FFD700; --radius: 14px; --shelf-wood: #3e2723; --shelf-wood-light: #5d4037; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'SF Mono','JetBrains Mono',monospace; background: var(--bg); color: var(--text); min-height:100vh; }
+  body::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 50% 0%, rgba(0,230,118,0.06), transparent 60%); pointer-events:none; }
+
+  .menu-strip { position:fixed; top:0; left:0; right:0; display:flex; align-items:center; gap:0; background:rgba(15,15,28,0.9); border-bottom:1px solid var(--border); backdrop-filter:blur(12px); z-index:100; padding:0 16px; }
+  .menu-strip .brand { font-size:12px; font-weight:500; color:#fff; letter-spacing:2px; padding:14px 0; margin-right:24px; border-right:1px solid var(--border); padding-right:24px; }
+  .menu-strip .brand em { font-style:normal; color: var(--accent); }
+  .menu-strip a { color:var(--text-dim); text-decoration:none; font-size:10px; padding:14px 16px; border-bottom:2px solid transparent; transition:all 0.2s; text-transform:uppercase; letter-spacing:1px; }
+  .menu-strip a:hover, .menu-strip a.active { color:#fff; border-bottom-color:var(--accent); }
+
+  .container { max-width:1100px; margin:0 auto; padding:80px 20px 40px; }
+
+  .hero { text-align:center; margin-bottom:32px; }
+  .hero h1 { font-size:28px; font-weight:300; color:#fff; letter-spacing:1px; }
+  .hero .sub { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px; margin-top:6px; }
+  .hero .badge { display:inline-block; margin-top:8px; padding:2px 10px; background:rgba(0,230,118,0.1); border:1px solid rgba(0,230,118,0.2); border-radius:10px; font-size:8px; color:var(--accent); text-transform:uppercase; letter-spacing:1px; }
+
+  /* ─── SECTION TABS ─── */
+  .section-tabs { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:24px; overflow-x:auto; }
+  .section-tab { padding:10px 18px; font-size:10px; cursor:pointer; color:var(--text-dim); background:none; border:none; border-bottom:2px solid transparent; font-family:inherit; text-transform:uppercase; letter-spacing:1px; white-space:nowrap; transition:all 0.2s; }
+  .section-tab:hover { color:#fff; }
+  .section-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+  .section { display:none; }
+  .section.active { display:block; }
+
+  /* ─── BOOKSHELF ─── */
+  .library-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .library-header h2 { font-size:14px; font-weight:500; color:#fff; }
+  .library-header .count { font-size:10px; color:var(--text-dim); }
+  .upload-btn { padding:6px 16px; background:var(--accent); color:#000; border:none; border-radius:6px; font-size:10px; font-weight:500; cursor:pointer; font-family:inherit; transition:opacity 0.2s; }
+  .upload-btn:hover { opacity:0.85; }
+
+  .bookshelf { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:linear-gradient(180deg, rgba(62,39,35,0.3) 0%, rgba(15,15,28,0.5) 100%); margin-bottom:20px; }
+  .shelf { display:flex; align-items:flex-end; gap:4px; padding:8px 12px 0; min-height:100px; border-bottom:1px solid rgba(255,255,255,0.04); position:relative; }
+  .shelf::after { content:''; position:absolute; bottom:0; left:0; right:0; height:6px; background:linear-gradient(180deg, var(--shelf-wood-light), var(--shelf-wood)); border-radius:0; }
+  .shelf:last-child::after { border-radius: 0 0 var(--radius) var(--radius); }
+  .shelf .shelf-label { position:absolute; top:6px; right:12px; font-size:7px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
+  .spine { flex-shrink:0; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; border-radius:2px; overflow:hidden; position:relative; z-index:1; }
+  .spine:hover { transform:translateY(-4px) scale(1.05); box-shadow:0 8px 24px rgba(0,0,0,0.5); z-index:5; }
+  .spine img { width:100%; height:100%; object-fit:cover; display:block; }
+  .spine.placeholder { background:linear-gradient(180deg, rgba(0,230,118,0.1), rgba(0,230,118,0.02)); border:1px dashed rgba(0,230,118,0.15); display:flex; align-items:center; justify-content:center; font-size:8px; color:var(--text-dim); }
+  .shelf-empty { display:flex; align-items:center; justify-content:center; width:100%; min-height:80px; font-size:10px; color:var(--text-dim); }
+  .spine-tooltip { display:none; position:absolute; bottom:100%; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); border:1px solid var(--border); border-radius:6px; padding:6px 10px; font-size:9px; color:#fff; white-space:nowrap; z-index:10; pointer-events:none; }
+  .spine:hover .spine-tooltip { display:block; }
+
+  /* ─── UPLOAD MODAL ─── */
+  .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:200; display:none; align-items:center; justify-content:center; }
+  .modal-overlay.active { display:flex; }
+  .modal { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:24px; width:min(440px,90vw); max-height:85vh; overflow-y:auto; backdrop-filter:blur(12px); }
+  .modal h3 { font-size:14px; color:#fff; margin-bottom:16px; }
+  .modal .form-group { margin-bottom:14px; }
+  .modal label { display:block; font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); margin-bottom:6px; }
+  .modal input, .modal select, .modal textarea { width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 12px; color:var(--text); font-family:inherit; font-size:12px; outline:none; }
+  .modal input:focus, .modal select:focus { border-color:var(--accent); }
+  .modal .preview-area { width:100%; margin:8px 0; text-align:center; }
+  .modal .preview-area img { max-width:100%; max-height:120px; border-radius:6px; border:1px solid var(--border); }
+  .modal .btn-row { display:flex; gap:8px; margin-top:16px; }
+  .modal .btn { padding:10px 20px; border:none; border-radius:8px; font-size:11px; font-weight:500; cursor:pointer; font-family:inherit; }
+  .modal .btn-primary { background:linear-gradient(135deg,var(--accent),#009f5f); color:#000; flex:1; }
+  .modal .btn-ghost { background:transparent; border:1px solid var(--border); color:var(--text-dim); }
+
+  /* ─── PDF/EPUB Section ─── */
+  .doc-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:12px; }
+  .doc-card { background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:10px; padding:14px; cursor:pointer; transition:all 0.2s; }
+  .doc-card:hover { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); }
+  .doc-card .doc-icon { font-size:28px; margin-bottom:8px; }
+  .doc-card .doc-name { font-size:11px; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .doc-card .doc-meta { font-size:8px; color:var(--text-dim); margin-top:2px; }
+  .doc-card .doc-actions { display:flex; gap:6px; margin-top:10px; }
+  .doc-card .doc-btn { padding:4px 10px; font-size:8px; border-radius:4px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); color:var(--text-dim); cursor:pointer; font-family:inherit; }
+  .doc-card .doc-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  .empty-state { text-align:center; padding:40px 20px; color:var(--text-dim); }
+  .empty-state .icon { font-size:40px; margin-bottom:8px; opacity:0.3; }
+
+  /* ─── CATEGORY SECTION ─── */
+  .category-list { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:8px; }
+  .category-card { background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:10px; padding:16px; cursor:pointer; transition:all 0.2s; }
+  .category-card:hover { background:rgba(255,255,255,0.04); }
+  .category-card h4 { font-size:12px; color:#fff; margin-bottom:4px; }
+  .category-card p { font-size:9px; color:var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="menu-strip">
+  <div class="brand">Vistamations <em>Literature</em></div>
+  <a href="index.html">Command Control</a>
+  <a href="bookstore.html" class="active">Books</a>
+  <a href="email.html">Email</a>
+  <a href="gaccounts.html">GAccounts</a>
+</div>
+
+<div class="container">
+  <div class="hero">
+    <h1>The Vistamations Library</h1>
+    <div class="sub">Public Division · Literature Department</div>
+    <div class="badge">Coming: Shopping Baskets · Payments</div>
+  </div>
+
+  <div class="section-tabs">
+    <button class="section-tab active" data-section="books">📚 Books</button>
+    <button class="section-tab" data-section="audiobooks">🎧 Audiobooks</button>
+    <button class="section-tab" data-section="podcasts">🎙️ Podcasts</button>
+    <button class="section-tab" data-section="documents">📄 PDF & EPUB</button>
+    <button class="section-tab" data-section="nonfiction">📖 Non-Fiction</button>
+    <button class="section-tab" data-section="fiction">✨ Fiction</button>
+  </div>
+
+  <!-- ─── BOOKS SECTION ─── -->
+  <div class="section active" id="section-books">
+    <div class="library-header">
+      <h2>📚 Book Collection</h2>
+      <button class="upload-btn" onclick="openUpload('books')">+ Add Book</button>
+    </div>
+    <div class="bookshelf" id="shelf-books">
+      <div class="shelf" data-row="0"><span class="shelf-label">Shelf 1</span><div class="shelf-empty">Upload book spines to fill your library</div></div>
+      <div class="shelf" data-row="1"><span class="shelf-label">Shelf 2</span></div>
+      <div class="shelf" data-row="2"><span class="shelf-label">Shelf 3</span></div>
+      <div class="shelf" data-row="3"><span class="shelf-label">Shelf 4</span></div>
+      <div class="shelf" data-row="4"><span class="shelf-label">Shelf 5</span></div>
+    </div>
+  </div>
+
+  <!-- ─── AUDIOBOOKS SECTION ─── -->
+  <div class="section" id="section-audiobooks">
+    <div class="library-header">
+      <h2>🎧 Audiobooks</h2>
+      <button class="upload-btn" onclick="openUpload('audiobooks')">+ Add Audiobook</button>
+    </div>
+    <div class="bookshelf" id="shelf-audiobooks">
+      <div class="shelf" data-row="0"><span class="shelf-label">Shelf 1</span><div class="shelf-empty">Upload audiobook covers</div></div>
+      <div class="shelf" data-row="1"><span class="shelf-label">Shelf 2</span></div>
+      <div class="shelf" data-row="2"><span class="shelf-label">Shelf 3</span></div>
+      <div class="shelf" data-row="3"><span class="shelf-label">Shelf 4</span></div>
+      <div class="shelf" data-row="4"><span class="shelf-label">Shelf 5</span></div>
+    </div>
+  </div>
+
+  <!-- ─── PODCASTS SECTION ─── -->
+  <div class="section" id="section-podcasts">
+    <div class="library-header">
+      <h2>🎙️ Podcasts</h2>
+      <button class="upload-btn" onclick="openUpload('podcasts')">+ Add Podcast</button>
+    </div>
+    <div class="bookshelf" id="shelf-podcasts">
+      <div class="shelf" data-row="0"><span class="shelf-label">Shelf 1</span><div class="shelf-empty">Upload podcast covers</div></div>
+      <div class="shelf" data-row="1"><span class="shelf-label">Shelf 2</span></div>
+      <div class="shelf" data-row="2"><span class="shelf-label">Shelf 3</span></div>
+      <div class="shelf" data-row="3"><span class="shelf-label">Shelf 4</span></div>
+      <div class="shelf" data-row="4"><span class="shelf-label">Shelf 5</span></div>
+    </div>
+  </div>
+
+  <!-- ─── PDF & EPUB SECTION ─── -->
+  <div class="section" id="section-documents">
+    <div class="library-header">
+      <h2>📄 PDF & EPUB</h2>
+      <button class="upload-btn" onclick="openUpload('documents')">+ Upload Document</button>
+    </div>
+    <div class="doc-grid" id="docs-grid">
+      <div class="empty-state"><div class="icon">📄</div><p>Upload PDFs or EPUBs to manage them here</p><p style="font-size:9px;margin-top:4px">Reader · Creator · Share</p></div>
+    </div>
+  </div>
+
+  <!-- ─── NON-FICTION ─── -->
+  <div class="section" id="section-nonfiction">
+    <div class="library-header"><h2>📖 Non-Fiction</h2></div>
+    <div class="category-list">
+      <div class="category-card" onclick="showCategory('biographies')"><h4>👤 Biographies</h4><p>Life stories, memoirs, autobiographies</p></div>
+      <div class="category-card" onclick="showCategory('manuals')"><h4>📘 Instruction Manuals</h4><p>Guides, how-tos, technical manuals</p></div>
+      <div class="category-card" onclick="showCategory('recipes')"><h4>🍳 Recipes</h4><p>Cookbooks, meal plans, culinary guides</p></div>
+      <div class="category-card" onclick="showCategory('diy')"><h4>🔧 DIY & Crafts</h4><p>Home projects, woodworking, repairs</p></div>
+      <div class="category-card" onclick="showCategory('reference')"><h4>📚 Reference</h4><p>Encyclopedias, dictionaries, textbooks</p></div>
+      <div class="category-card" onclick="showCategory('science')"><h4>🔬 Science & Tech</h4><p>Research, engineering, computing</p></div>
+    </div>
+  </div>
+
+  <!-- ─── FICTION ─── -->
+  <div class="section" id="section-fiction">
+    <div class="library-header"><h2>✨ Fiction</h2></div>
+    <div class="category-list">
+      <div class="category-card"><h4>🌌 Sci-Fi</h4><p>Space operas, dystopian, cyberpunk</p></div>
+      <div class="category-card"><h4>🐉 Fantasy</h4><p>Epic quests, magic, alternate worlds</p></div>
+      <div class="category-card"><h4>🔍 Mystery</h4><p>Detective stories, thrillers, suspense</p></div>
+      <div class="category-card"><h4>❤️ Romance</h4><p>Love stories, drama, relationships</p></div>
+      <div class="category-card"><h4>👻 Horror</h4><p>Gothic, supernatural, psychological</p></div>
+      <div class="category-card"><h4>📜 Classics</h4><p>Timeless literature, foundational works</p></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── UPLOAD MODAL ─── -->
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal">
+    <h3 id="uploadTitle">Add to Library</h3>
+    <div class="form-group"><label>Book Title</label><input type="text" id="upTitle" placeholder="Enter title" autocomplete="off"></div>
+    <div class="form-group"><label>Author</label><input type="text" id="upAuthor" placeholder="Author name" autocomplete="off"></div>
+    <div class="form-group">
+      <label>Spine Size (width : height ratio)</label>
+      <select id="upSize">
+        <option value="20:3">Thin — 20:3 (slim paperback)</option>
+        <option value="20:6" selected>Standard — 20:6 (average novel)</option>
+        <option value="20:12">Thick — 20:12 (epic / omnibus)</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Spine Image</label><input type="file" id="upImage" accept="image/*" onchange="previewSpine()"></div>
+    <div class="preview-area" id="previewArea"></div>
+    <div class="form-group"><label>Category</label><select id="upCategory"><option value="fiction">Fiction</option><option value="nonfiction">Non-Fiction</option><option value="reference">Reference</option></select></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="closeUpload()">Cancel</button>
+      <button class="btn btn-primary" onclick="addToShelf()">Place on Shelf</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var currentSection = 'books';
+
+document.querySelectorAll('.section-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.section-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentSection = tab.dataset.section;
+    document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById('section-' + currentSection).classList.add('active');
+    renderShelf(currentSection);
+  });
+});
+
+function openUpload(section) {
+  currentSection = section;
+  document.getElementById('uploadTitle').textContent = section === 'books' ? 'Add Book' : section === 'audiobooks' ? 'Add Audiobook' : section === 'podcasts' ? 'Add Podcast' : 'Upload Document';
+  document.getElementById('uploadModal').classList.add('active');
+  document.getElementById('upTitle').value = '';
+  document.getElementById('upAuthor').value = '';
+  document.getElementById('upImage').value = '';
+  document.getElementById('previewArea').innerHTML = '';
+}
+
+function closeUpload() { document.getElementById('uploadModal').classList.remove('active'); }
+
+function previewSpine() {
+  var file = document.getElementById('upImage').files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById('previewArea').innerHTML = '<img src="' + e.target.result + '" alt="Preview">';
+  };
+  reader.readAsDataURL(file);
+}
+
+function addToShelf() {
+  var title = document.getElementById('upTitle').value.trim();
+  var author = document.getElementById('upAuthor').value.trim();
+  var size = document.getElementById('upSize').value;
+  var category = document.getElementById('upCategory').value;
+  var file = document.getElementById('upImage').files[0];
+
+  if (!title || !file) return;
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var shelves = JSON.parse(localStorage.getItem('vista-shelf-' + currentSection) || '[]');
+    var [w, h] = size.split(':').map(Number);
+    shelves.push({ title:title, author:author, size:size, category:category, spine:e.target.result, w:w, h:h, added:new Date().toISOString() });
+    localStorage.setItem('vista-shelf-' + currentSection, JSON.stringify(shelves));
+    closeUpload();
+    renderShelf(currentSection);
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderShelf(section) {
+  var shelves = JSON.parse(localStorage.getItem('vista-shelf-' + section) || '[]');
+  var container = document.getElementById('shelf-' + section);
+  if (!container) return;
+
+  // Clear existing spines
+  var allShelves = container.querySelectorAll('.shelf');
+  allShelves.forEach(function(sh) {
+    sh.querySelectorAll('.spine').forEach(function(s) { s.remove(); });
+    var empty = sh.querySelector('.shelf-empty');
+    if (empty) empty.remove();
+  });
+
+  if (shelves.length === 0 && container.querySelector('.shelf:first-child')) {
+    var firstShelf = container.querySelector('.shelf:first-child');
+    if (!firstShelf.querySelector('.shelf-empty') && firstShelf.querySelectorAll('.spine').length === 0) {
+      var emptyDiv = document.createElement('div');
+      emptyDiv.className = 'shelf-empty';
+      emptyDiv.textContent = 'Upload book spines to fill your library';
+      firstShelf.appendChild(emptyDiv);
+    }
+  }
+
+  // Distribute across 5 shelves, max ~8 books per shelf
+  var maxPerShelf = 8;
+  var shelfEls = container.querySelectorAll('.shelf');
+
+  shelves.forEach(function(book, i) {
+    var shelfIdx = Math.floor(i / maxPerShelf);
+    if (shelfIdx >= shelfEls.length) return;
+    var shelf = shelfEls[shelfIdx];
+
+    var spine = document.createElement('div');
+    spine.className = 'spine';
+    var pw = book.size === '20:3' ? 20 : book.size === '20:12' ? 28 : 24;
+    var ph = book.size === '20:3' ? 85 : book.size === '20:12' ? 95 : 90;
+    spine.style.width = pw + 'px';
+    spine.style.height = ph + 'px';
+    spine.innerHTML = '<img src="' + book.spine + '" alt="' + escapeHtml(book.title) + '">' +
+      '<div class="spine-tooltip">' + escapeHtml(book.title) + '<br><span style="opacity:0.5">' + escapeHtml(book.author) + '</span></div>';
+    spine.title = book.title + ' by ' + book.author;
+    spine.onclick = function() { alert(book.title + '\nby ' + book.author + '\n' + book.category); };
+    shelf.appendChild(spine);
+  });
+
+  updateCounts(section);
+}
+
+function updateCounts(section) {
+  var shelves = JSON.parse(localStorage.getItem('vista-shelf-' + section) || '[]');
+  var header = document.querySelector('#section-' + section + ' .library-header .count');
+  if (header) header.textContent = shelves.length + ' items';
+}
+
+function showCategory(cat) {
+  document.querySelectorAll('.section-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('section-books').classList.add('active');
+  document.querySelector('.section-tab[data-section="books"]').classList.add('active');
+  alert('"' + cat + '" shelf coming soon. Books will be tagged to categories.');
+}
+
+function escapeHtml(str) { var d = document.createElement('div'); d.textContent = str || ''; return d.innerHTML; }
+
+// Load all shelves on start
+['books','audiobooks','podcasts'].forEach(function(s) { renderShelf(s); });
+</script>
+</body>
+</html>
