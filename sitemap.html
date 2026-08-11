@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sitemap — Vistamations</title>
+<style>
+  :root { --bg: #06060d; --card-bg: rgba(15,15,28,0.85); --text: #d4d4e8; --text-dim: rgba(212,212,232,0.5); --border: rgba(255,255,255,0.06); --accent: #FFD700; --radius: 14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'SF Mono','JetBrains Mono',monospace; background: var(--bg); color: var(--text); min-height:100vh; }
+  body::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 50% 0%, rgba(255,215,0,0.04), transparent 60%); pointer-events:none; }
+  .menu-strip { position:fixed; top:0; left:0; right:0; display:flex; align-items:center; gap:0; background:rgba(15,15,28,0.9); border-bottom:1px solid var(--border); backdrop-filter:blur(12px); z-index:100; padding:0 16px; }
+  .menu-strip .brand { font-size:12px; font-weight:500; color:#fff; letter-spacing:2px; padding:14px 0; margin-right:24px; border-right:1px solid var(--border); padding-right:24px; }
+  .menu-strip .brand em { font-style:normal; color:var(--accent); }
+  .menu-strip a { color:var(--text-dim); text-decoration:none; font-size:10px; padding:14px 16px; border-bottom:2px solid transparent; transition:all 0.2s; text-transform:uppercase; letter-spacing:1px; }
+  .menu-strip a:hover, .menu-strip a.active { color:#fff; border-bottom-color:var(--accent); }
+  .container { max-width:900px; margin:0 auto; padding:80px 20px 40px; }
+
+  .hero { text-align:center; margin-bottom:32px; }
+  .hero h1 { font-size:24px; font-weight:300; color:#fff; letter-spacing:1px; }
+  .hero .sub { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px; margin-top:4px; }
+  .hero .count { font-size:9px; color:var(--accent); margin-top:6px; }
+
+  .section { margin-bottom:24px; }
+  .section h2 { font-size:13px; color:var(--accent); text-transform:uppercase; letter-spacing:2px; padding:8px 14px; background:rgba(255,215,0,0.04); border-left:3px solid var(--accent); border-radius:0 6px 6px 0; margin-bottom:12px; }
+  .link-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:6px; }
+  .link-grid.single-col { grid-template-columns:1fr; }
+  .link-card { display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; text-decoration:none; transition:all 0.15s; }
+  .link-card:hover { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); }
+  .link-card .lc-icon { font-size:16px; flex-shrink:0; width:28px; text-align:center; }
+  .link-card .lc-name { font-size:11px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .link-card .lc-path { font-size:8px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  .footer { text-align:center; margin-top:32px; padding-top:16px; border-top:1px solid var(--border); font-size:9px; color:var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="menu-strip">
+  <div class="brand">Vistamations <em>Sitemap</em></div>
+  <a href="index.html">Command Control</a>
+  <a href="sitemap.html" class="active">Sitemap</a>
+</div>
+
+<div class="container">
+  <div class="hero">
+    <h1>Site Map</h1>
+    <div class="sub">All accessible pages • Local Sub-System</div>
+    <div class="count" id="totalCount"></div>
+  </div>
+
+  <div class="section">
+    <h2>🏠 Core Pages</h2>
+    <div class="link-grid" id="core"></div>
+  </div>
+
+  <div class="section">
+    <h2>🤖 Agent Pages</h2>
+    <div class="link-grid" id="agents"></div>
+  </div>
+
+  <div class="section">
+    <h2>⚙️ Command & Operations</h2>
+    <div class="link-grid" id="ops"></div>
+  </div>
+
+  <div class="section">
+    <h2>📊 Sub-System Pages</h2>
+    <div class="link-grid single-col" id="subs"></div>
+  </div>
+
+  <div class="footer">
+    <p>Vistamations System • evidence-registry branch • Auto-generated {{DATE}}</p>
+  </div>
+</div>
+
+<script>
+var pages = [
+  // Core pages
+  { url:'index.html', name:'Command Control', icon:'🏠', section:'core' },
+  { url:'media-player.html', name:'Media Centre', icon:'🎬', section:'core' },
+  { url:'clock.html', name:'Clock', icon:'🕐', section:'core' },
+  { url:'clock-module.html', name:'Clock Module', icon:'⌚', section:'core' },
+  { url:'cloud-upload.html', name:'Cloud Upload', icon:'☁️', section:'core' },
+  { url:'8-way-comm.html', name:'8-Way Comm', icon:'📡', section:'core' },
+  { url:'sitemap.html', name:'Sitemap', icon:'🗺️', section:'core' },
+
+  // Agent pages
+  { url:'gordon.html', name:'Gordon (AG001)', icon:'G', section:'agents' },
+  { url:'trinity.html', name:'Trinity (AG002)', icon:'T', section:'agents' },
+  { url:'merlin.html', name:'Merlin V.II (AG003)', icon:'M', section:'agents' },
+  { url:'claw.html', name:'Claw (AG005)', icon:'C', section:'agents' },
+  { url:'big-brother.html', name:'Big Brother (AG006)', icon:'B', section:'agents' },
+  { url:'dee.html', name:'Dee (AG007)', icon:'D', section:'agents' },
+  { url:'stefi.html', name:'Stefi (AG008)', icon:'S', section:'agents' },
+  { url:'gem.html', name:'gem (AG010)', icon:'g', section:'agents' },
+  { url:'wizard/agent-onboarding.html', name:'Agent Onboarding Wizard', icon:'🧙', section:'agents' },
+
+  // Command & Operations
+  { url:'crons/openclaw/olivia/command-portal.html', name:'Command Portal (Olivia)', icon:'📨', section:'ops' },
+  { url:'crons/openclaw/olivia/olivia-gate.html', name:'Olivia Gate', icon:'🚪', section:'ops' },
+  { url:'crons/openclaw/monitor1.html', name:'Monitor1 Dashboard', icon:'📊', section:'ops' },
+  { url:'publications.html', name:'Publications', icon:'📰', section:'ops' },
+  { url:'links.html', name:'Research Links', icon:'🔗', section:'ops' },
+  { url:'olivia/agent-dossier.html', name:'Agent Dossier', icon:'📋', section:'ops' },
+  { url:'archetypes.html', name:'Archetypes (Agent Dev)', icon:'⭐', section:'ops' },
+
+  // Sub-system pages
+  { url:'email.html', name:'Email Hub (Hops/Pete/James)', icon:'✉️', section:'subs' },
+  { url:'gaccounts.html', name:'GAccounts Vault', icon:'🔐', section:'subs' },
+  { url:'bookstore.html', name:'Bookstore / Library', icon:'📚', section:'subs' },
+  { url:'handy-mail.html', name:'Handy Mail Security Gate', icon:'🛡️', section:'subs' },
+  { url:'pdf-toolkit.html', name:'PDF Toolkit', icon:'📄', section:'subs' },
+  { url:'gem-chat.html', name:'Gem Chat (Gemini)', icon:'💎', section:'subs' },
+  { url:'mya/index.html', name:'Mya\'s World', icon:'🐝', section:'subs' },
+  { url:'media-player/index.html', name:'Media Player (Legacy)', icon:'▶️', section:'subs' },
+  { url:'vistamations-home-bento/dist/index.html', name:'Home Bento (Cloudflare)', icon:'🏠', section:'subs' },
+  { url:'crons/openclaw/research/evidence-registry.html', name:'Evidence Registry', icon:'📜', section:'subs' },
+  { url:'crons/openclaw/research/research-inventory.html', name:'Research Inventory', icon:'🔬', section:'subs' },
+];
+
+function render() {
+  var sections = { core:[], agents:[], ops:[], subs:[] };
+  pages.forEach(function(p) { sections[p.section].push(p); });
+
+  var total = 0;
+  for (var key in sections) {
+    var html = '';
+    sections[key].forEach(function(p) {
+      html += '<a href="' + p.url + '" class="link-card"><span class="lc-icon">' + p.icon + '</span><span class="lc-name">' + p.name + '</span><span class="lc-path">/' + p.url + '</span></a>';
+      total++;
+    });
+    document.getElementById(key).innerHTML = html;
+  }
+  document.getElementById('totalCount').textContent = total + ' pages';
+}
+
+render();
+</script>
+</body>
+</html>
