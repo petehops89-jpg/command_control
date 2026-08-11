@@ -149,7 +149,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-hei
 
 <div class="action-bar">
   <button class="action-btn gold" onclick="startTutorial()" id="tutLaunch">🐝 Start Tour</button>
-  <button class="action-btn outline" onclick="openSettings()">⚙️ Settings</button>
+  <button class="action-btn outline" onclick="openSettings()" id="settingsBtn">⚙️ Settings</button>
   <button class="action-btn outline" onclick="openNews()">📰 News</button>
 </div>
 
@@ -323,12 +323,15 @@ function startVoiceRecognition() {
   recognition.lang = 'en-US';
   recognition.onresult = (e) => {
     const text = e.results[e.results.length-1][0].transcript.toLowerCase().trim();
-    if (text.includes('start tour') || text.includes('show me')) startTutorial();
-    else if (text.includes('expert') || text.includes('ask bee')) beeQuickHelp();
-    else if (text.includes('settings')) openSettings();
+    if (text.includes('start tour') || text.includes('show me')) { startTutorial(); return; }
+    if (text.includes('next') || text.includes('continue')) { if (tutorialStep >= 0) { tutorialNext(); return; } }
+    if (text.includes('back') || text.includes('previous')) { if (tutorialStep >= 0) { tutorialPrev(); return; } }
+    if (text.includes('skip') || text.includes('stop tour') || text.includes('end tour')) { if (tutorialStep >= 0) { tutorialEnd(); return; } }
+    if (text.includes('expert') || text.includes('ask bee')) beeQuickHelp();
+    else if (text.includes('settings')) { if (tutorialStep >= 0) { } else { openSettings(); } }
     else if (text.includes('news') || text.includes('feed')) openNews();
-    else if (text.includes('skins') || text.includes('locker')) highlightCard('cardSkins');
-    else if (text.includes('creative') || text.includes('build')) highlightCard('cardCreative');
+    else if (text.includes('skins') || text.includes('locker')) { document.getElementById('cardSkins').scrollIntoView({behavior:'smooth'}); }
+    else if (text.includes('creative') || text.includes('build')) { document.getElementById('cardCreative').scrollIntoView({behavior:'smooth'}); }
   };
   recognition.onend = () => { if (voiceEnabled) recognition.start(); };
   recognition.onerror = () => {};
@@ -387,40 +390,53 @@ async function askExpert(message) {
 // ─── TUTORIAL WIZARD ───
 const tutorialSteps = [
   {
-    cardId: 'cardExpert',
+    cardId: null,
     position: 'center',
+    title: '🐝 Welcome to Mya\'s World!',
+    body: 'Hi Mya! I\'m Bee, your AI guide. I\'ll show you around your new Fortnite world. There are 8 steps — just tap Next to follow along, or Skip Tour anytime. Let\'s start with your Settings!'
+  },
+  {
+    cardId: 'settingsBtn',
+    position: 'below',
+    title: '⚙️ Settings — Make It Yours',
+    body: 'First, let\'s set up your world. Tap the ⚙️ Settings button to choose your colour scheme (Fortnite Purple, Sunset Pink, or Ocean Blue), pick your AI model, and turn voice on or off. Tap Save when done, then come back here and press Next!',
+    action: 'openSettings'
+  },
+  {
+    cardId: 'cardExpert',
+    position: 'below',
     title: '🦙 Fortnite Expert AI',
-    body: 'This is where you get expert Fortnite help. Ask Bee anything — skins, weapons, strategy, map tips. The AI knows everything about Fortnite, just like a cool older cousin!'
+    body: 'This is your Fortnite Expert! Ask Bee anything — best landing spots, weapon stats, skin recommendations, map strategies, Chapter 5 updates. The AI knows everything about Fortnite, like a cool older cousin who never loses a match!'
   },
   {
     cardId: 'cardSkins',
     position: 'below',
     title: '🎨 Your Skins & Locker',
-    body: 'View all your Fortnite skins, emotes, and gear here. Track your favorites, see what\'s new in the Item Shop, and plan your next outfit.'
+    body: 'View all your Fortnite skins, emotes, back bling, and pickaxes here. Track what you own, see what\'s new in the Item Shop, and plan your next outfit. Your locker, your style!'
   },
   {
     cardId: 'cardCreative',
     position: 'below',
     title: '🏗️ Creative Mode with Dad',
-    body: 'Dad builds amazing Creative islands! Here you can find his island codes, playtest his latest builds, and see screenshots of his creations.'
+    body: 'Dad builds amazing Creative islands! Here you can find his island codes, playtest his latest builds, and see what he\'s working on. Engineering meets Fortnite — Dad\'s speciality!'
   },
   {
     cardId: 'cardDrop',
     position: 'below',
     title: '🎯 Today\'s Drop Zone',
-    body: 'Every day a new landing spot is featured. See the recommended loot paths and rotation routes. Check here before you drop into your next match!'
+    body: 'Every day Bee picks the best landing spot. Check here before you drop — see the recommended loot paths and rotation routes so you always land hot and loot fast!'
   },
   {
     cardId: 'cardNews',
     position: 'below',
     title: '📡 Fortnite News Feed',
-    body: 'Latest Fortnite news, patch updates, item shop changes, and community highlights. You can swap the news feed in Settings to follow your favorite Fortnite news sources.'
+    body: 'Latest Fortnite headlines, patch notes, Item Shop changes, and community highlights. In Settings you can swap the news feed to follow your favourite sources!'
   },
   {
     cardId: 'cardChat',
     position: 'below',
     title: '👥 Your Communities',
-    body: 'Join Fortnite chat groups with players who share your style! Take the tour to match with skin collectors, creative builders, or duo partners.'
+    body: 'Join Fortnite chat groups with players who share your style! Match with skin collectors, creative builders, or duo partners. Coming soon!'
   }
 ];
 
@@ -441,15 +457,31 @@ function showTutorialStep(index) {
   document.getElementById('tutBody').textContent = step.body;
   document.getElementById('tutPrev').style.display = index > 0 ? 'inline-block' : 'none';
   document.getElementById('tutNext').textContent = index === tutorialSteps.length - 1 ? '🎉 Finish!' : 'Next →';
-  document.getElementById('tutSkip').textContent = index === tutorialSteps.length - 1 ? 'Finish' : 'Skip Tour';
+  document.getElementById('tutSkip').textContent = 'Skip Tour';
   
-  // Spotlight + zoom on card
-  highlightCard(step.cardId);
-  positionSpotlight(step.cardId);
-  positionPopup(step.cardId);
+  // If step has an action (like openSettings), show a special hint
+  if (step.action === 'openSettings') {
+    document.getElementById('tutNext').style.display = 'none';
+    // auto-open settings for Mya
+    setTimeout(function() { openSettings(); }, 800);
+  } else {
+    document.getElementById('tutNext').style.display = 'inline-block';
+  }
+  
+  // Spotlight + popup on card
+  if (step.cardId) {
+    highlightCard(step.cardId);
+    positionSpotlight(step.cardId);
+    positionPopup(step.cardId);
+  } else {
+    // Center popup for intro
+    unhighlightAll();
+    document.getElementById('tutorialSpotlight').classList.remove('active');
+    positionPopup('bentoGrid');
+  }
   
   beeSpeak(step.body);
-  updateBP(15 + (index + 1) * 12);
+  updateBP(10 + (index + 1) * 11);
 }
 
 function highlightCard(cardId) {
@@ -502,6 +534,12 @@ function positionPopup(cardId) {
 }
 
 function tutorialNext() {
+  // Close settings if still open from step 1
+  var step = tutorialSteps[tutorialStep];
+  if (step && step.action === 'openSettings') {
+    closeSettings();
+    document.getElementById('tutNext').style.display = 'inline-block';
+  }
   showTutorialStep(tutorialStep + 1);
 }
 
@@ -514,7 +552,8 @@ function tutorialEnd() {
   document.getElementById('tutorialSpotlight').classList.remove('active');
   document.getElementById('tutorialPopup').classList.remove('active');
   unhighlightAll();
-  beeSpeak("Great job Mya! You know your way around now. Tap the bee anytime for help, or explore on your own. Have fun!");
+  closeSettings();
+  beeSpeak("Tour complete Mya! You now know your way around — Settings, Fortnite Expert, your Skins, Creative with Dad, Drop Zones, News, and Communities. Tap the bee anytime for help or just explore. Have fun!");
   updateBP(100);
   tutorialStep = -1;
 }

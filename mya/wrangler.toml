@@ -1,9 +1,9 @@
 name = "mya-vistamations"
-main = "src/mya-worker.js"
 compatibility_date = "2026-08-09"
-workers_dev = true
 
 [assets]
+directory = "./"
+not_found_handling = "single-page-application"
 
 [[routes]]
 pattern = "www.vistamations.com/mya"
