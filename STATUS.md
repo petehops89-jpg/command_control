@@ -95,7 +95,7 @@
 |---|---|---|---|
 | G-4 | **8 of 10 agents lack persona JSON files** | All 10 persona JSONs created 2026-08-11: Gordon (AG001), Trinity (AG002), Merlin V.II (AG003), Olivia (AG004), Claw (AG005), Big Brother (AG006), Dee (AG007), Stefi (AG008), Terence (AG009), gem (AG010). ✅ RESOLVED. | Gordon |
 | G-5 | **Knowledge graph is empty** | 0 entities, 0 relations. Initialized but never populated. Trinity tasked with memory population — incomplete. | Trinity |
-| G-6 | **Redis is empty** | 0 keys stored. Running but unused. Session cache, agent state, and play tracking data have no storage. | Trinity |
+| G-6 | **Redis active** | 74 keys populated: all 10 agents (name, role, status, division, department), session tracking, pipeline state, auth state, system memory, play tracking. Agent cache now available for Command Control dashboard. ✅ RESOLVED. | Trinity |
 | G-7 | **No automated tests** | Zero test files exist anywhere in the repository. No test framework, no test scripts. | Big Brother |
 | G-8 | **No CI/CD pipeline** | No GitHub Actions, no build verification, no automated deploy. | Gordon / Trinity |
 | G-9 | **Gemini auth incomplete** | gem daemon (AG010) "auth blocked — awaiting Google credentials." ADC exists for vists-498322 but no daemon wiring. | gem / Big Brother |
