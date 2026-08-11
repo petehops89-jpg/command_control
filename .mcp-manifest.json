@@ -1,0 +1,39 @@
+{
+  "mcpServers": [
+    {
+      "name": "n8n-mcp",
+      "status": "active",
+      "port": null,
+      "nodes": 525,
+      "aiTools": 263,
+      "description": "Workflow automation nodes for n8n. 263 AI-specific tools including OpenAI, Anthropic, Google AI, and vector store integrations.",
+      "endpoint": "n8n-mcp://local"
+    },
+    {
+      "name": "figma-dev-mode",
+      "status": "active",
+      "port": 3845,
+      "url": "http://127.0.0.1:3845/sse",
+      "description": "Figma design tool bridge for agent-based UI/UX design and prototyping. Used by Stefi (AG008)."
+    },
+    {
+      "name": "openclaw-gateway",
+      "status": "active",
+      "port": 18789,
+      "description": "External client gateway for Telegram, Discord, and other platform bindings. Manages session pairs and message routing."
+    },
+    {
+      "name": "data-ingestion-connector",
+      "status": "development",
+      "count": 2,
+      "description": "External data feed ingestion connectors. RSS, webhook, and API polling pipelines for research acquisition."
+    },
+    {
+      "name": "vector-search-connector",
+      "status": "development",
+      "count": 1,
+      "description": "Vector search connector for semantic similarity queries. Target: ChromaDB or pgvector."
+    }
+  ],
+  "lastValidated": "2026-08-12T01:30:00+10:00"
+}
